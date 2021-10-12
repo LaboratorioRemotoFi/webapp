@@ -4,18 +4,15 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import MuiLink from "@material-ui/core/Link";
 import Link from "../src/Link";
-import styled from "styled-components";
 
-export default function Index() {
+export default function About() {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="sm">
       <Box my={4}>
-        <Typography variant="h1" component="h1" gutterBottom>
-          Laboratorio remoto
+        <Typography variant="h4" component="h1" gutterBottom>
+          Next.js v4-beta example
         </Typography>
-        <Link href="/about" color="secondary">
-          Go to the about page
-        </Link>
+        <Link href="/">Go to the main page</Link>
       </Box>
     </Container>
   );

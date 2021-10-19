@@ -11,7 +11,7 @@ export default function Index() {
     <Container maxWidth="md">
       <Box my={4}>
         <Typography variant="h1" component="h1" gutterBottom>
-          Laboratorio remoto
+          Laboratorio remoto.
         </Typography>
         <Link href="/about" color="secondary">
           Go to the about page
@@ -20,3 +20,6 @@ export default function Index() {
     </Container>
   );
 }
+
+
+

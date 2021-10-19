@@ -11,15 +11,17 @@ export default function Index() {
     <Container maxWidth="md">
       <Box my={4}>
         <Typography variant="h1" component="h1" gutterBottom>
-          Laboratorio remoto.
+          Laboratorio remoto
         </Typography>
-        <Link href="/about" color="secondary">
+        <Link href="/about" color="primary">
           Go to the about page
         </Link>
+        <Box>
+          <Link href="/nath" color="secondary">
+            Go to Nath page
+          </Link>
+        </Box>
       </Box>
     </Container>
   );
 }
-
-
-

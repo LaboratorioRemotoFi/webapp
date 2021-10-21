@@ -19,6 +19,10 @@ export default function Index() {
         <Link href="/paginaAlex" color="secondary">
           Ir a la pagina de Alex
         </Link>
+        <br/>
+        <Link href="/Login" color="secondary">
+          Ir al login
+        </Link>
       </Box>
     </Container>
   );

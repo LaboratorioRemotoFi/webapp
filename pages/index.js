@@ -1,9 +1,8 @@
-import React from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import MuiLink from "@mui/material/Link";
-import Link from "../src/Link";
+import React from 'react';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
 
 export default function Index() {
   return (
@@ -12,10 +11,9 @@ export default function Index() {
         <Typography variant="h1" component="h1" gutterBottom>
           Laboratorio remoto
         </Typography>
-        <Link href="/Login" color="secondary">
+        <Link href="/Login" color="secondary" display="block">
           Ir al login
         </Link>
-        <br />
         <Link href="/about" color="secondary">
           Acerca de
         </Link>

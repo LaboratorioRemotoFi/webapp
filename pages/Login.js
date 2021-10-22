@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from './Layout';
+import { useRouter } from 'next/router'
 import { Grid,Paper, TextField, Button, Typography,Link,Box } from '@mui/material';
 
 
 const Login=()=>{
+    const router = useRouter()
+
     const paperStyle1={height:'45vh',width:500, margin:"60px auto"}
     const paperStyle2={height:'24vh',width:570, margin:"5px auto"}
+
+    const [user,setUser]=useState('')
+    const [password,setPassword]=useState('')
+
+    {/*const users={
+        'user1':{
+            password:'1234',
+            type:'student',
+        },
+        'user2':{
+            password:'4567',
+            type:'professor',
+        },
+    };*/}
+    const handleSubmit=(e)=>{
+        e.preventDefault()
+        if(user =='student'&&password=='1234'){
+            router.push('/horarios')
+        }
+        else if(user =='professor'&&password=='4567'){
+            router.push('/horariosProfesores')
+        }
+    }
     return(
         <Layout>  
             <Grid>
@@ -21,8 +47,10 @@ const Login=()=>{
                         </Grid>
                         <Grid item>
                             <Box sx={{ margin:'20px'}}>
-                                <TextField label='Username' size='small' fullWidth required variant="filled"/>
-                                <TextField label='Password' size='small' type='password' fullWidth required variant="filled" sx={{pt:'5px'}}/>
+                                <TextField onChange={(e)=> setUser(e.target.value)} label='Username' size='small' 
+                                fullWidth required variant="filled"/>
+                                <TextField onChange={(e)=> setPassword(e.target.value)} label='Password' size='small' type='password' 
+                                fullWidth required variant="filled" sx={{pt:'5px'}}/>
                                 <Typography sx={{pt:'5px'}}>
                                     <Link href="#" sx={{ textDecoration: 'none'}}>
                                         Restablecer contraseña
@@ -33,7 +61,7 @@ const Login=()=>{
                         <Grid item>
                             <Box sx={{mx:'20px',mb:'10px'}}>
                                 
-                                    <Button href="/horarios" type='submit' sx ={{ bgcolor: '#cd171e', color: 'white'}} 
+                                    <Button onClick={handleSubmit} type='submit' sx ={{ bgcolor: '#cd171e','&:hover':{bgcolor: '#cd171e'}, color: 'white'}} 
                                     variant="contained" fullWidth>
                                         Ingresar
                                     </Button>

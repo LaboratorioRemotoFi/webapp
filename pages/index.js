@@ -12,16 +12,12 @@ export default function Index() {
         <Typography variant="h1" component="h1" gutterBottom>
           Laboratorio remoto
         </Typography>
-        <Link href="/about" color="secondary">
-          Go to the about page
-        </Link>
-        <br />
-        <Link href="/paginaAlex" color="secondary">
-          Ir a la pagina de Alex
-        </Link>
-        <br />
         <Link href="/Login" color="secondary">
           Ir al login
+        </Link>
+        <br />
+        <Link href="/about" color="secondary">
+          Acerca de
         </Link>
       </Box>
     </Container>

@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import {
-  Grid, Paper, TextField, Button, Typography, Link, Box,
-} from '@mui/material';
-import Layout from './Layout';
+  Grid,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Link,
+  Box,
+} from "@mui/material";
+import Layout from "./Layout";
 
 const Login = () => {
   const router = useRouter();
 
-  const paperStyle1 = { height: '45vh', width: 500, margin: '60px auto' };
-  const paperStyle2 = { height: '24vh', width: 570, margin: '5px auto' };
+  const paperStyle1 = { height: "45vh", width: 500, margin: "60px auto" };
+  const paperStyle2 = { height: "24vh", width: 570, margin: "5px auto" };
 
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
 
-  { /* const users={
+  {
+    /* const users={
         'user1':{
             password:'1234',
             type:'student',
@@ -23,13 +30,14 @@ const Login = () => {
             password:'4567',
             type:'professor',
         },
-    }; */ }
+    }; */
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (user == 'student' && password == '1234') {
-      router.push('/horarios');
-    } else if (user == 'professor' && password == '4567') {
-      router.push('/horariosProfesores');
+    if (user == "student" && password == "1234") {
+      router.push("/horarios");
+    } else if (user == "professor" && password == "4567") {
+      router.push("/horariosProfesores");
     }
   };
   return (
@@ -38,9 +46,13 @@ const Login = () => {
         <Paper elevation={10} style={paperStyle1}>
           <Grid item container direction="column">
             <Grid item xs align="center">
-              <Box sx={{
-                bgcolor: '#cd171e', color: 'white', minHeight: '75px', border: '1px black',
-              }}
+              <Box
+                sx={{
+                  bgcolor: "#cd171e",
+                  color: "white",
+                  minHeight: "75px",
+                  border: "1px black",
+                }}
               >
                 <br />
                 <Typography variant="h5" sx={{ flexGrow: 1 }}>
@@ -49,54 +61,57 @@ const Login = () => {
               </Box>
             </Grid>
             <Grid item>
-              <Box sx={{ margin: '20px' }}>
+              <Box sx={{ margin: "20px" }}>
                 <TextField
                   onChange={(e) => setUser(e.target.value)}
-label="Username"
-size="small"
+                  label="Username"
+                  size="small"
                   fullWidth
-required
-variant="filled"
+                  required
+                  variant="filled"
                 />
                 <TextField
                   onChange={(e) => setPassword(e.target.value)}
-label="Password"
-size="small"
-type="password"
+                  label="Password"
+                  size="small"
+                  type="password"
                   fullWidth
-required
-variant="filled"
-sx={{ pt: '5px' }}
+                  required
+                  variant="filled"
+                  sx={{ pt: "5px" }}
                 />
-                <Typography sx={{ pt: '5px' }}>
-                  <Link href="#" sx={{ textDecoration: 'none' }}>
+                <Typography sx={{ pt: "5px" }}>
+                  <Link href="#" sx={{ textDecoration: "none" }}>
                     Restablecer contraseña
-                                </Link>
+                  </Link>
                 </Typography>
               </Box>
             </Grid>
             <Grid item>
-              <Box sx={{ mx: '20px', mb: '10px' }}>
-
+              <Box sx={{ mx: "20px", mb: "10px" }}>
                 <Button
                   onClick={handleSubmit}
-type="submit"
-sx={{ bgcolor: '#cd171e', '&:hover': { bgcolor: '#cd171e' }, color: 'white' }}
+                  type="submit"
+                  sx={{
+                    bgcolor: "#cd171e",
+                    "&:hover": { bgcolor: "#cd171e" },
+                    color: "white",
+                  }}
                   variant="contained"
-fullWidth
+                  fullWidth
                 >
                   Ingresar
                 </Button>
-
               </Box>
             </Grid>
           </Grid>
         </Paper>
 
         <Paper elevation={10} style={paperStyle2}>
-          <Grid sx={{ ml: '5px' }}>
+          <Grid sx={{ ml: "5px" }}>
             <Typography variant="h10">
-              Las credenciales de acceso se encuentran definidas de la siguiente manera:
+              Las credenciales de acceso se encuentran definidas de la siguiente
+              manera:
             </Typography>
             <Typography>Alumno:</Typography>
             <Typography>Usuario: Número de cuenta</Typography>

@@ -1,15 +1,23 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import {
-  Button, Card, CardMedia, CardContent, CardActions, CardActionArea, Link, Typography, Box,
-} from '@material-ui/core';
+  Button,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  CardActionArea,
+  Link,
+  Typography,
+  Box,
+} from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
   },
   media: {
-    height: 'auto',
+    height: "auto",
   },
 });
 
@@ -17,7 +25,7 @@ export default function MediaCard() {
   const classes = useStyles();
 
   return (
-    <Link href="/horarios" style={{ textDecoration: 'none' }}>
+    <Link href="/horarios" style={{ textDecoration: "none" }}>
       <Button className={classes.root}>
         <Card className={classes.root}>
           {/* <CardMedia

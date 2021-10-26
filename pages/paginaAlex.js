@@ -9,7 +9,7 @@ import Link from "../src/Link";
 import Navbar from "../src/components/navbar";
 import AccordionSimple from "../src/components/accordion";
 
-const PaginaAlex=() => {
+const PaginaAlex = () => {
   const [stateTest, setState] = useState(false);
 
   return (

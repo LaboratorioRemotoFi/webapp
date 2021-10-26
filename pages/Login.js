@@ -6,7 +6,7 @@ import {
 import Layout from './Layout';
 
 const Login = () => {
-  const router = useRouter();
+  const router=useRouter();
 
   const paperStyle1 = { height: '45vh', width: 500, margin: '60px auto' };
   const paperStyle2 = { height: '24vh', width: 570, margin: '5px auto' };

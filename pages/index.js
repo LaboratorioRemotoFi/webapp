@@ -1,9 +1,9 @@
-import React from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import MuiLink from "@mui/material/Link";
-import Link from "../src/Link";
+import React from 'react';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import MuiLink from '@mui/material/Link';
+import Link from '../src/Link';
 
 export default function Index() {
   return (
@@ -19,7 +19,7 @@ export default function Index() {
         <Link href="/paginaAlex" color="secondary">
           Ir a la pagina de Alex
         </Link>
-        <br/>
+        <br />
         <Link href="/Login" color="secondary">
           Ir al login
         </Link>

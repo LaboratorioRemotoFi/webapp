@@ -9,36 +9,34 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 
-const Acordeon=() => {
-  return (
-    <div>
-      <Accordion>
-        <AccordionSummary>
-          <h1>Habilidades</h1>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            <List>
-              <ListItem disablePadding>
-                <ListItemText primary="R" />
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="C#" />
-              </ListItem>
-            </List>
-            <List>
-              <ListItem disablePadding>
-                 <ListItemText primary="Python" />
-               </ListItem>
-              <ListItem disablePadding>
-                <ListItemText primary="Javascript" />
-              </ListItem>
-            </List>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
-    </div>
-  );
-};
+const Acordeon = () => (
+  <div>
+    <Accordion>
+      <AccordionSummary>
+        <h1>Habilidades</h1>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          <List>
+            <ListItem disablePadding>
+              <ListItemText primary="R" />
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemText primary="C#" />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem disablePadding>
+              <ListItemText primary="Python" />
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemText primary="Javascript" />
+            </ListItem>
+          </List>
+        </Box>
+      </AccordionDetails>
+    </Accordion>
+  </div>
+);
 
 export default Acordeon;

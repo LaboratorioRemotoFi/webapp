@@ -1,10 +1,11 @@
-import React from 'react'
-import Layout from './Layout'
-import Typography from '@mui/material/Typography'
+import React from 'react';
+import Typography from '@mui/material/Typography';
+import Layout from './Layout';
+
 export default function HorariosProfesores() {
-    return(
+  return (
     <Layout>
-        <Typography component='h5'>Horarios profes</Typography>
+      <Typography component="h5">Horarios profes</Typography>
     </Layout>
-    )
+  );
 }

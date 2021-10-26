@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Layout from './Layout';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -14,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Layout from './Layout';
 
 function createData(name) {
   return {
@@ -36,7 +36,7 @@ function Row(props) {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <React.Fragment>
+    <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
           <IconButton
@@ -77,7 +77,7 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 }
 
@@ -108,7 +108,7 @@ export default function Horarios() {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography component='h5'>
+                <Typography component="h5">
                   Prácticas
                 </Typography>
               </TableCell>
@@ -121,6 +121,6 @@ export default function Horarios() {
           </TableBody>
         </Table>
       </TableContainer>
-      </Layout>
+    </Layout>
   );
 }

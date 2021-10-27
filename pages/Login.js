@@ -7,6 +7,7 @@ import {
   Button,
   Typography,
   Link,
+  Popper,
   Box,
 } from "@mui/material";
 import Layout from "./Layout";
@@ -19,7 +20,9 @@ const Login = () => {
 
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
   {
     /* const users={
         'user1':{
@@ -38,6 +41,21 @@ const Login = () => {
       router.push("/horarios");
     } else if (user == "professor" && password == "4567") {
       router.push("/horariosProfesores");
+    }
+    if (user == "student" && password != "1234" || user == "professor" && password != "4567") {
+      setAnchorEl(anchorEl ? null : event.currentTarget);
+    }
+  };
+  const keyPress = (e) => {
+    if (e.keyCode == 13) {
+      if (user == "student" && password == "1234") {
+        router.push("/horarios");
+      } else if (user == "professor" && password == "4567") {
+        router.push("/horariosProfesores");
+      }
+      if (user == "student" && password != "1234" || user == "professor" && password != "4567") {
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+      }
     }
   };
   return (
@@ -64,6 +82,7 @@ const Login = () => {
               <Box sx={{ margin: "20px" }}>
                 <TextField
                   onChange={(e) => setUser(e.target.value)}
+                  onKeyDown={keyPress}
                   label="Username"
                   size="small"
                   fullWidth
@@ -72,6 +91,7 @@ const Login = () => {
                 />
                 <TextField
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={keyPress}
                   label="Password"
                   size="small"
                   type="password"
@@ -102,6 +122,21 @@ const Login = () => {
                 >
                   Ingresar
                 </Button>
+                <Popper 
+                  id={id} 
+                  open={open} 
+                  anchorEl={anchorEl}
+                  placement="auto"
+                  >
+                  <Box 
+                  sx={{ 
+                    border: 1, 
+                    p: "5px",
+                    bgcolor: "background.paper" }}
+                    >
+                    Contraseña incorrecta
+                  </Box>
+                </Popper>
               </Box>
             </Grid>
           </Grid>

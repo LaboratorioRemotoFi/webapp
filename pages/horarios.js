@@ -1,6 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
@@ -14,6 +15,8 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Layout from "./Layout";
+ 
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function createData(name) {
   return {
@@ -66,9 +69,13 @@ function Row(props) {
                   {row.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
                       <TableCell component="th" scope="row">
+                        {/*<Checkbox {...label}/>*/}
                         {historyRow.date}
                       </TableCell>
-                      <TableCell>{historyRow.hour}</TableCell>
+                      <TableCell>
+                        {/*<Checkbox {...label}/>*/}
+                        {historyRow.hour}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -1,41 +1,41 @@
-import React from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Layout from './Layout';
+import React from "react";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Layout from "./Layout";
 
 const grupos = [
   {
-    id: '1',
-    clave: '1234',
-    asignatura: 'Mecánica',
-    grupo: '1',
-    horario: '07:00 a 09:00',
-    dias: 'L',
+    id: "1",
+    clave: "1234",
+    asignatura: "Mecánica",
+    grupo: "1",
+    horario: "07:00 a 09:00",
+    dias: "L",
   },
   {
-    id: '2',
-    clave: '1234',
-    asignatura: 'Mecánica',
-    grupo: '2',
-    horario: '11:00 a 13:00',
-    dias: 'L',
+    id: "2",
+    clave: "1234",
+    asignatura: "Mecánica",
+    grupo: "2",
+    horario: "11:00 a 13:00",
+    dias: "L",
   },
   {
-    id: '3',
-    clave: '1236',
-    asignatura: 'Electricidad y Magnetismo',
-    grupo: '2',
-    horario: '09:00 a 11:00',
-    dias: 'M',
+    id: "3",
+    clave: "1236",
+    asignatura: "Electricidad y Magnetismo",
+    grupo: "2",
+    horario: "09:00 a 11:00",
+    dias: "M",
   },
 ];
 
@@ -45,9 +45,7 @@ export default function Index() {
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
-            <Typography variant="h4">
-              Grupos disponibles
-            </Typography>
+            <Typography variant="h4">Grupos disponibles</Typography>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -63,7 +61,7 @@ export default function Index() {
                   {grupos.map((row) => (
                     <TableRow
                       key={row.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
                         {row.clave}

@@ -1,41 +1,43 @@
 import React from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import {
+  Box,
+  Link,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import Layout from "./Layout";
 
-const grupos = [
+const groups = [
   {
     id: "1",
-    clave: "1234",
-    asignatura: "Mecánica",
-    grupo: "1",
-    horario: "07:00 a 09:00",
-    dias: "L",
+    key: "1234",
+    course: "Mecánica",
+    group: "1",
+    schedule: "07:00 a 09:00",
+    days: "L",
   },
   {
     id: "2",
-    clave: "1234",
-    asignatura: "Mecánica",
-    grupo: "2",
-    horario: "11:00 a 13:00",
-    dias: "L",
+    key: "1234",
+    course: "Mecánica",
+    group: "2",
+    schedule: "11:00 a 13:00",
+    days: "L",
   },
   {
     id: "3",
-    clave: "1236",
-    asignatura: "Electricidad y Magnetismo",
-    grupo: "2",
-    horario: "09:00 a 11:00",
-    dias: "M",
+    key: "1236",
+    course: "Electricidad y Magnetismo",
+    group: "2",
+    schedule: "09:00 a 11:00",
+    days: "M",
   },
 ];
 

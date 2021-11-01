@@ -10,9 +10,12 @@ import {
   Box,
 } from "@mui/material";
 import Layout from "./Layout";
+import { useSessionContext } from "./_app.js";
 
 const Login = () => {
   const router = useRouter();
+
+  const { userHasAuthenticated } = useSessionContext();
 
   const paperStyle1 = { height: "45vh", width: 500, margin: "60px auto" };
   const paperStyle2 = { height: "24vh", width: 570, margin: "5px auto" };
@@ -35,8 +38,10 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (user == "student" && password == "1234") {
+      userHasAuthenticated(true);
       router.push("/horarios");
     } else if (user == "professor" && password == "4567") {
+      userHasAuthenticated(true);
       router.push("/horariosProfesores");
     }
   };

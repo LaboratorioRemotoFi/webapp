@@ -10,8 +10,16 @@ import createEmotionCache from "../src/createEmotionCache";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
+const SessionContext = React.createContext("");
+
+export function useSessionContext() {
+  return React.useContext(SessionContext);
+}
+
 export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
+  const [isAuthenticated, userHasAuthenticated] = React.useState(false);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -22,7 +30,11 @@ export default function MyApp(props) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component {...pageProps} />
+        <SessionContext.Provider
+          value={{ isAuthenticated, userHasAuthenticated }}
+        >
+          <Component {...pageProps} />
+        </SessionContext.Provider>
       </ThemeProvider>
     </CacheProvider>
   );

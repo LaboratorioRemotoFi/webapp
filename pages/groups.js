@@ -60,7 +60,7 @@ export default function Index() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {grupos.map((row) => (
+                  {groups.map((row) => (
                     <TableRow
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

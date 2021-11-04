@@ -22,7 +22,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
+  const id = open ? "simple-popper" : undefined;
   {
     /* const users={
         'user1':{
@@ -42,7 +42,10 @@ const Login = () => {
     } else if (user == "professor" && password == "4567") {
       router.push("/horariosProfesores");
     }
-    if (user == "student" && password != "1234" || user == "professor" && password != "4567") {
+    if (
+      (user == "student" && password != "1234") ||
+      (user == "professor" && password != "4567")
+    ) {
       setAnchorEl(anchorEl ? null : event.currentTarget);
     }
   };
@@ -53,7 +56,10 @@ const Login = () => {
       } else if (user == "professor" && password == "4567") {
         router.push("/horariosProfesores");
       }
-      if (user == "student" && password != "1234" || user == "professor" && password != "4567") {
+      if (
+        (user == "student" && password != "1234") ||
+        (user == "professor" && password != "4567")
+      ) {
         setAnchorEl(anchorEl ? null : event.currentTarget);
       }
     }
@@ -122,18 +128,19 @@ const Login = () => {
                 >
                   Ingresar
                 </Button>
-                <Popper 
-                  id={id} 
-                  open={open} 
+                <Popper
+                  id={id}
+                  open={open}
                   anchorEl={anchorEl}
                   placement="auto"
+                >
+                  <Box
+                    sx={{
+                      border: 1,
+                      p: "5px",
+                      bgcolor: "background.paper",
+                    }}
                   >
-                  <Box 
-                  sx={{ 
-                    border: 1, 
-                    p: "5px",
-                    bgcolor: "background.paper" }}
-                    >
                     Contraseña incorrecta
                   </Box>
                 </Popper>

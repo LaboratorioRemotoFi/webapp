@@ -15,8 +15,8 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Layout from "./Layout";
- 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 function createData(name) {
   return {

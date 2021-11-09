@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import Layout from "./Layout";
+import Layout from "../src/components/Layout";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -107,7 +107,7 @@ const rows = [
   createData("Práctica 5"),
 ];
 
-export default function Horarios() {
+export default function Index() {
   return (
     <Layout>
       <TableContainer component={Paper}>

@@ -12,7 +12,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import Layout from "./Layout";
+import Layout from "../src/components/Layout";
 
 const groups = [
   {

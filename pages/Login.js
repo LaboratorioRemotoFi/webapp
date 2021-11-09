@@ -10,10 +10,10 @@ import {
   Popper,
   Box,
 } from "@mui/material";
-import Layout from "./Layout";
+import Layout from "../src/components/Layout";
 import { useSessionContext } from "./_app.js";
 
-const Login = () => {
+export default function Index() {
   const router = useRouter();
 
   const { userHasAuthenticated } = useSessionContext();
@@ -24,28 +24,18 @@ const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
+
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
-  {
-    /* const users={
-        'user1':{
-            password:'1234',
-            type:'student',
-        },
-        'user2':{
-            password:'4567',
-            type:'professor',
-        },
-    }; */
-  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (user == "student" && password == "1234") {
       userHasAuthenticated(true);
-      router.push("/Horarios");
+      router.push("/horarios");
     } else if (user == "professor" && password == "4567") {
       userHasAuthenticated(true);
-      router.push("/Grupos");
+      router.push("/grupos");
     }
     if (
       (user == "student" && password != "1234") ||
@@ -54,12 +44,15 @@ const Login = () => {
       setAnchorEl(anchorEl ? null : event.currentTarget);
     }
   };
+
   const keyPress = (e) => {
     if (e.keyCode == 13) {
       if (user == "student" && password == "1234") {
+        userHasAuthenticated(true);
         router.push("/horarios");
       } else if (user == "professor" && password == "4567") {
-        router.push("/horariosProfesores");
+        userHasAuthenticated(true);
+        router.push("/grupos");
       }
       if (
         (user == "student" && password != "1234") ||
@@ -69,6 +62,7 @@ const Login = () => {
       }
     }
   };
+
   return (
     <Layout>
       <Grid>
@@ -171,6 +165,4 @@ const Login = () => {
       </Grid>
     </Layout>
   );
-};
-
-export default Login;
+}

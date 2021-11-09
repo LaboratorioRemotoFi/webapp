@@ -4,9 +4,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import MuiLink from "@mui/material/Link";
 import { List, ListItem, ListItemText } from "@mui/material";
-import Link from "../src/Link";
+import Link from "../src/components/Link";
 
-export default function About() {
+export default function Index() {
   return (
     <Container maxWidth="md">
       <Box my={4}>

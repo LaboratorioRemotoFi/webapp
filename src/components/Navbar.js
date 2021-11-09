@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     userHasAuthenticated(false);
-    router.push("/Login");
+    router.push("/login");
   };
 
   if (isAuthenticated) {

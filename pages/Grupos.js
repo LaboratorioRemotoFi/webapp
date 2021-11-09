@@ -66,12 +66,12 @@ export default function Index() {
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {row.clave}
+                        {row.key}
                       </TableCell>
-                      <TableCell align="left">{row.asignatura}</TableCell>
-                      <TableCell align="right">{row.grupo}</TableCell>
-                      <TableCell align="right">{row.horario}</TableCell>
-                      <TableCell align="right">{row.dias}</TableCell>
+                      <TableCell align="left">{row.course}</TableCell>
+                      <TableCell align="right">{row.group}</TableCell>
+                      <TableCell align="right">{row.schedule}</TableCell>
+                      <TableCell align="right">{row.days}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

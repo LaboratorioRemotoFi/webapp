@@ -39,10 +39,10 @@ const Login = () => {
     e.preventDefault();
     if (user == "student" && password == "1234") {
       userHasAuthenticated(true);
-      router.push("/horarios");
+      router.push("/Horarios");
     } else if (user == "professor" && password == "4567") {
       userHasAuthenticated(true);
-      router.push("/horariosProfesores");
+      router.push("/Grupos");
     }
   };
   return (

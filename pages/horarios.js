@@ -1,7 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -16,9 +15,24 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Layout from "../src/components/Layout";
-import useData from "../src/hooks/useData";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
+function createData(name) {
+  return {
+    name,
+    history: [
+      {
+        date: "2020-01-05",
+        hour: "7:00-9:00",
+      },
+      {
+        date: "2020-01-02",
+        hour: "17:00-19:00",
+      },
+    ],
+  };
+}
 
 function Row(props) {
   const { row } = props;
@@ -85,15 +99,15 @@ Row.propTypes = {
   }).isRequired,
 };
 
+const rows = [
+  createData("Práctica 1"),
+  createData("Práctica 2"),
+  createData("Práctica 3"),
+  createData("Práctica 4"),
+  createData("Práctica 5"),
+];
+
 export default function Index() {
-  const [state, dispatch] = useData();
-  const [practiceIndex, setPracticeIndex] = React.useState(0);
-
-  const addPractice = () => {
-    dispatch({ type: "addPractice", name: `Practica ${practiceIndex}` });
-    setPracticeIndex(practiceIndex + 1);
-  };
-
   return (
     <Layout>
       <TableContainer component={Paper}>
@@ -105,15 +119,13 @@ export default function Index() {
               </TableCell>
             </TableRow>
           </TableHead>
-          <PracticesTable practices={state.practices} />
           <TableBody>
-            {state.practicas.map((row) => (
+            {rows.map((row) => (
               <Row key={row.name} row={row} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Button onClick={addPractice}>Agregar practica</Button>
     </Layout>
   );
 }

@@ -19,22 +19,6 @@ import practicesReducer from "../src/hooks/practicesReducer";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-/* function createData(name) {
-  return {
-    name,
-    history: [
-      {
-        date: "2020-01-05",
-        hour: "7:00-9:00",
-      },
-      {
-        date: "2020-01-02",
-        hour: "17:00-19:00",
-      },
-    ],
-  };
-} */
-
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
@@ -100,14 +84,6 @@ Row.propTypes = {
     ).isRequired,
   }).isRequired,
 };
-
-/* const rows = [
-  createData("Práctica 1"),
-  createData("Práctica 2"),
-  createData("Práctica 3"),
-  createData("Práctica 4"),
-  createData("Práctica 5"),
-]; */
 
 export default function Index() {
   const [state, dispatch] = practicesReducer();

@@ -15,10 +15,11 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Layout from "../src/components/Layout";
+import practicesReducer from "../src/hooks/practicesReducer";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-function createData(name) {
+/* function createData(name) {
   return {
     name,
     history: [
@@ -32,7 +33,7 @@ function createData(name) {
       },
     ],
   };
-}
+} */
 
 function Row(props) {
   const { row } = props;
@@ -66,15 +67,15 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
+                  {row.schedules.map((historyRow) => (
+                    <TableRow key={historyRow.scheduleID}>
                       <TableCell component="th" scope="row">
                         {/*<Checkbox {...label}/>*/}
-                        {historyRow.date}
+                        {historyRow.day}
                       </TableCell>
                       <TableCell>
                         {/*<Checkbox {...label}/>*/}
-                        {historyRow.hour}
+                        {historyRow.time}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -90,24 +91,28 @@ function Row(props) {
 
 Row.propTypes = {
   row: PropTypes.shape({
-    history: PropTypes.arrayOf(
+    schedules: PropTypes.arrayOf(
       PropTypes.shape({
-        hour: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
+        scheduleID: PropTypes.string.isRequired,
+        time: PropTypes.string.isRequired,
+        day: PropTypes.string.isRequired,
       })
     ).isRequired,
   }).isRequired,
 };
 
-const rows = [
+/* const rows = [
   createData("Práctica 1"),
   createData("Práctica 2"),
   createData("Práctica 3"),
   createData("Práctica 4"),
   createData("Práctica 5"),
-];
+]; */
 
 export default function Index() {
+  const [state, dispatch] = practicesReducer();
+  const [practiceIndex, setPracticeIndex] = React.useState(0);
+
   return (
     <Layout>
       <TableContainer component={Paper}>
@@ -120,8 +125,8 @@ export default function Index() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <Row key={row.name} row={row} />
+            {state.practices.map((row) => (
+              <Row key={row.practiceId} row={row} />
             ))}
           </TableBody>
         </Table>

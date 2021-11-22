@@ -12,9 +12,12 @@ import {
 } from "@mui/material";
 import Layout from "../src/components/Layout";
 import { useSessionContext } from "./_app.js";
+import usersReducer from "../src/hooks/usersReducer.js";
 
 export default function Index() {
   const router = useRouter();
+
+  const [state, dispatch] = usersReducer();
 
   const { userHasAuthenticated } = useSessionContext();
 

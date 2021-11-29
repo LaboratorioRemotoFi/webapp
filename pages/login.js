@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import {
   Grid,
@@ -12,19 +12,20 @@ import {
 } from "@mui/material";
 import Layout from "../src/components/Layout";
 import { useSessionContext } from "./_app.js";
-import usersReducer from "../src/hooks/usersReducer.js";
+import { StudentsContext } from "../src/hooks/studentsProvider";
 
 export default function Index() {
   const router = useRouter();
 
-  const [state, dispatch] = usersReducer();
+  const [studentsState, studentsDispatch] = useContext(StudentsContext);
+  const { user, groups, subjects, practices } = studentsState;
 
   const { userHasAuthenticated } = useSessionContext();
 
   const paperStyle1 = { height: "45vh", width: 500, margin: "60px auto" };
   const paperStyle2 = { height: "24vh", width: 570, margin: "5px auto" };
 
-  const [user, setUser] = useState("");
+  const [useR, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -33,16 +34,16 @@ export default function Index() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (user == "student" && password == "1234") {
+    if (useR == "student" && password == "1234") {
       userHasAuthenticated(true);
       router.push("/horarios");
-    } else if (user == "professor" && password == "4567") {
+    } else if (useR == "professor" && password == "4567") {
       userHasAuthenticated(true);
       router.push("/grupos");
     }
     if (
-      (user == "student" && password != "1234") ||
-      (user == "professor" && password != "4567")
+      (useR == "student" && password != "1234") ||
+      (useR == "professor" && password != "4567")
     ) {
       setAnchorEl(anchorEl ? null : event.currentTarget);
     }
@@ -50,16 +51,16 @@ export default function Index() {
 
   const keyPress = (e) => {
     if (e.keyCode == 13) {
-      if (user == "student" && password == "1234") {
+      if (useR == "student" && password == "1234") {
         userHasAuthenticated(true);
         router.push("/horarios");
-      } else if (user == "professor" && password == "4567") {
+      } else if (useR == "professor" && password == "4567") {
         userHasAuthenticated(true);
         router.push("/grupos");
       }
       if (
-        (user == "student" && password != "1234") ||
-        (user == "professor" && password != "4567")
+        (useR == "student" && password != "1234") ||
+        (useR == "professor" && password != "4567")
       ) {
         setAnchorEl(anchorEl ? null : event.currentTarget);
       }

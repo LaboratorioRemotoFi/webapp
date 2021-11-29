@@ -5,19 +5,15 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider } from "@emotion/react";
 import theme from "../src/config/theme";
-import studentsReducer from "../src/hooks/studentsReducer";
+import StudentsProvider from "../src/hooks/studentsProvider";
 import createEmotionCache from "../src/config/createEmotionCache";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
 const SessionContext = React.createContext("");
-const studentsReducerContext = React.createContext();
 
 export function useSessionContext() {
-  return React.useContext(SessionContext);
-}
-export function useStudentsReducerContext() {
   return React.useContext(SessionContext);
 }
 
@@ -38,7 +34,9 @@ export default function MyApp(props) {
         <SessionContext.Provider
           value={{ isAuthenticated, userHasAuthenticated }}
         >
-          <Component {...pageProps} />
+          <StudentsProvider>
+            <Component {...pageProps} />
+          </StudentsProvider>
         </SessionContext.Provider>
       </ThemeProvider>
     </CacheProvider>

@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import {
@@ -13,35 +13,12 @@ import {
   Paper,
 } from "@mui/material";
 import Layout from "../src/components/Layout";
-
-const groups = [
-  {
-    id: "1",
-    key: "1234",
-    course: "Mecánica",
-    group: "1",
-    schedule: "07:00 a 09:00",
-    days: "L",
-  },
-  {
-    id: "2",
-    key: "1234",
-    course: "Mecánica",
-    group: "2",
-    schedule: "11:00 a 13:00",
-    days: "L",
-  },
-  {
-    id: "3",
-    key: "1236",
-    course: "Electricidad y Magnetismo",
-    group: "2",
-    schedule: "09:00 a 11:00",
-    days: "M",
-  },
-];
+import useStoreContext from "../src/hooks/storeContext";
 
 export default function Index() {
+  const [currentState, currentDispatch] = useStoreContext();
+  const { user, subjects, groups, practices } = currentState ? currentState : 0;
+
   return (
     <>
       <Layout>
@@ -55,30 +32,38 @@ export default function Index() {
                     <TableCell>Clave</TableCell>
                     <TableCell align="left">Asignatura</TableCell>
                     <TableCell align="right">Grupo</TableCell>
-                    <TableCell align="right">Horario</TableCell>
-                    <TableCell align="right">Días</TableCell>
+                    <TableCell align="right"></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {groups.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.key}
-                      </TableCell>
-                      <TableCell align="left">{row.course}</TableCell>
-                      <TableCell align="right">{row.group}</TableCell>
-                      <TableCell align="right">{row.schedule}</TableCell>
-                      <TableCell align="right">{row.days}</TableCell>
-                    </TableRow>
-                  ))}
+                  {!currentState
+                    ? "NO DATA"
+                    : Object.values(groups).map((row) => (
+                        <TableRow
+                          key={row.id}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {row.subjectId}
+                          </TableCell>
+                          <TableCell align="left">
+                            {subjects[row.subjectId].name}
+                          </TableCell>
+                          <TableCell align="right">{row.groupNumber}</TableCell>
+                          <TableCell align="right">
+                            <Link href="" color="secondary">
+                              Detalles
+                            </Link>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                 </TableBody>
               </Table>
             </TableContainer>
           </Box>
-          <Link href="/index" color="secondary">
+          <Link href="/" color="secondary">
             Ir a la página principal
           </Link>
         </Container>

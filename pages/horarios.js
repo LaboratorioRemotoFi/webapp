@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
@@ -16,6 +16,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Layout from "../src/components/Layout";
 import practicesReducer from "../src/hooks/practicesReducer";
+import useStoreContext from "../src/hooks/storeContext";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -87,26 +88,54 @@ Row.propTypes = {
 
 export default function Index() {
   const [state, dispatch] = practicesReducer();
+
+  const [currentState, currentDispatch] = useStoreContext();
+  const { user, groups, subjects, practices } = currentState ? currentState : 0;
+
   const [practiceIndex, setPracticeIndex] = React.useState(0);
 
   return (
     <Layout>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography component="h5">Prácticas</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {state.practices.map((row) => (
-              <Row key={row.practiceId} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box>
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Typography component="h5">
+                    {subjects ? subjects[1500]["name"] : null}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {state.practices.map((row) => (
+                <Row key={row.practiceId} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+      <Box>
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Typography component="h5">
+                    {subjects ? subjects[1501]["name"] : null}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {state.practices.map((row) => (
+                <Row key={row.practiceId} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </Layout>
   );
 }

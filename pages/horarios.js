@@ -20,6 +20,7 @@ import { StudentsContext } from "../src/hooks/studentsProvider";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
+
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
@@ -55,11 +56,9 @@ function Row(props) {
                   {row.schedules.map((historyRow) => (
                     <TableRow key={historyRow.scheduleID}>
                       <TableCell component="th" scope="row">
-                        {/*<Checkbox {...label}/>*/}
                         {historyRow.day}
                       </TableCell>
                       <TableCell>
-                        {/*<Checkbox {...label}/>*/}
                         {historyRow.time}
                       </TableCell>
                     </TableRow>
@@ -87,12 +86,12 @@ Row.propTypes = {
 };
 
 export default function Index() {
-  const [state, dispatch] = practicesReducer();
+  //const [state, dispatch] = practicesReducer();
 
-  const [studentsState, studentsDispatch] = useContext(StudentsContext);
-  const { user, groups, subjects, practices } = studentsState;
+  const [state, dispatch] = useContext(StudentsContext);
+  const { user, groups, subjects, practices } = state;
 
-  const [practiceIndex, setPracticeIndex] = React.useState(0);
+  //const [practiceIndex, setPracticeIndex] = React.useState(0);
 
   return (
     <Layout>
@@ -109,8 +108,8 @@ export default function Index() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {state.practices.map((row) => (
-                <Row key={row.practiceId} row={row} />
+              {practices.map((row) => (
+                <Row key={row.id} row={row} />
               ))}
             </TableBody>
           </Table>
@@ -129,8 +128,8 @@ export default function Index() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {state.practices.map((row) => (
-                <Row key={row.practiceId} row={row} />
+              {practices.map((row) => (
+                <Row key={row.id} row={row} />
               ))}
             </TableBody>
           </Table>

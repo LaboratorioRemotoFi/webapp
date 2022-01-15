@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import {
   Grid,
@@ -11,12 +11,13 @@ import {
   Box,
 } from "@mui/material";
 import Layout from "../src/components/Layout";
-import { useSessionContext } from "./_app.js";
+import { useSessionContext } from "../src/hooks/sessionProvider";
 
 export default function Index() {
   const router = useRouter();
 
-  const { userHasAuthenticated } = useSessionContext();
+  const [sessionState, sessionDispatch] = useSessionContext();
+  const { isAuthenticated, isStudent } = sessionState;
 
   const paperStyle1 = { height: "45vh", width: 500, margin: "60px auto" };
   const paperStyle2 = { height: "24vh", width: 570, margin: "5px auto" };
@@ -31,10 +32,10 @@ export default function Index() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (user == "student" && password == "1234") {
-      userHasAuthenticated(true);
+      sessionDispatch({ type: "studentLogin" });
       router.push("/horarios");
     } else if (user == "professor" && password == "4567") {
-      userHasAuthenticated(true);
+      sessionDispatch({ type: "professorLogin" });
       router.push("/grupos");
     }
     if (
@@ -48,10 +49,10 @@ export default function Index() {
   const keyPress = (e) => {
     if (e.keyCode == 13) {
       if (user == "student" && password == "1234") {
-        userHasAuthenticated(true);
+        sessionDispatch({ type: "studentLogin" });
         router.push("/horarios");
       } else if (user == "professor" && password == "4567") {
-        userHasAuthenticated(true);
+        sessionDispatch({ type: "professorLogin" });
         router.push("/grupos");
       }
       if (

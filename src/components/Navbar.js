@@ -4,16 +4,19 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { useSessionContext } from "../../pages/_app.js";
+import { useSessionContext } from "../../src/hooks/sessionProvider";
 import { useRouter } from "next/router";
 
 const Navbar = () => {
   const router = useRouter();
 
-  const { isAuthenticated, userHasAuthenticated } = useSessionContext();
+  const [sessionState, sessionDispatch] = useSessionContext();
+  const { isAuthenticated } = sessionState;
 
   const handleLogout = () => {
-    userHasAuthenticated(false);
+    sessionDispatch({ type: "logout" });
+    console.log("Navbar Logout");
+    console.log(isAuthenticated);
     router.push("/login");
   };
 

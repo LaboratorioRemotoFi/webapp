@@ -20,7 +20,6 @@ import { StudentsContext } from "../src/hooks/studentsProvider";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
@@ -58,9 +57,7 @@ function Row(props) {
                       <TableCell component="th" scope="row">
                         {historyRow.day}
                       </TableCell>
-                      <TableCell>
-                        {historyRow.time}
-                      </TableCell>
+                      <TableCell>{historyRow.time}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

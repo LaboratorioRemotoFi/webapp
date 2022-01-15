@@ -24,11 +24,7 @@ const initialState = {
     type: "student", //student - professor
     email: "abc@gmail.com",
     name: "Alex",
-    groupsIds: [
-      "2021-2_1500_2",
-      "2021-2_1501_3",
-      "2021-2_1502_1"
-    ],
+    groupsIds: ["2021-2_1500_2", "2021-2_1501_3", "2021-2_1502_1"],
   },
   groups: {
     "2021-2_1500_2": {

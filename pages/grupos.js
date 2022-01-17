@@ -3,7 +3,6 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import {
   Box,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -12,6 +11,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import Link from "../src/components/Link";
 import Layout from "../src/components/Layout";
 import useStoreContext from "../src/hooks/storeContext";
 

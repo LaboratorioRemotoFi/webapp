@@ -121,14 +121,28 @@ export default function Index() {
                 <TableBody>
                   {!currentState
                     ? "NO DATA"
-                    : Object.values(groups).map((row) => (
-                      // Get only the practices for each subject
-                      subPractices = Object.values(practices).filter(obj => subjects[row.subjectId].practicesIds.includes(obj.id)),
-                      /*console.log(Object.values(practices)),
+                    : Object.values(groups).map(
+                        (row) => (
+                          // Get only the practices for each subject
+                          (subPractices = Object.values(practices).filter(
+                            (obj) =>
+                              subjects[row.subjectId].practicesIds.includes(
+                                obj.id
+                              )
+                          )),
+                          (
+                            /*console.log(Object.values(practices)),
                       console.log(Object.values(subjects[row.subjectId].practicesIds)),
                       console.log(subPractices)*/
-                      <Row key={row.id} row={row} subject={subjects[row.subjectId]} practices={subPractices} />
-                      ))}
+                            <Row
+                              key={row.id}
+                              row={row}
+                              subject={subjects[row.subjectId]}
+                              practices={subPractices}
+                            />
+                          )
+                        )
+                      )}
                 </TableBody>
               </Table>
             </TableContainer>

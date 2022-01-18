@@ -5,7 +5,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider } from "@emotion/react";
 import theme from "../src/config/theme";
-//import { createContext, useContext, useReducer } from "react";
 import createEmotionCache from "../src/config/createEmotionCache";
 import { StoreContext } from "../src/hooks/storeContext";
 import SessionProvider, { SessionContext } from "../src/hooks/sessionProvider";

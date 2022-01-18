@@ -49,7 +49,7 @@ const professorMockData = {
       id: "1500-2",
       name: "Práctica 2",
       practiceNumber: 2,
-      raspIP: "192.0.2.2",
+      raspIp: "192.0.2.2",
     },
     "1500-3": {
       id: "1500-3",

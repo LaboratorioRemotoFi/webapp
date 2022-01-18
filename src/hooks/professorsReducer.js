@@ -6,7 +6,6 @@ const professorsReducer = (state, action) => {
     case "professorLogin":
       return {
         ...state,
-        //isAuthenticated: true,
       };
   }
 };

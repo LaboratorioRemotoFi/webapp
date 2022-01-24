@@ -33,7 +33,7 @@ export default function Index() {
     e.preventDefault();
     if (user == "student" && password == "1234") {
       sessionDispatch({ type: "studentLogin" });
-      router.push("/horarios");
+      router.push("/practicas");
     } else if (user == "professor" && password == "4567") {
       sessionDispatch({ type: "professorLogin" });
       router.push("/grupos");
@@ -50,7 +50,7 @@ export default function Index() {
     if (e.keyCode == 13) {
       if (user == "student" && password == "1234") {
         sessionDispatch({ type: "studentLogin" });
-        router.push("/horarios");
+        router.push("/practicas");
       } else if (user == "professor" && password == "4567") {
         sessionDispatch({ type: "professorLogin" });
         router.push("/grupos");

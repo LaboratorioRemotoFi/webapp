@@ -5,6 +5,9 @@ const studentMockData = {
     email: "abc@gmail.com",
     name: "Alex",
     groupsIds: ["2021-2_1500_2", "2021-2_1501_3", "2021-2_1502_1"],
+    //reservedSchedules: [
+    //  { practiceId: 1500, day: [2022, 1, 8], time: [10, 0] },
+    //],
   },
   subjects: {
     1500: {
@@ -49,13 +52,15 @@ const studentMockData = {
       name: "Plano inclinado 1",
       practiceNumber: 1,
       raspIp: "256.256.000.000",
-      startDate: "2022-02-07",
-      endDate: "2022-02-19",
-      startTime: "07:00",
-      endTime: "17:00",
-      timeFrame: "01:00",
+      startDate: [2022, 1, 7],
+      endDate: [2022, 1, 11],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 45, // Minutes
       reservedSchedules: [
-        // Reserved start times and days
+        // Another option (put student id here and remove "reservedSchedules" from user object):
+        //[1, 2022, 1, 8, 10, 0] // -> [studentId, year, month, day, hour, minute]
+        //[2022, 1, 8, 10, 0],
       ],
     },
     "1500-2": {
@@ -63,13 +68,14 @@ const studentMockData = {
       name: "Plano inclinado 2",
       practiceNumber: 2,
       raspIp: "256.256.000.000",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      timeFrame: "",
+      startDate: [2022, 1, 14],
+      endDate: [2022, 1, 18],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 45,
       reservedSchedules: [
         // Reserved start times and days
+        { studentId: 10, schedule: [2022, 1, 14, 7, 45] },
       ],
     },
     "1500-3": {
@@ -77,11 +83,11 @@ const studentMockData = {
       name: "Plano inclinado 3",
       practiceNumber: 3,
       raspIp: "256.256.000.000",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      timeFrame: "",
+      startDate: [2022, 1, 21],
+      endDate: [2022, 1, 25],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 45,
       reservedSchedules: [
         // Reserved start times and days
       ],
@@ -91,11 +97,11 @@ const studentMockData = {
       name: "Fricción 1",
       practiceNumber: 1,
       raspIp: "256.256.000.000",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      timeFrame: "",
+      startDate: [2022, 1, 7],
+      endDate: [2022, 1, 11],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 60,
       reservedSchedules: [
         // Reserved start times and days
       ],
@@ -105,11 +111,11 @@ const studentMockData = {
       name: "Fricción 2",
       practiceNumber: 2,
       raspIp: "256.256.000.000",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      timeFrame: "",
+      startDate: [2022, 1, 14],
+      endDate: [2022, 1, 18],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 60,
       reservedSchedules: [
         // Reserved start times and days
       ],
@@ -119,11 +125,11 @@ const studentMockData = {
       name: "Fricción 3",
       practiceNumber: 3,
       raspIp: "256.256.000.000",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      timeFrame: "",
+      startDate: [2022, 1, 21],
+      endDate: [2022, 1, 25],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 60,
       reservedSchedules: [
         // Reserved start times and days
       ],
@@ -133,11 +139,11 @@ const studentMockData = {
       name: "Caída libre 1",
       practiceNumber: 1,
       raspIp: "256.256.000.000",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      timeFrame: "",
+      startDate: [2022, 1, 7],
+      endDate: [2022, 1, 11],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 60,
       reservedSchedules: [
         // Reserved start times and days
       ],
@@ -147,11 +153,11 @@ const studentMockData = {
       name: "Caída libre 2",
       practiceNumber: 2,
       raspIp: "256.256.000.000",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      timeFrame: "",
+      startDate: [2022, 1, 14],
+      endDate: [2022, 1, 18],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 60,
       reservedSchedules: [
         // Reserved start times and days
       ],
@@ -161,11 +167,11 @@ const studentMockData = {
       name: "Caída libre 3",
       practiceNumber: 3,
       raspIp: "256.256.000.000",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-      timeFrame: "",
+      startDate: [2022, 1, 21],
+      endDate: [2022, 1, 25],
+      startTime: [7, 0],
+      endTime: [19, 0],
+      timeFrame: 60,
       reservedSchedules: [
         // Reserved start times and days
       ],

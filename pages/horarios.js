@@ -107,6 +107,7 @@ export default function Index() {
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
+            <Typography variant="h7">Bienvenido, {user.name}.</Typography>
             <Typography variant="h4">Prácticas disponibles</Typography>
             <TableContainer component={Paper} sx={{ width: 0.5 }}>
               <Table aria-label="collapsible table">

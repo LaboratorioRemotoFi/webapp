@@ -15,6 +15,7 @@ const initialState = {
   subjects: professorMockData.subjects,
   groups: professorMockData.groups,
   practices: professorMockData.practices,
+  students: professorMockData.students,
 };
 
 export { initialState };

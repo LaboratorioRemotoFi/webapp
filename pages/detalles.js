@@ -26,7 +26,7 @@ export default function Index() {
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
-            <Typography variant="h7">
+            <Typography variant="h8">
               Grupo {groups["2021-2_1500_1"].groupNumber}
             </Typography>
             <Typography variant="h4">Control de prácticas</Typography>

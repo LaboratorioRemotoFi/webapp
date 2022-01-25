@@ -13,8 +13,8 @@ const studentsReducer = (state, action) => {
         currPractice: action.payload,
       };
     case "reserveSchedule":
-      let updatedPractices = JSON.parse(JSON.stringify(state.practices));
-      //let updatedPractices = state.practices;
+      //let updatedPractices = JSON.parse(JSON.stringify(state.practices));
+      let updatedPractices = state.practices;
       /* console.log("state.practices");
       console.log(state.practices);
       console.log("updatedPractices");

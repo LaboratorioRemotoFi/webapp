@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
 import {
   Box,
   Table,
@@ -37,8 +36,12 @@ export default function Index() {
                     <TableCell>Alumno</TableCell>
 
                     {Object.values(practices).map((cell) => (
-                      <TableCell key={cell.name}>
-                        <TableCell component="th" scope="row">
+                      <TableCell alignItems="center" key={cell.name}>
+                        <TableCell
+                          sx={{ borderBottom: "none" }}
+                          component="th"
+                          scope="row"
+                        >
                           {cell.name}
                         </TableCell>
                       </TableCell>

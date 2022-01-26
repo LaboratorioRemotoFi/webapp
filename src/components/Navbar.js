@@ -23,7 +23,7 @@ const Navbar = () => {
   if (isAuthenticated) {
     return (
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar sx={{ bgcolor: "#cd171e" }} position="static">
+        <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Laboratorio Remoto FI
@@ -32,9 +32,9 @@ const Navbar = () => {
               onClick={handleLogout}
               type="submit"
               sx={{
-                bgcolor: "white",
-                color: "#cd171e",
-                "&:hover": { bgcolor: "#cd171e", color: "white" },
+                bgcolor: "primary",
+                color: "primary",
+                "&:hover": { color: "white" },
               }}
               variant="contained"
             >
@@ -47,7 +47,7 @@ const Navbar = () => {
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar sx={{ bgcolor: "#cd171e" }} position="static">
+      <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Laboratorio Remoto FI

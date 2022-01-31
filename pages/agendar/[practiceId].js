@@ -300,8 +300,8 @@ export default function Index() {
                                   currentDispatch({
                                     type: "reserveSchedule",
                                     payload: {
-                                      "currPractice": currPractice.id,
-                                      "reservedSchedule": {
+                                      currPractice: currPractice.id,
+                                      reservedSchedule: {
                                         studentId: user.id,
                                         schedule: availableSchedules[key],
                                       },

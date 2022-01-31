@@ -7,21 +7,17 @@ const studentsReducer = (state, action) => {
       return {
         ...state,
       };
-    case "updateCurrentPractice":
-      return {
-        ...state,
-        currPractice: action.payload,
-      };
     case "reserveSchedule":
       //let updatedPractices = JSON.parse(JSON.stringify(state.practices));
+      // TODO: Don't modify the state
       let updatedPractices = state.practices;
       /* console.log("state.practices");
       console.log(state.practices);
       console.log("updatedPractices");
       console.log(updatedPractices);
       console.log(updatedPractices[state.currPractice.id]); */
-      updatedPractices[state.currPractice.id].reservedSchedules.push(
-        action.payload
+      updatedPractices[action.payload.currPractice].reservedSchedules.push(
+        action.payload.reservedSchedule
       );
       return {
         ...state,
@@ -37,7 +33,6 @@ const initialState = {
   subjects: studentMockData.subjects,
   groups: studentMockData.groups,
   practices: studentMockData.practices,
-  currPractice: "",
 };
 
 export { initialState };

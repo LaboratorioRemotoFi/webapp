@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useRouter } from "next/router";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import {
@@ -12,9 +13,9 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import Link from "../src/components/Link";
-import Layout from "../src/components/Layout";
-import useStoreContext from "../src/hooks/storeContext";
+import Link from "../../src/components/Link";
+import Layout from "../../src/components/Layout";
+import useStoreContext from "../../src/hooks/storeContext";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -188,12 +189,15 @@ function convertDates(origScheduleList, timeFrame) {
 }
 
 export default function Index() {
-  const [currentState, currentDispatch] = useStoreContext();
-  const { user, subjects, groups, practices, currPractice } = currentState
-    ? currentState
-    : 0;
+  const router = useRouter();
+  const { practiceId } = router.query;
 
-  if (!currentState) {
+  const [currentState, currentDispatch] = useStoreContext();
+  const { user, subjects, groups, practices } = currentState ? currentState : 0;
+
+  const currPractice = practiceId && currentState.practices[practiceId];
+
+  if (!currPractice) {
     return (
       <>
         <Layout>
@@ -296,8 +300,11 @@ export default function Index() {
                                   currentDispatch({
                                     type: "reserveSchedule",
                                     payload: {
-                                      studentId: user.id,
-                                      schedule: availableSchedules[key],
+                                      "currPractice": currPractice.id,
+                                      "reservedSchedule": {
+                                        studentId: user.id,
+                                        schedule: availableSchedules[key],
+                                      },
                                     },
                                   });
                                 }}

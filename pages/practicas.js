@@ -66,14 +66,8 @@ function Row(props) {
                       <TableCell>{practiceRow.name}</TableCell>
                       <TableCell>
                         <Link
-                          href="/horarios"
+                          href={`/agendar/${practiceRow.id}`}
                           color="secondary"
-                          onClick={() => {
-                            dispatch({
-                              type: "updateCurrentPractice",
-                              payload: practiceRow,
-                            });
-                          }}
                         >
                           Agendar
                         </Link>

@@ -18,7 +18,7 @@ import useStoreContext from "../src/hooks/storeContext";
 
 export default function Index() {
   const router = useRouter();
-  const [group, setGroup] = useState(null);
+  const [selectedGroupId, setGroupId] = useState(null);
   //const { groupNumber } = router.query;
   //const currGroup = groupNumber && currentState?.groups?.[groupNumber];
   const [currentState, currentDispatch] = useStoreContext();
@@ -26,12 +26,12 @@ export default function Index() {
     ? currentState
     : 0;
 
-  return group ? (
+  return selectedGroupId ? (
     <>
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
-            <Typography variant="h8">Grupo {group}</Typography>
+            <Typography variant="h8">Grupo {selectedGroupId}</Typography>
             <Typography variant="h4">Control de prácticas</Typography>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -75,7 +75,7 @@ export default function Index() {
               </Table>
             </TableContainer>
           </Box>
-          <Link href="" color="secondary" onClick={() => setGroup(null)}>
+          <Link href="" color="secondary" onClick={() => setGroupId(null)}>
             Volver
           </Link>
         </Container>
@@ -119,7 +119,7 @@ export default function Index() {
                             <Link
                               href=""
                               color="secondary"
-                              onClick={() => setGroup(row.groupNumber)}
+                              onClick={() => setGroupId(row.groupNumber)}
                             >
                               Detalles
                             </Link>

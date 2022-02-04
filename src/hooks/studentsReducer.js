@@ -8,31 +8,72 @@ const studentsReducer = (state, action) => {
         ...state,
       };
     case "reserveSchedule":
-      //let updatedPractices = JSON.parse(JSON.stringify(state.practices));
-      // TODO: Don't modify the state
-      let updatedPractices = state.practices;
-      /* console.log("state.practices");
-      console.log(state.practices);
-      console.log("updatedPractices");
-      console.log(updatedPractices);
-      console.log(updatedPractices[state.currPractice.id]); */
-      updatedPractices[action.payload.currPractice].reservedSchedules.push(
-        action.payload.reservedSchedule
-      );
+      let updatedSchedules = [
+        ...state.practices[action.payload.currPracticeId].reservedSchedules,
+      ];
+
+      // If currentStudentSchedule has a value, find its index in the reservedSchedules array
+      // and delete it
+      if (
+        typeof state.practices[action.payload.currPracticeId]
+          .currentStudentSchedule == "number"
+      ) {
+        let removedScheduleIndex = updatedSchedules.findIndex(function (
+          scheduleObj,
+          index
+        ) {
+          if (
+            scheduleObj.schedule ==
+            state.practices[action.payload.currPracticeId]
+              .currentStudentSchedule
+          )
+            return true;
+        });
+        updatedSchedules.splice(removedScheduleIndex, 1);
+      }
+      updatedSchedules.push(action.payload.reservedSchedule);
       return {
         ...state,
-        practices: updatedPractices,
+        practices: {
+          ...state.practices,
+          [action.payload.currPracticeId]: {
+            ...state.practices[action.payload.currPracticeId],
+            currentStudentSchedule: action.payload.reservedSchedule.schedule,
+            reservedSchedules: updatedSchedules,
+          },
+        },
       };
     default:
-      return state;
+      return {
+        ...state,
+      };
   }
 };
+
+function updateCurrStudentPracticeAttr(studentId, practices) {
+  let practicesIndexes = Object.keys(practices);
+  for (let i = 0; i < practicesIndexes.length; i++) {
+    let currPracticeSchedules =
+      practices[practicesIndexes[i]].reservedSchedules;
+    for (let j = 0; j < currPracticeSchedules.length; j++) {
+      if (currPracticeSchedules[i]?.studentId == studentId) {
+        practices[practicesIndexes[i]].currentStudentSchedule =
+          currPracticeSchedules[i].schedule;
+        break;
+      }
+    }
+  }
+  return practices;
+}
 
 const initialState = {
   user: studentMockData.user,
   subjects: studentMockData.subjects,
   groups: studentMockData.groups,
-  practices: studentMockData.practices,
+  practices: updateCurrStudentPracticeAttr(
+    studentMockData.user.id,
+    studentMockData.practices
+  ),
 };
 
 export { initialState };

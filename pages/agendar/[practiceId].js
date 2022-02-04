@@ -19,173 +19,81 @@ import useStoreContext from "../../src/hooks/storeContext";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-function checkAvail(practiceSchedules, schedule) {
-  for (let i = 0; i < practiceSchedules.length; i++) {
-    if (
-      JSON.stringify(schedule) == JSON.stringify(practiceSchedules[i].schedule)
-    ) {
-      return false;
-    }
-  }
-  return true;
-}
+function getSchedules(startDate, endDate, timeFrame, invalidWeekdays) {
+  let scheduleList = [];
 
-function getSchedules(user, practice) {
-  let availableSchedules = [];
-
-  for (let i = 0; i < practice.reservedSchedules.length; i++) {
-    if (practice.reservedSchedules[i].studentId == user.id) {
-      return [[practice.reservedSchedules[i].schedule], true];
-    }
-  }
-
-  let fullStartDate = practice.startDate;
-  fullStartDate = fullStartDate.concat(practice.startTime);
-  const startDate = new Date(...fullStartDate);
-
-  let firstDayEndTime = practice.startDate;
-  firstDayEndTime = firstDayEndTime.concat(practice.endTime);
-  const startDateEndTime = new Date(...firstDayEndTime);
-
-  let fullEndDate = practice.endDate;
-  fullEndDate = fullEndDate.concat(practice.endTime);
-  const endDate = new Date(...fullEndDate);
-
-  const noAvailDays =
-    ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) |
-    (0 + 1);
+  const firstDayEndTime = [
+    new Date(startDate).getFullYear(),
+    new Date(startDate).getMonth(),
+    new Date(startDate).getDate(),
+    new Date(endDate).getHours(),
+    new Date(endDate).getMinutes(),
+  ];
+  const startDateEndTime = new Date(...firstDayEndTime).getTime();
 
   const noAvailSchedPerDay =
-    ((startDateEndTime.getTime() - startDate.getTime()) /
-      (1000 * 60) /
-      practice.timeFrame) |
-    0;
+    ((startDateEndTime - startDate) / (1000 * 60) / timeFrame) | 0;
 
-  let temp;
-  let tempDate = startDate;
-  let tempDateMs = tempDate.getTime(); // / (1000 * 60);
-  temp = practice.startDate;
-  temp = temp.concat(practice.startTime);
+  let temp = new Date(startDate).getTime();
+  let tempCurrDay;
 
-  for (let i = 0; i < noAvailDays; i++) {
-    tempDate = new Date(tempDateMs);
-    temp[0] = tempDate.getFullYear();
-    temp[1] = tempDate.getMonth();
-    if (i == 0) {
-      temp[2] = tempDate.getDate();
-    } else {
-      temp[2] = tempDate.getDate() + 1;
-    }
-    temp[3] = practice.startTime[0];
-    temp[4] = practice.startTime[1];
-    if (checkAvail(practice.reservedSchedules, temp)) {
-      availableSchedules.push(temp.slice());
-    }
-    tempDate = new Date(...temp);
-    tempDateMs = tempDate.getTime();
+  while (temp < endDate) {
+    tempCurrDay = new Date(temp).getTime();
     for (let j = 1; j < noAvailSchedPerDay; j++) {
-      // ADD EXTRA 5 MINUTES TO PREPARE HARDWARE?
-      tempDateMs = tempDateMs + practice.timeFrame * (1000 * 60);
-      tempDate = new Date(tempDateMs);
-      temp[0] = tempDate.getFullYear();
-      temp[1] = tempDate.getMonth();
-      temp[2] = tempDate.getDate();
-      temp[3] = tempDate.getHours();
-      temp[4] = tempDate.getMinutes();
-      if (checkAvail(practice.reservedSchedules, temp)) {
-        availableSchedules.push(temp.slice());
-      }
-      tempDate = new Date(...temp);
-      tempDateMs = tempDate.getTime();
+      scheduleList.push(temp);
+      temp = temp + timeFrame * (1000 * 60);
+    }
+    scheduleList.push(temp);
+    temp = new Date(tempCurrDay);
+    temp.setHours(temp.getHours() + 24);
+    temp = temp.getTime();
+
+    // Validate day of the week
+    let weekday = new Date(temp).getDay();
+    while (invalidWeekdays.includes(weekday)) {
+      temp = new Date(temp);
+      temp.setHours(temp.getHours() + 24);
+      temp = temp.getTime();
+      weekday = new Date(temp).getDay();
     }
   }
 
-  return [availableSchedules, false];
+  return scheduleList;
 }
 
-function convertDates(origScheduleList, timeFrame) {
-  const months = [
-    "enero",
-    "febrero",
-    "marzo",
-    "abril",
-    "mayo",
-    "junio",
-    "julio",
-    "agosto",
-    "septiembre",
-    "octubre",
-    "noviembre",
-    "diciembre",
-  ];
-  const days = [
-    "Domingo",
-    "Lunes",
-    "Martes",
-    "Miércoles",
-    "Jueves",
-    "Viernes",
-    "Sábado",
-  ];
+function convertDate(schedule, timeFrame) {
+  let newSched;
 
-  let newSchedList = [];
+  let optionsDate = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  let optionsHour = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
 
-  for (let i = 0; i < origScheduleList.length; i++) {
-    let temp = [];
+  let temp = [];
+  let dayString = new Date(schedule).toLocaleDateString("es-MX", optionsDate);
+  dayString = dayString.charAt(0).toUpperCase() + dayString.slice(1);
+  let initHourString = new Date(schedule)
+    .toLocaleDateString("es-MX", optionsHour)
+    .slice(-5);
+  let endHour = new Date(
+    new Date(schedule).getTime() + (timeFrame - 1) * 1000 * 60
+  );
+  let endHourString = endHour
+    .toLocaleDateString("es-MX", optionsHour)
+    .slice(-5);
+  newSched = [dayString, initHourString, endHourString];
 
-    const tempDate = new Date(...origScheduleList[i]);
-    const month = months[tempDate.getMonth()];
-    const day = days[tempDate.getDay()];
-    let date =
-      day +
-      " " +
-      origScheduleList[i][2].toString() +
-      " de " +
-      month +
-      " del " +
-      origScheduleList[i][0].toString();
-    temp.push(date);
-
-    let initTime, finalTime;
-    if (origScheduleList[i][3].toString().length < 2) {
-      initTime = "0" + origScheduleList[i][3].toString();
-    } else {
-      initTime = origScheduleList[i][3].toString();
-    }
-    if (origScheduleList[i][4].toString().length < 2) {
-      initTime = initTime + ":0" + origScheduleList[i][4].toString();
-    } else {
-      initTime = initTime + ":" + origScheduleList[i][4].toString();
-    }
-
-    temp.push(initTime);
-
-    let tempFinalHour, tempFinalMinute;
-
-    tempFinalHour = origScheduleList[i][3];
-    tempFinalMinute = origScheduleList[i][4] + timeFrame - 1;
-
-    if (tempFinalMinute > 59) {
-      tempFinalHour = tempFinalHour + 1;
-      tempFinalMinute = tempFinalMinute - 60;
-    }
-
-    if (tempFinalHour.toString().length < 2) {
-      finalTime = "0" + tempFinalHour.toString();
-    } else {
-      finalTime = tempFinalHour.toString();
-    }
-    if (tempFinalMinute.toString().length < 2) {
-      finalTime = finalTime + ":0" + tempFinalMinute.toString();
-    } else {
-      finalTime = finalTime + ":" + tempFinalMinute.toString();
-    }
-
-    temp.push(finalTime);
-
-    newSchedList.push(temp.slice());
-  }
-  return newSchedList;
+  return newSched;
 }
 
 export default function Index() {
@@ -195,9 +103,9 @@ export default function Index() {
   const [currentState, currentDispatch] = useStoreContext();
   const { user, subjects, groups, practices } = currentState ? currentState : 0;
 
-  const currPractice = practiceId && currentState.practices[practiceId];
+  console.log(currentState);
 
-  if (!currPractice) {
+  if (!currentState) {
     return (
       <>
         <Layout>
@@ -230,6 +138,8 @@ export default function Index() {
     );
   }
 
+  const currPractice = practiceId && currentState.practices[practiceId];
+
   const currSubject = subjects[currPractice.id.slice(0, 4)];
 
   const groupsIds = Object.getOwnPropertyNames(groups);
@@ -239,19 +149,28 @@ export default function Index() {
   for (let i = 0; i < groupsIds.length; i++) {
     if (groupsIds[i].includes(currSubject.id.toString())) {
       currGroup = groups[groupsIds[i]];
+      break;
     }
   }
 
-  let [availableSchedules, isReserved] = getSchedules(user, currPractice);
-
-  //console.log(availableSchedules);
-
-  let formattedSchedules = convertDates(
-    availableSchedules,
-    currPractice.timeFrame
+  // Last parameter: invalid weekdays (Sunday: 0, Saturday: 6)
+  let scheduleList = getSchedules(
+    currPractice.startDate,
+    currPractice.endDate,
+    currPractice.timeFrame,
+    [0, 6]
   );
 
-  let reservedSchedule;
+  console.log(scheduleList);
+
+  let options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  let convertedDate;
 
   return (
     <>
@@ -278,49 +197,81 @@ export default function Index() {
                 <TableBody>
                   {!currentState
                     ? "NO DATA"
-                    : formattedSchedules.map((row, key) => (
-                        <TableRow
-                          key={key}
-                          sx={{
-                            "&:last-child td, &:last-child th": {
-                              border: 0,
-                            },
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {row[0]}
-                          </TableCell>
-                          <TableCell align="left">{row[1]}</TableCell>
-                          <TableCell align="left">{row[2]}</TableCell>
-                          <TableCell align="right">
-                            {!isReserved ? (
-                              <Button
-                                variant="contained"
-                                onClick={() => {
-                                  currentDispatch({
-                                    type: "reserveSchedule",
-                                    payload: {
-                                      currPractice: currPractice.id,
-                                      reservedSchedule: {
-                                        studentId: user.id,
-                                        schedule: availableSchedules[key],
-                                      },
-                                    },
-                                  });
+                    : scheduleList
+                        .filter(
+                          (schedule) =>
+                            // If the schedule isn't on the reserved schedules array
+                            // or is the schedule the current student reserved,
+                            // then show it
+                            !currPractice.reservedSchedules.find(function (
+                              scheduleObj,
+                              index
+                            ) {
+                              if (scheduleObj.studentId == user.id)
+                                return false;
+                              if (scheduleObj.schedule == schedule) return true;
+                            })
+                        )
+                        .map(
+                          (row, key) => (
+                            (convertedDate = convertDate(
+                              row,
+                              currPractice.timeFrame
+                            )),
+                            (
+                              <TableRow
+                                key={key}
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
                                 }}
                               >
-                                Reservar
-                              </Button>
-                            ) : (
-                              <Typography
-                                sx={{ fontWeight: "bold", color: "#CD171E" }}
-                              >
-                                HORARIO RESERVADO
-                              </Typography>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                                <TableCell component="th" scope="row">
+                                  {convertedDate[0]}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {convertedDate[1]}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {convertedDate[2]}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {!(
+                                    row == currPractice.currentStudentSchedule
+                                  ) ? (
+                                    <Button
+                                      variant="contained"
+                                      onClick={() => {
+                                        currentDispatch({
+                                          type: "reserveSchedule",
+                                          payload: {
+                                            currPracticeId: currPractice.id,
+                                            reservedSchedule: {
+                                              studentId: user.id,
+                                              schedule: row,
+                                            },
+                                          },
+                                        });
+                                      }}
+                                    >
+                                      Reservar
+                                    </Button>
+                                  ) : (
+                                    <Typography
+                                      sx={{
+                                        fontWeight: "bold",
+                                        color: "#CD171E",
+                                      }}
+                                    >
+                                      HORARIO RESERVADO
+                                    </Typography>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            )
+                          )
+                        )}
                 </TableBody>
               </Table>
             </TableContainer>

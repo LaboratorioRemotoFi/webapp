@@ -20,7 +20,7 @@ const professorMockData = {
       semester: "2021-2",
       subjectId: 1500,
       groupNumber: 1,
-      studentIds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      studentIds: [0, 1, 2],
       /* schedule: {
         days: ["Lun", "Mie"],
         hour: "07:00 a 08:30",
@@ -31,7 +31,7 @@ const professorMockData = {
       semester: "2021-2",
       subjectId: 1500,
       groupNumber: 2,
-      studentIds: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+      studentIds: [10, 11, 12, 13],
       /* schedule: {
         days: ["Mie", "Vie"],
         hour: "09:00 a 10:30",
@@ -56,6 +56,29 @@ const professorMockData = {
       name: "Práctica 3",
       practiceNumber: 3,
       raspIp: "192.0.2.3",
+    },
+    "1500-4": {
+      id: "1500-4",
+      name: "Práctica 4",
+      practiceNumber: 4,
+      raspIp: "192.0.2.4",
+    },
+  },
+  students: {
+    0: {
+      id: "0",
+      name: "Alberto Ramos",
+      email: "abc@gmail.com",
+    },
+    1: {
+      id: "1",
+      name: "Luis Cano",
+      email: "scd@outlook.com",
+    },
+    2: {
+      id: "2",
+      name: "Daniela Mendoza",
+      email: "hgj@hotmail.com",
     },
   },
 };

@@ -13,7 +13,7 @@ const Footer = () => (
       display: "flex",
     }}
   >
-    <AppBar sx={{ bgcolor: "#cd171e" }} position="relative">
+    <AppBar sx={{ bgcolor: "main" }} position="relative">
       <Typography variant="h8" component="div" sx={{ flexGrow: 1 }}>
         Facultad de Ingeniería UNAM
       </Typography>

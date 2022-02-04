@@ -86,7 +86,7 @@ export default function Index() {
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
-            <Typography variant="h7">Bienvenido, {user.name}.</Typography>
+            <Typography variant="h7">Bienvenido, {/*user.name*/}.</Typography>
             <Typography variant="h4">Grupos disponibles</Typography>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">

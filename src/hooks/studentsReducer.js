@@ -52,20 +52,14 @@ const studentsReducer = (state, action) => {
 };
 
 function updateCurrStudentPracticeAttr(studentId, practices) {
-  console.log(studentId);
   let practicesIndexes = Object.keys(practices);
   for (let i = 0; i < practicesIndexes.length; i++) {
-    console.log(practices[practicesIndexes[i]].name);
     let currPracticeSchedules =
       practices[practicesIndexes[i]].reservedSchedules;
-    console.log(currPracticeSchedules);
     for (let j = 0; j < currPracticeSchedules.length; j++) {
-      console.log(currPracticeSchedules[j]?.studentId);
       if (currPracticeSchedules[j]?.studentId == studentId) {
         practices[practicesIndexes[i]].currentStudentSchedule =
           currPracticeSchedules[j].schedule;
-        console.log("TRUE");
-        console.log(practices[practicesIndexes[i]].currentStudentSchedule);
         break;
       }
     }

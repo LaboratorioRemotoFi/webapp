@@ -172,8 +172,6 @@ export default function Index() {
 
   let convertedDate;
 
-  console.log(currPractice);
-
   return (
     <>
       <Layout>
@@ -216,20 +214,12 @@ export default function Index() {
                               scheduleObj,
                               index
                             ) {
-                              //console.log("TRYING");
                               if (
                                 scheduleObj.schedule ==
                                 currPractice.currentStudentSchedule
                               )
-                                //  console.log("RESERVED");
-                                //  console.log(scheduleObj.schedule);
-                                //  console.log(currPractice.currentStudentSchedule);
                                 return false;
                               if (scheduleObj.schedule == schedule) return true;
-                              //console.log("Schedule");
-                              //console.log(schedule);
-                              //console.log(currDate + (currPractice.timeFrame - 1) * 60 * 1000);
-                              //if (schedule < (currDate + (currPractice.timeFrame - 1) * 60 * 1000)) return true;
                             })
                         )
                         .map(

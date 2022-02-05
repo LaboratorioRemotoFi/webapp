@@ -19,6 +19,9 @@ import useStoreContext from "../../src/hooks/storeContext";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
+let currDate = Date.now();
+//let currDate = new Date("2022-02-04T07:00").getTime();
+
 function getSchedules(startDate, endDate, timeFrame, invalidWeekdays) {
   let scheduleList = [];
 
@@ -79,7 +82,6 @@ function convertDate(schedule, timeFrame) {
     minute: "numeric",
   };
 
-  let temp = [];
   let dayString = new Date(schedule).toLocaleDateString("es-MX", optionsDate);
   dayString = dayString.charAt(0).toUpperCase() + dayString.slice(1);
   let initHourString = new Date(schedule)
@@ -94,6 +96,10 @@ function convertDate(schedule, timeFrame) {
   newSched = [dayString, initHourString, endHourString];
 
   return newSched;
+}
+
+function shouldBeDisplayed(schedule) {
+
 }
 
 export default function Index() {
@@ -161,8 +167,6 @@ export default function Index() {
     [0, 6]
   );
 
-  console.log(scheduleList);
-
   let options = {
     weekday: "long",
     year: "numeric",
@@ -171,6 +175,8 @@ export default function Index() {
   };
 
   let convertedDate;
+
+  console.log(currPractice);
 
   return (
     <>
@@ -184,6 +190,9 @@ export default function Index() {
               {currSubject.id} - {currSubject.name}, grupo{" "}
               {currGroup.groupNumber}
             </Typography>
+            <Link href="/practicas" color="secondary">
+              Regresar a lista de prácticas
+            </Link>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -200,16 +209,26 @@ export default function Index() {
                     : scheduleList
                         .filter(
                           (schedule) =>
+                            // Only show schedule if its end time has not yet come
+                            (schedule + (currPractice.timeFrame - 1) * 60 * 1000) > currDate
                             // If the schedule isn't on the reserved schedules array
                             // or is the schedule the current student reserved,
                             // then show it
-                            !currPractice.reservedSchedules.find(function (
+                            && !currPractice.reservedSchedules.find(function (
                               scheduleObj,
                               index
                             ) {
-                              if (scheduleObj.studentId == user.id)
+                              //console.log("TRYING");
+                              if (scheduleObj.schedule == currPractice.currentStudentSchedule)
+                              //  console.log("RESERVED");
+                              //  console.log(scheduleObj.schedule);
+                              //  console.log(currPractice.currentStudentSchedule);
                                 return false;
                               if (scheduleObj.schedule == schedule) return true;
+                              //console.log("Schedule");
+                              //console.log(schedule);
+                              //console.log(currDate + (currPractice.timeFrame - 1) * 60 * 1000);
+                              //if (schedule < (currDate + (currPractice.timeFrame - 1) * 60 * 1000)) return true;
                             })
                         )
                         .map(
@@ -276,9 +295,6 @@ export default function Index() {
               </Table>
             </TableContainer>
           </Box>
-          <Link href="/practicas" color="secondary">
-            Regresar a lista de prácticas
-          </Link>
         </Container>
       </Layout>
     </>

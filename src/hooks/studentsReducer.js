@@ -15,8 +15,8 @@ const studentsReducer = (state, action) => {
       // If currentStudentSchedule has a value, find its index in the reservedSchedules array
       // and delete it
       if (
-        typeof state.practices[action.payload.currPracticeId]
-          .currentStudentSchedule == "number"
+        !isNaN(state.practices[action.payload.currPracticeId]
+          .currentStudentSchedule)
       ) {
         let removedScheduleIndex = updatedSchedules.findIndex(function (
           scheduleObj,
@@ -51,14 +51,20 @@ const studentsReducer = (state, action) => {
 };
 
 function updateCurrStudentPracticeAttr(studentId, practices) {
+  console.log(studentId);
   let practicesIndexes = Object.keys(practices);
   for (let i = 0; i < practicesIndexes.length; i++) {
+    console.log(practices[practicesIndexes[i]].name);
     let currPracticeSchedules =
       practices[practicesIndexes[i]].reservedSchedules;
+    console.log(currPracticeSchedules);
     for (let j = 0; j < currPracticeSchedules.length; j++) {
-      if (currPracticeSchedules[i]?.studentId == studentId) {
+      console.log(currPracticeSchedules[j]?.studentId);
+      if (currPracticeSchedules[j]?.studentId == studentId) {
         practices[practicesIndexes[i]].currentStudentSchedule =
-          currPracticeSchedules[i].schedule;
+          currPracticeSchedules[j].schedule;
+        console.log("TRUE");
+        console.log(practices[practicesIndexes[i]].currentStudentSchedule);
         break;
       }
     }

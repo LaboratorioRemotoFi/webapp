@@ -23,6 +23,147 @@ import useStoreContext from "../src/hooks/storeContext";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
+let currDate = Date.now();
+//let currDate = new Date("2022-02-04T07:00").getTime();
+
+function getDateString(date) {
+  let optionsDay = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  let optionsHour = {
+    hour: "numeric",
+    minute: "numeric",
+  };
+
+  const dayString = new Date(date).toLocaleDateString("es-MX", optionsDay);
+  //dayString = dayString.charAt(0).toUpperCase() + dayString.slice(1);
+  const hourString = new Date(date)
+    .toLocaleDateString("es-MX", optionsHour)
+    .slice(-5);
+
+  const dateString = [dayString, hourString];
+
+  return dateString;
+}
+
+function ScheduleLink(props) {
+  const { practiceId, startDate, endDate, currentStudentSchedule } = props;
+
+  // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
+  const reserveTime =  7 * 24 * 60 * 60 * 1000;
+
+  let state;
+
+  const hasSchedule = !isNaN(currentStudentSchedule);
+  const scheduleString = getDateString(currentStudentSchedule);
+  const schedulingDate = getDateString(startDate - reserveTime);
+
+  // 
+  if (currDate > endDate) {
+    state = "Expired";
+  } else if (hasSchedule && currDate > currentStudentSchedule && currDate < endDate) {
+    state = "Late reschedule";
+  } else if (hasSchedule && currDate < currentStudentSchedule && currDate < endDate) {
+    state = "Reschedule";
+  } else if (!hasSchedule && currDate < endDate && currDate >= (startDate - reserveTime)) {
+    state = "Available";
+  } else if (currDate < (startDate - reserveTime)) {
+    state = "Not available";
+  }
+
+  switch(state) {
+    case "Expired":
+      console.log("Case Expired");
+      if (!hasSchedule) {
+        return(
+          <>
+            <Typography variant="inherit" color="red" fontWeight="bold">Expirada</Typography>
+            <Typography variant="inherit">No fue agendada.</Typography>
+          </>
+        );
+      }
+      return(
+        <>
+          <Typography variant="inherit" fontWeight="bold">Terminada</Typography>
+          <Typography variant="inherit">Fue agendada para el {scheduleString[0]} a las {scheduleString[1]} y se realizó ([detalles])/no se realizó.</Typography>
+        </>
+      );
+      break;
+    case "Late reschedule":
+      console.log("Case Late reschedule");
+      return(
+        <>
+          <Typography variant="inherit" color="red" fontWeight="bold">Expirada</Typography>
+          <Typography variant="inherit">
+            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.</Typography>
+          <Link
+            href={`/agendar/${practiceId}`}
+            color="secondary"
+            fontWeight="bold"
+          >
+            Reagendar
+          </Link>
+        </>
+      );
+      break;
+    case "Reschedule":
+      console.log("Case Reschedule");
+      return(
+        <>
+          <Typography variant="inherit" fontWeight="bold">Agendada</Typography>
+          <Typography variant="inherit">
+            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.</Typography>
+          <Link
+            href={`/agendar/${practiceId}`}
+            color="secondary"
+            fontWeight="bold"
+          >
+            Reagendar
+          </Link>
+          
+        </>
+      );
+      break;
+    case "Available":
+      console.log("Case Available");
+      return(
+        <Link
+          href={`/agendar/${practiceId}`}
+          color="secondary"
+          fontWeight="bold"
+        >
+          Agendar
+        </Link>
+      );
+      break;
+    case "Not available":
+      console.log("Case Not available");
+      return(
+        <>
+          <Typography variant="inherit" fontWeight="bold">No disponible</Typography>
+          <Typography variant="inherit">Estará disponible para agendar a partir del {schedulingDate[0]} a las {schedulingDate[1]}.</Typography>
+        </>
+      );
+      break;
+    default:
+      return(
+        <Typography variant="inherit" fontWeight="bold">No disponible</Typography>
+      );
+      break;
+  }
+}
+
+ScheduleLink.propTypes = {
+  practiceId: PropTypes.string.isRequired,
+  startDate: PropTypes.number.isRequired,
+  endDate: PropTypes.number.isRequired,
+  currentStudentSchedule: PropTypes.number.isRequired,
+};
+
 function Row(props) {
   const { row, practices, subject, dispatch } = props;
   const [open, setOpen] = React.useState(false);
@@ -52,9 +193,9 @@ function Row(props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>No.</TableCell>
-                    <TableCell>Nombre</TableCell>
-                    <TableCell>Agendar</TableCell>
+                    <TableCell width="10%">No.</TableCell>
+                    <TableCell width="20%">Nombre</TableCell>
+                    <TableCell width="70%">Agendar</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -65,12 +206,12 @@ function Row(props) {
                       </TableCell>
                       <TableCell>{practiceRow.name}</TableCell>
                       <TableCell>
-                        <Link
-                          href={`/agendar/${practiceRow.id}`}
-                          color="secondary"
-                        >
-                          Agendar
-                        </Link>
+                        <ScheduleLink
+                          practiceId={practiceRow.id}
+                          startDate={practiceRow.startDate}
+                          endDate={practiceRow.endDate}
+                          currentStudentSchedule={practiceRow.currentStudentSchedule}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -91,8 +232,12 @@ Row.propTypes = {
   }).isRequired,
   practices: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string.isRequired,
       practiceNumber: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
+      startDate: PropTypes.number.isRequired,
+      endDate: PropTypes.number.isRequired,
+      currentStudentSchedule: PropTypes.number.isRequired,
     })
   ).isRequired,
   subject: PropTypes.shape({
@@ -110,13 +255,17 @@ export default function Index() {
   console.log("Data load Index");
   console.log(currentState);
 
+  const currDateString = getDateString(currDate);
+
   return (
     <>
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
+            <Typography>Bienvenid@, hoy es {currDateString[0]} a las {currDateString[1]}.</Typography>
+            <br />
             <Typography variant="h4">Prácticas disponibles</Typography>
-            <TableContainer component={Paper} sx={{ width: 0.5 }}>
+            <TableContainer component={Paper} sx={{ width: 0.6 }}>
               <Table aria-label="collapsible table">
                 <TableHead>
                   <TableRow>

@@ -98,10 +98,6 @@ function convertDate(schedule, timeFrame) {
   return newSched;
 }
 
-function shouldBeDisplayed(schedule) {
-
-}
-
 export default function Index() {
   const router = useRouter();
   const { practiceId } = router.query;
@@ -210,19 +206,24 @@ export default function Index() {
                         .filter(
                           (schedule) =>
                             // Only show schedule if its end time has not yet come
-                            (schedule + (currPractice.timeFrame - 1) * 60 * 1000) > currDate
+                            schedule +
+                              (currPractice.timeFrame - 1) * 60 * 1000 >
+                              currDate &&
                             // If the schedule isn't on the reserved schedules array
                             // or is the schedule the current student reserved,
                             // then show it
-                            && !currPractice.reservedSchedules.find(function (
+                            !currPractice.reservedSchedules.find(function (
                               scheduleObj,
                               index
                             ) {
                               //console.log("TRYING");
-                              if (scheduleObj.schedule == currPractice.currentStudentSchedule)
-                              //  console.log("RESERVED");
-                              //  console.log(scheduleObj.schedule);
-                              //  console.log(currPractice.currentStudentSchedule);
+                              if (
+                                scheduleObj.schedule ==
+                                currPractice.currentStudentSchedule
+                              )
+                                //  console.log("RESERVED");
+                                //  console.log(scheduleObj.schedule);
+                                //  console.log(currPractice.currentStudentSchedule);
                                 return false;
                               if (scheduleObj.schedule == schedule) return true;
                               //console.log("Schedule");

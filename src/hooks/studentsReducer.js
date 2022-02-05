@@ -15,8 +15,9 @@ const studentsReducer = (state, action) => {
       // If currentStudentSchedule has a value, find its index in the reservedSchedules array
       // and delete it
       if (
-        !isNaN(state.practices[action.payload.currPracticeId]
-          .currentStudentSchedule)
+        !isNaN(
+          state.practices[action.payload.currPracticeId].currentStudentSchedule
+        )
       ) {
         let removedScheduleIndex = updatedSchedules.findIndex(function (
           scheduleObj,

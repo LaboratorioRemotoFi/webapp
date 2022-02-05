@@ -54,7 +54,7 @@ function ScheduleLink(props) {
   const { practiceId, startDate, endDate, currentStudentSchedule } = props;
 
   // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
-  const reserveTime =  7 * 24 * 60 * 60 * 1000;
+  const reserveTime = 7 * 24 * 60 * 60 * 1000;
 
   let state;
 
@@ -62,44 +62,66 @@ function ScheduleLink(props) {
   const scheduleString = getDateString(currentStudentSchedule);
   const schedulingDate = getDateString(startDate - reserveTime);
 
-  // 
+  //
   if (currDate > endDate) {
     state = "Expired";
-  } else if (hasSchedule && currDate > currentStudentSchedule && currDate < endDate) {
+  } else if (
+    hasSchedule &&
+    currDate > currentStudentSchedule &&
+    currDate < endDate
+  ) {
     state = "Late reschedule";
-  } else if (hasSchedule && currDate < currentStudentSchedule && currDate < endDate) {
+  } else if (
+    hasSchedule &&
+    currDate < currentStudentSchedule &&
+    currDate < endDate
+  ) {
     state = "Reschedule";
-  } else if (!hasSchedule && currDate < endDate && currDate >= (startDate - reserveTime)) {
+  } else if (
+    !hasSchedule &&
+    currDate < endDate &&
+    currDate >= startDate - reserveTime
+  ) {
     state = "Available";
-  } else if (currDate < (startDate - reserveTime)) {
+  } else if (currDate < startDate - reserveTime) {
     state = "Not available";
   }
 
-  switch(state) {
+  switch (state) {
     case "Expired":
       console.log("Case Expired");
       if (!hasSchedule) {
-        return(
+        return (
           <>
-            <Typography variant="inherit" color="red" fontWeight="bold">Expirada</Typography>
+            <Typography variant="inherit" color="red" fontWeight="bold">
+              Expirada
+            </Typography>
             <Typography variant="inherit">No fue agendada.</Typography>
           </>
         );
       }
-      return(
+      return (
         <>
-          <Typography variant="inherit" fontWeight="bold">Terminada</Typography>
-          <Typography variant="inherit">Fue agendada para el {scheduleString[0]} a las {scheduleString[1]} y se realizó ([detalles])/no se realizó.</Typography>
+          <Typography variant="inherit" fontWeight="bold">
+            Terminada
+          </Typography>
+          <Typography variant="inherit">
+            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]} y
+            se realizó ([detalles])/no se realizó.
+          </Typography>
         </>
       );
       break;
     case "Late reschedule":
       console.log("Case Late reschedule");
-      return(
+      return (
         <>
-          <Typography variant="inherit" color="red" fontWeight="bold">Expirada</Typography>
+          <Typography variant="inherit" color="red" fontWeight="bold">
+            Expirada
+          </Typography>
           <Typography variant="inherit">
-            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.</Typography>
+            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.
+          </Typography>
           <Link
             href={`/agendar/${practiceId}`}
             color="secondary"
@@ -112,11 +134,14 @@ function ScheduleLink(props) {
       break;
     case "Reschedule":
       console.log("Case Reschedule");
-      return(
+      return (
         <>
-          <Typography variant="inherit" fontWeight="bold">Agendada</Typography>
+          <Typography variant="inherit" fontWeight="bold">
+            Agendada
+          </Typography>
           <Typography variant="inherit">
-            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.</Typography>
+            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.
+          </Typography>
           <Link
             href={`/agendar/${practiceId}`}
             color="secondary"
@@ -124,13 +149,12 @@ function ScheduleLink(props) {
           >
             Reagendar
           </Link>
-          
         </>
       );
       break;
     case "Available":
       console.log("Case Available");
-      return(
+      return (
         <Link
           href={`/agendar/${practiceId}`}
           color="secondary"
@@ -142,16 +166,23 @@ function ScheduleLink(props) {
       break;
     case "Not available":
       console.log("Case Not available");
-      return(
+      return (
         <>
-          <Typography variant="inherit" fontWeight="bold">No disponible</Typography>
-          <Typography variant="inherit">Estará disponible para agendar a partir del {schedulingDate[0]} a las {schedulingDate[1]}.</Typography>
+          <Typography variant="inherit" fontWeight="bold">
+            No disponible
+          </Typography>
+          <Typography variant="inherit">
+            Estará disponible para agendar a partir del {schedulingDate[0]} a
+            las {schedulingDate[1]}.
+          </Typography>
         </>
       );
       break;
     default:
-      return(
-        <Typography variant="inherit" fontWeight="bold">No disponible</Typography>
+      return (
+        <Typography variant="inherit" fontWeight="bold">
+          No disponible
+        </Typography>
       );
       break;
   }
@@ -210,7 +241,9 @@ function Row(props) {
                           practiceId={practiceRow.id}
                           startDate={practiceRow.startDate}
                           endDate={practiceRow.endDate}
-                          currentStudentSchedule={practiceRow.currentStudentSchedule}
+                          currentStudentSchedule={
+                            practiceRow.currentStudentSchedule
+                          }
                         />
                       </TableCell>
                     </TableRow>
@@ -262,7 +295,9 @@ export default function Index() {
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
-            <Typography>Bienvenid@, hoy es {currDateString[0]} a las {currDateString[1]}.</Typography>
+            <Typography>
+              Bienvenid@, hoy es {currDateString[0]} a las {currDateString[1]}.
+            </Typography>
             <br />
             <Typography variant="h4">Prácticas disponibles</Typography>
             <TableContainer component={Paper} sx={{ width: 0.6 }}>

@@ -421,7 +421,7 @@ export default function Index() {
                                   )
                               )),
                               (
-                              /*console.log(Object.values(practices)),
+                                /*console.log(Object.values(practices)),
                                 console.log(Object.values(subjects[row.subjectId].practicesIds)),
                                 console.log(subPractices)*/
                                 <Row
@@ -443,8 +443,8 @@ export default function Index() {
                 {nearestPracticeExists ? (
                   <>
                     <Typography variant="body1">
-                      Práctica no. {nearestPractice.practiceNumber} "
-                      {nearestPractice.name}" de {nearestPracticeSubject.id} -{" "}
+                      Práctica no. {nearestPractice.practiceNumber} &quot;
+                      {nearestPractice.name}&quot; de {nearestPracticeSubject.id} -{" "}
                       {nearestPracticeSubject.name}, el día{" "}
                       {nearestPracticeDate[0]} a las {nearestPracticeDate[1]}{" "}
                       horas.

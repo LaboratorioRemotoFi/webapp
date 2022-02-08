@@ -101,7 +101,7 @@ const studentMockData = {
       practiceNumber: 1,
       raspIp: "256.256.000.000",
       startDate: new Date("2022-01-24T07:00").getTime(),
-      endDate: new Date("2022-01-28T18:00").getTime(),
+      endDate: new Date("2022-01-28T19:00").getTime(),
       timeFrame: 60,
       currentStudentSchedule: NaN,
       reservedSchedules: [
@@ -167,7 +167,7 @@ const studentMockData = {
       practiceNumber: 3,
       raspIp: "256.256.000.000",
       startDate: new Date("2022-02-07T07:00").getTime(),
-      endDate: new Date("2022-02-11T19:00").getTime(),
+      endDate: new Date("2022-02-11T22:00").getTime(),
       timeFrame: 60,
       currentStudentSchedule: NaN,
       reservedSchedules: [

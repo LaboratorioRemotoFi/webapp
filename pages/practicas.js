@@ -444,7 +444,8 @@ export default function Index() {
                   <>
                     <Typography variant="body1">
                       Práctica no. {nearestPractice.practiceNumber} &quot;
-                      {nearestPractice.name}&quot; de {nearestPracticeSubject.id} -{" "}
+                      {nearestPractice.name}&quot; de{" "}
+                      {nearestPracticeSubject.id} -{" "}
                       {nearestPracticeSubject.name}, el día{" "}
                       {nearestPracticeDate[0]} a las {nearestPracticeDate[1]}{" "}
                       horas.

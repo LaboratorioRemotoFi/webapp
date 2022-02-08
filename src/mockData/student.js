@@ -60,8 +60,8 @@ const studentMockData = {
         // Another option (put student id here and remove "reservedSchedules" from user object):
         //[1, 2022, 1, 8, 10, 0] // -> [studentId, year, month, day, hour, minute]
         //[2022, 1, 8, 10, 0],
-        { studentId: 0, schedule: new Date("2022-01-07T08:20").getTime() },
-        { studentId: 10, schedule: new Date("2022-02-02T10:20").getTime() },
+        { studentId: 0, schedule: new Date("2022-01-25T07:45").getTime() },
+        { studentId: 10, schedule: new Date("2022-02-02T08:30").getTime() },
       ],
     },
     "1500-2": {
@@ -92,7 +92,7 @@ const studentMockData = {
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
-        { studentId: 10, schedule: new Date("2022-02-22T07:45").getTime() },
+        { studentId: 10, schedule: new Date("2022-02-22T07:30").getTime() },
       ],
     },
     "1501-1": {

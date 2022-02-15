@@ -6,11 +6,14 @@ const theme = createTheme({
   palette: {
     primary: {
       //main: "#556cd6",
-      main: "#cd171e",
-      contrastText: "white",
+      light: "#EB7478",
+      main: "#CD171E",
+      dark: "#8B1115",
+      contrastText: "#fff",
     },
     secondary: {
-      main: "#19857b",
+      //main: "#19857b",
+      main: "#116BD1",
     },
     error: {
       main: red.A400,

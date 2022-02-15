@@ -13,7 +13,7 @@ const studentMockData = {
     1500: {
       id: 1500,
       name: "Mecánica",
-      practicesIds: ["1500-1", "1500-2", "1500-3"],
+      practicesIds: ["1500-1", "1500-2", "1500-3", "1500-4", "1500-5"],
     },
     1501: {
       id: 1501,
@@ -60,8 +60,8 @@ const studentMockData = {
         // Another option (put student id here and remove "reservedSchedules" from user object):
         //[1, 2022, 1, 8, 10, 0] // -> [studentId, year, month, day, hour, minute]
         //[2022, 1, 8, 10, 0],
-        { studentId: 0, schedule: new Date("2022-01-07T08:20").getTime() },
-        { studentId: 10, schedule: new Date("2022-02-02T10:20").getTime() },
+        { studentId: 0, schedule: new Date("2022-01-25T07:45").getTime() },
+        { studentId: 10, schedule: new Date("2022-02-02T08:30").getTime() },
       ],
     },
     "1500-2": {
@@ -86,13 +86,41 @@ const studentMockData = {
       name: "Plano inclinado 3",
       practiceNumber: 3,
       raspIp: "256.256.000.000",
+      startDate: new Date("2022-02-14T07:00").getTime(),
+      endDate: new Date("2022-02-18T19:00").getTime(),
+      timeFrame: 30,
+      currentStudentSchedule: NaN,
+      reservedSchedules: [
+        // Reserved start times and days
+        { studentId: 10, schedule: new Date("2022-02-14T07:30").getTime() },
+      ],
+    },
+    "1500-4": {
+      id: "1500-4",
+      name: "Plano inclinado 4",
+      practiceNumber: 4,
+      raspIp: "256.256.000.000",
+      startDate: new Date("2022-02-21T07:00").getTime(),
+      endDate: new Date("2022-03-04T19:00").getTime(),
+      timeFrame: 50,
+      currentStudentSchedule: NaN,
+      reservedSchedules: [
+        // Reserved start times and days
+        { studentId: 10, schedule: new Date("2022-02-21T08:40").getTime() },
+      ],
+    },
+    "1500-5": {
+      id: "1500-5",
+      name: "Plano inclinado 5",
+      practiceNumber: 5,
+      raspIp: "256.256.000.000",
       startDate: new Date("2022-02-28T07:00").getTime(),
       endDate: new Date("2022-03-04T19:00").getTime(),
       timeFrame: 30,
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
-        { studentId: 10, schedule: new Date("2022-02-22T07:45").getTime() },
+        { studentId: 10, schedule: new Date("2022-02-22T07:30").getTime() },
       ],
     },
     "1501-1": {
@@ -101,7 +129,7 @@ const studentMockData = {
       practiceNumber: 1,
       raspIp: "256.256.000.000",
       startDate: new Date("2022-01-24T07:00").getTime(),
-      endDate: new Date("2022-01-28T18:00").getTime(),
+      endDate: new Date("2022-01-28T19:00").getTime(),
       timeFrame: 60,
       currentStudentSchedule: NaN,
       reservedSchedules: [
@@ -167,7 +195,7 @@ const studentMockData = {
       practiceNumber: 3,
       raspIp: "256.256.000.000",
       startDate: new Date("2022-02-07T07:00").getTime(),
-      endDate: new Date("2022-02-11T19:00").getTime(),
+      endDate: new Date("2022-02-11T22:00").getTime(),
       timeFrame: 60,
       currentStudentSchedule: NaN,
       reservedSchedules: [

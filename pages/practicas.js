@@ -100,7 +100,6 @@ function ScheduleLink(props) {
   const availableDateStart = getDateString(startDate);
   const availableDateEnd = getDateString(endDate);
 
-  //
   if (currDate > endDate) {
     state = "Expired";
   } else if (
@@ -128,6 +127,7 @@ function ScheduleLink(props) {
   switch (state) {
     case "Expired":
       console.log("Case Expired");
+      // Change for !done
       if (!hasSchedule) {
         return (
           <>
@@ -178,6 +178,7 @@ function ScheduleLink(props) {
         </>
       );
       break;
+    // ADD CHECK FOR DONE/NOT DONE
     case "Late reschedule":
       console.log("Case Late reschedule");
       return (

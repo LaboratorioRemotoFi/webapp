@@ -106,6 +106,7 @@ const studentMockData = {
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
+        { studentId: 0, schedule: new Date("2022-02-21T07:00").getTime() },
         { studentId: 10, schedule: new Date("2022-02-21T08:40").getTime() },
       ],
     },
@@ -113,20 +114,6 @@ const studentMockData = {
       id: "1500-5",
       name: "Plano inclinado 5",
       practiceNumber: 5,
-      raspIp: "256.256.000.000",
-      startDate: new Date("2022-02-28T07:00").getTime(),
-      endDate: new Date("2022-03-04T19:00").getTime(),
-      timeFrame: 30,
-      currentStudentSchedule: NaN,
-      reservedSchedules: [
-        // Reserved start times and days
-        { studentId: 10, schedule: new Date("2022-02-22T07:30").getTime() },
-      ],
-    },
-    "1500-6": {
-      id: "1500-6",
-      name: "Plano inclinado 6",
-      practiceNumber: 6,
       raspIp: "256.256.000.000",
       startDate: new Date("2022-03-07T07:00").getTime(),
       endDate: new Date("2022-04-29T22:00").getTime(),
@@ -188,6 +175,7 @@ const studentMockData = {
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
+        { studentId: 0, schedule: new Date("2022-02-18T07:00").getTime() },
         { studentId: 6, schedule: new Date("2022-02-21T07:40").getTime() },
         { studentId: 2, schedule: new Date("2022-04-29T21:00").getTime() },
       ],

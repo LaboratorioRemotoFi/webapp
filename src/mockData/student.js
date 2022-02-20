@@ -18,12 +18,12 @@ const studentMockData = {
     1501: {
       id: 1501,
       name: "Cinemática",
-      practicesIds: ["1501-1", "1501-2", "1501-3"],
+      practicesIds: ["1501-1", "1501-2", "1501-3", "1501-4"],
     },
     1502: {
       id: 1502,
       name: "Dinámica",
-      practicesIds: ["1502-1", "1502-2", "1502-3"],
+      practicesIds: ["1502-1", "1502-2", "1502-3", "1502-4"],
     },
   },
   groups: {
@@ -123,6 +123,20 @@ const studentMockData = {
         { studentId: 10, schedule: new Date("2022-02-22T07:30").getTime() },
       ],
     },
+    "1500-6": {
+      id: "1500-6",
+      name: "Plano inclinado 6",
+      practiceNumber: 6,
+      raspIp: "256.256.000.000",
+      startDate: new Date("2022-03-07T07:00").getTime(),
+      endDate: new Date("2022-04-29T22:00").getTime(),
+      timeFrame: 30,
+      currentStudentSchedule: NaN,
+      reservedSchedules: [
+        // Reserved start times and days
+        { studentId: 5, schedule: new Date("2022-03-07T07:30").getTime() },
+      ],
+    },
     "1501-1": {
       id: "1501-1",
       name: "Fricción 1",
@@ -163,6 +177,21 @@ const studentMockData = {
         // Reserved start times and days
       ],
     },
+    "1501-4": {
+      id: "1501-4",
+      name: "Fricción 4",
+      practiceNumber: 4,
+      raspIp: "256.256.000.000",
+      startDate: new Date("2022-02-14T07:00").getTime(),
+      endDate: new Date("2022-04-29T22:00").getTime(),
+      timeFrame: 40,
+      currentStudentSchedule: NaN,
+      reservedSchedules: [
+        // Reserved start times and days
+        { studentId: 6, schedule: new Date("2022-02-21T07:40").getTime() },
+        { studentId: 2, schedule: new Date("2022-04-29T21:00").getTime() },
+      ],
+    },
     "1502-1": {
       id: "1502-1",
       name: "Caída libre 1",
@@ -200,6 +229,20 @@ const studentMockData = {
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
+      ],
+    },
+    "1502-4": {
+      id: "1502-4",
+      name: "Caída libre 4",
+      practiceNumber: 4,
+      raspIp: "256.256.000.000",
+      startDate: new Date("2022-02-14T07:00").getTime(),
+      endDate: new Date("2022-04-29T22:00").getTime(),
+      timeFrame: 45,
+      currentStudentSchedule: NaN,
+      reservedSchedules: [
+        // Reserved start times and days
+        { studentId: 6, schedule: new Date("2022-03-22T07:45").getTime() },
       ],
     },
   },

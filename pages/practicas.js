@@ -254,9 +254,9 @@ function Row(props) {
         <TableCell align="right">{row.groupNumber}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ padding: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
+            <Box sx={{ margin: 0 }}>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
@@ -392,12 +392,12 @@ export default function Index() {
         <Container maxWidth="false">
           <Box my={4}>
             <Typography>
-              Bienvenid@, hoy es {currDateString[0]} a las {currDateString[1]}.
+              Bienvenid@ {user?.name}, hoy es {currDateString[0]} a las {currDateString[1]}.
             </Typography>
             <br />
             <Typography variant="h4">Prácticas disponibles</Typography>
             <Grid container spacing={4}>
-              <Grid item xs={7}>
+              <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
                 <TableContainer component={Paper} sx={{ width: 1 }}>
                   <Table aria-label="collapsible table">
                     <TableHead>
@@ -438,7 +438,7 @@ export default function Index() {
                   </Table>
                 </TableContainer>
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={12} md={5} order={{ xs: 1, md: 2 }}>
                 <Typography variant="h6">Próxima práctica:</Typography>
                 {nearestPracticeExists ? (
                   <>

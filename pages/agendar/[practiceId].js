@@ -22,10 +22,10 @@ import {
 import Link from "../../src/components/Link";
 import Layout from "../../src/components/Layout";
 import useStoreContext from "../../src/hooks/storeContext";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import esLocale from 'date-fns/locale/es';
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
+import esLocale from "date-fns/locale/es";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -108,6 +108,20 @@ function convertDate(schedule, timeFrame) {
   return newSched;
 }
 
+function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
+  let scheduleList = [];
+
+  let temp = new Date(day).getTime();
+
+  for (let j = 1; j < noAvailSchedPerDay; j++) {
+    scheduleList.push(temp);
+    temp = temp + timeFrame * (1000 * 60);
+  }
+  scheduleList.push(temp);
+
+  return scheduleList;
+}
+
 export default function Index() {
   const router = useRouter();
   const { practiceId } = router.query;
@@ -182,13 +196,61 @@ export default function Index() {
 
   let convertedDate;
 
-  const [selectedDate, handleDateChange] = React.useState(null);
+  const firstDayEndTime = [
+    new Date(currPractice.startDate).getFullYear(),
+    new Date(currPractice.startDate).getMonth(),
+    new Date(currPractice.startDate).getDate(),
+    new Date(currPractice.endDate).getHours(),
+    new Date(currPractice.endDate).getMinutes(),
+  ];
+  const startDateEndTime = new Date(...firstDayEndTime).getTime();
 
-  const [age, setAge] = React.useState('');
+  const noAvailSchedPerDay =
+    ((startDateEndTime - currPractice.startDate) /
+      (1000 * 60) /
+      currPractice.timeFrame) |
+    0;
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const startHour = new Date(currPractice.startDate).getHours();
+  const startMinutes = new Date(currPractice.startDate).getMinutes();
+
+  const initialDate = isNaN(currPractice.currentStudentSchedule)
+    ? null
+    : currPractice.currentStudentSchedule;
+
+  const [selectedDate, handleDateChange] = React.useState(initialDate);
+  //if (isNaN(selectedDate)) handleDateChange(null);
+  console.log("Selected date");
+  console.log(selectedDate);
+  const [hourIsDisabled, disableHourSelection] = React.useState(true);
+
+  const [newDate, setNewDate] = React.useState("");
+
+  const handleHourChange = (event) => {
+    setNewDate(event.target.value);
   };
+
+  console.log("NEW DATE HOUR");
+  console.log(newDate);
+  console.log(new Date(newDate));
+
+  const minDate =
+    new Date().getTime() > currPractice.startDate
+      ? new Date().getTime()
+      : currPractice.startDate;
+  console.log("MIN DATE");
+  console.log(new Date(minDate));
+
+  //let daySchedules = [];
+
+  let daySchedules =
+    selectedDate == null
+      ? []
+      : getDaySchedules(
+          selectedDate.getTime(),
+          noAvailSchedPerDay,
+          currPractice.timeFrame
+        );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
@@ -206,42 +268,78 @@ export default function Index() {
               Regresar a lista de prácticas
             </Link>
             <Typography variant="h6" mt={2} mb={2}>
-              Para reservar un horario, selecciona una fecha y hora a continuación:
+              Para reservar un horario, selecciona una fecha y hora a
+              continuación:
             </Typography>
             <Grid container spacing={4} mb={2}>
-              <Grid item xs={3}>
+              <Grid item md={3} xs={6}>
                 <DatePicker
-                  mask={'__/__/____'}
+                  mask={"__/__/____"}
                   label="Selecciona una fecha"
                   value={selectedDate}
-                  minDate={currPractice.startDate}
+                  minDate={minDate}
                   maxDate={currPractice.endDate}
                   shouldDisableDate={(day) => {
                     console.log("shouldDisableDate");
                     return currPractice.invalidWeekdays.includes(day.getDay());
                   }}
                   onChange={(newValue) => {
-                    handleDateChange(newValue);
+                    if (newValue !== null) {
+                      newValue.setHours(startHour, startMinutes, 0);
+                      handleDateChange(newValue);
+                      disableHourSelection(false);
+                      console.log(newValue);
+                      console.log(newValue.getTime());
+                    }
                   }}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item md={2} xs={6}>
                 <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-helper-label">Hora</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
-                    value={age}
-                    label="Hora"
-                    onChange={handleChange}
-                    disabled={false}
-                  >
-                    <MenuItem value=""><em>Selecciona...</em></MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    Hora
+                  </InputLabel>
+                  {!daySchedules.length > 0 ? (
+                    <Select
+                      labelId="demo-simple-select-helper-label"
+                      id="demo-simple-select-helper"
+                      value={newDate}
+                      label="Hora"
+                      onChange={handleHourChange}
+                      disabled={hourIsDisabled}
+                    >
+                      <MenuItem value="">
+                        <em>No disponibles</em>
+                      </MenuItem>
+                    </Select>
+                  ) : (
+                    <Select
+                      labelId="demo-simple-select-helper-label"
+                      id="demo-simple-select-helper"
+                      value={newDate}
+                      label="Hora"
+                      onChange={handleHourChange}
+                      disabled={hourIsDisabled}
+                    >
+                      <MenuItem value="">
+                        <em>Selecciona...</em>
+                      </MenuItem>
+                      {daySchedules.map(
+                        (schedule) => (
+                          (convertedDate = convertDate(
+                            schedule,
+                            currPractice.timeFrame
+                          )),
+                          (
+                            <MenuItem value={schedule} disabled={true}>
+                              {convertedDate[1]}
+                            </MenuItem>
+                          )
+                        )
+                      )}
+                    </Select>
+                  )}
                 </FormControl>
               </Grid>
             </Grid>

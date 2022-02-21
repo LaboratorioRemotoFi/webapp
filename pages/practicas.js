@@ -58,8 +58,8 @@ function ScheduleDetails(props) {
 
   return (
     <>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item sm={1} xs={2}>
+      <Grid container spacing={2} alignItems="center" mt={0} pt={0}>
+        <Grid item sm={1} xs={2} style={{ paddingTop: 0 }}>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -68,7 +68,7 @@ function ScheduleDetails(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </Grid>
-        <Grid item sm={11} xs={10}>
+        <Grid item sm={11} xs={10} style={{ paddingTop: 0 }}>
           <Typography variant="inherit" fontWeight="bold">
             Detalles
           </Typography>
@@ -86,7 +86,8 @@ ScheduleDetails.propTypes = {
 };
 
 function ScheduleLink(props) {
-  const { practiceId, startDate, endDate, timeFrame, currentStudentSchedule } = props;
+  const { practiceId, startDate, endDate, timeFrame, currentStudentSchedule } =
+    props;
   const [open, setOpen] = React.useState(false);
 
   // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
@@ -184,14 +185,15 @@ function ScheduleLink(props) {
       return (
         <>
           <Typography variant="inherit" color="red" fontWeight="bold">
-            Expirada{" "}
-            (<Link
+            Expirada (
+            <Link
               href={`/agendar/${practiceId}`}
               color="secondary"
               fontWeight="bold"
             >
               Reagendar
-            </Link>)
+            </Link>
+            )
           </Typography>
           <ScheduleDetails
             details={
@@ -219,14 +221,15 @@ function ScheduleLink(props) {
       return (
         <>
           <Typography variant="inherit" fontWeight="bold">
-            Agendada{" "}
-            (<Link
+            Agendada (
+            <Link
               href={`/agendar/${practiceId}`}
               color="secondary"
               fontWeight="bold"
             >
               Reagendar
-            </Link>)
+            </Link>
+            )
           </Typography>
           <ScheduleDetails
             details={

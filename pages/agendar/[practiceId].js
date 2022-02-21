@@ -1,21 +1,31 @@
 import React, { useContext } from "react";
 import { useRouter } from "next/router";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 import {
   Box,
   Button,
+  Container,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
+  Typography,
   Paper,
 } from "@mui/material";
 import Link from "../../src/components/Link";
 import Layout from "../../src/components/Layout";
 import useStoreContext from "../../src/hooks/storeContext";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+import esLocale from 'date-fns/locale/es';
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -160,7 +170,7 @@ export default function Index() {
     currPractice.startDate,
     currPractice.endDate,
     currPractice.timeFrame,
-    [0, 6]
+    currPractice.invalidWeekdays
   );
 
   let options = {
@@ -172,8 +182,16 @@ export default function Index() {
 
   let convertedDate;
 
+  const [selectedDate, handleDateChange] = React.useState(null);
+
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
   return (
-    <>
+    <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
@@ -187,6 +205,46 @@ export default function Index() {
             <Link href="/practicas" color="secondary">
               Regresar a lista de prácticas
             </Link>
+            <Typography variant="h6" mt={2} mb={2}>
+              Para reservar un horario, selecciona una fecha y hora a continuación:
+            </Typography>
+            <Grid container spacing={4} mb={2}>
+              <Grid item xs={3}>
+                <DatePicker
+                  mask={'__/__/____'}
+                  label="Selecciona una fecha"
+                  value={selectedDate}
+                  minDate={currPractice.startDate}
+                  maxDate={currPractice.endDate}
+                  shouldDisableDate={(day) => {
+                    console.log("shouldDisableDate");
+                    return currPractice.invalidWeekdays.includes(day.getDay());
+                  }}
+                  onChange={(newValue) => {
+                    handleDateChange(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-helper-label">Hora</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={age}
+                    label="Hora"
+                    onChange={handleChange}
+                    disabled={false}
+                  >
+                    <MenuItem value=""><em>Selecciona...</em></MenuItem>
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -288,6 +346,6 @@ export default function Index() {
           </Box>
         </Container>
       </Layout>
-    </>
+    </LocalizationProvider>
   );
 }

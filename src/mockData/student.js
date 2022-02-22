@@ -112,6 +112,7 @@ const studentMockData = {
         // Reserved start times and days
         { studentId: 0, schedule: new Date("2022-02-21T07:00").getTime() },
         { studentId: 10, schedule: new Date("2022-02-21T08:40").getTime() },
+        { studentId: 3, schedule: new Date("2022-03-04T08:40").getTime() },
       ],
     },
     "1500-5": {
@@ -127,6 +128,7 @@ const studentMockData = {
       reservedSchedules: [
         // Reserved start times and days
         { studentId: 5, schedule: new Date("2022-03-07T07:30").getTime() },
+        { studentId: 7, schedule: new Date("2022-03-07T09:00").getTime() },
       ],
     },
     "1501-1": {

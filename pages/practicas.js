@@ -26,7 +26,6 @@ import useStoreContext from "../src/hooks/storeContext";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 let currDate = Date.now();
-//let currDate = new Date("2022-02-04T07:00").getTime();
 
 function getDateString(date) {
   let optionsDay = {
@@ -42,7 +41,6 @@ function getDateString(date) {
   };
 
   const dayString = new Date(date).toLocaleDateString("es-MX", optionsDay);
-  //dayString = dayString.charAt(0).toUpperCase() + dayString.slice(1);
   const hourString = new Date(date)
     .toLocaleDateString("es-MX", optionsHour)
     .slice(-5);
@@ -127,7 +125,6 @@ function ScheduleLink(props) {
 
   switch (state) {
     case "Expired":
-      console.log("Case Expired");
       // Change for !done
       if (!hasSchedule) {
         return (
@@ -181,7 +178,6 @@ function ScheduleLink(props) {
       break;
     // ADD CHECK FOR DONE/NOT DONE
     case "Late reschedule":
-      console.log("Case Late reschedule");
       return (
         <>
           <Typography variant="inherit" color="red" fontWeight="bold">
@@ -217,7 +213,6 @@ function ScheduleLink(props) {
       );
       break;
     case "Reschedule":
-      console.log("Case Reschedule");
       return (
         <>
           <Typography variant="inherit" fontWeight="bold">
@@ -253,7 +248,6 @@ function ScheduleLink(props) {
       );
       break;
     case "Available":
-      console.log("Case Available");
       return (
         <>
           <Link
@@ -281,7 +275,6 @@ function ScheduleLink(props) {
       );
       break;
     case "Not available":
-      console.log("Case Not available");
       return (
         <>
           <Typography variant="inherit" fontWeight="bold">
@@ -476,6 +469,7 @@ export default function Index() {
       nearestPractice.currentStudentSchedule - currDate > 0 ? true : false;
   }
 
+  console.log("Nearest practice id and date");
   console.log(nearestPractice);
   console.log(nearestPracticeDate);
 
@@ -515,9 +509,6 @@ export default function Index() {
                                   )
                               )),
                               (
-                                /*console.log(Object.values(practices)),
-                                console.log(Object.values(subjects[row.subjectId].practicesIds)),
-                                console.log(subPractices)*/
                                 <Row
                                   key={row.id}
                                   row={row}

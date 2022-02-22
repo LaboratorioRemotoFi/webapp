@@ -80,7 +80,6 @@ function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
 }
 
 function isNotAvailable(schedule, scheduleList, currPractice) {
-  //console.log("disable hour");
   let disable = !scheduleList
     .filter(
       (schedule) =>
@@ -96,7 +95,6 @@ function isNotAvailable(schedule, scheduleList, currPractice) {
         })
     )
     .includes(schedule);
-  //console.log(disable);
   return disable;
 }
 
@@ -112,13 +110,14 @@ export default function Index() {
 
   // Variables for selected date from date picker
   const [selectedDate, setSelectedDate] = React.useState(null);
-  console.log("Selected date");
-  console.log(selectedDate);
   // Disable hour select if there's no date picked
   const [hourIsDisabled, disableHourSelection] = React.useState(true);
 
   // Final new date selected, obtained after selecting hour
   const [newDate, setNewDate] = React.useState("");
+  console.log("New selected date");
+  console.log(newDate);
+  console.log(new Date(newDate));
 
   // String for final date
   const [convertedNewDate, setConvertedNewDate] = React.useState(null);
@@ -190,26 +189,18 @@ export default function Index() {
 
   // Previous registered saved schedule
   let previousSchedule;
-  console.log("CURRSTUDENT SCHEDULE");
-  console.log(currPractice.currentStudentSchedule);
   if (!isNaN(currPractice.currentStudentSchedule)) {
     const initialConvertedDate = convertDate(
       currPractice.currentStudentSchedule,
       currPractice.timeFrame
     );
-    console.log("PREVIOUS SCHEDULE CONVERTED DATE");
-    console.log(initialConvertedDate);
     previousSchedule = `Actualmente, se ha reservado el horario con fecha${" "}
     del ${initialConvertedDate[0]}, hora de inicio a las ${
       initialConvertedDate[1]
     }${" "}
     y hora de finalización a las ${initialConvertedDate[2]}.`;
-    console.log("PREVIOUS SCHEDULE");
-    console.log(previousSchedule);
   } else {
     previousSchedule = "No hay un horario reservado actualmente.";
-    console.log("PREVIOUS SCHEDULE");
-    console.log(previousSchedule);
   }
 
   // Minimum date available to select on day picker
@@ -217,20 +208,14 @@ export default function Index() {
     new Date().getTime() > currPractice.startDate
       ? new Date().getTime()
       : currPractice.startDate;
-  console.log("MIN DATE");
-  console.log(new Date(minDate));
 
   const handleDayChange = (value) => {
     if (value !== null) {
       value.setHours(startHour, startMinutes, 0);
       setSelectedDate(value);
       disableHourSelection(false);
-      console.log("DAY CHANGE");
-      console.log(value);
-      console.log(value.getTime());
       setNewDate("");
       setConvertedNewDate(null);
-      //convertedNewDate = null;
     }
   };
 
@@ -243,17 +228,10 @@ export default function Index() {
           noAvailSchedPerDay,
           currPractice.timeFrame
         );
-  console.log("DAY SCHEDULES");
-  console.log(daySchedules);
 
   const handleHourChange = (event) => {
-    console.log("HANDLE HOUR CHANGE");
-    console.log(event.target.value);
     if (!(event.target.value === "")) {
       setNewDate(event.target.value);
-      console.log("HOUR CHANGE");
-      console.log(event.target.value);
-      console.log(new Date(event.target.value));
       setConvertedNewDate(
         convertDate(event.target.value, currPractice.timeFrame)
       );
@@ -263,10 +241,6 @@ export default function Index() {
       setConvertedNewDate(null);
     }
   };
-
-  console.log("NEW DATE HOUR");
-  console.log(newDate);
-  console.log(new Date(newDate));
 
   const handleReserveSchedule = () => {
     currentDispatch({
@@ -295,12 +269,10 @@ export default function Index() {
           <Box my={4}>
             <Typography variant="h4">
               Práctica No. {currPractice.practiceNumber} - {currPractice.name}
-              {console.log("TITLE")}
             </Typography>
             <Typography variant="h5">
               {currSubject.id} - {currSubject.name}, grupo{" "}
               {currGroup.groupNumber}
-              {console.log("SUBTITLE")}
             </Typography>
             <Link href="/practicas" color="secondary">
               Regresar a lista de prácticas
@@ -350,7 +322,6 @@ export default function Index() {
                   minDate={minDate}
                   maxDate={currPractice.endDate}
                   shouldDisableDate={(day) => {
-                    console.log("shouldDisableDate");
                     return currPractice.invalidWeekdays.includes(day.getDay());
                   }}
                   onChange={handleDayChange}

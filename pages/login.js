@@ -29,7 +29,7 @@ export default function Index() {
   const id = open ? "simple-popper" : undefined;
 
   const handleSubmit = async () => {
-    const response = await fetch("http://localhost:3000/api/authenticate", {
+    const response = await fetch("/api/authenticate", {
       method: "POST",
       headers: {
         Accept: "application/json",

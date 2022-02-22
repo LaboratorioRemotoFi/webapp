@@ -483,7 +483,9 @@ export default function Index() {
               {currDateString[1]}.
             </Typography>
             <br />
-            <Typography variant="h4" mb={2}>Prácticas disponibles</Typography>
+            <Typography variant="h4" mb={2}>
+              Prácticas disponibles
+            </Typography>
             <Grid container spacing={4}>
               <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
                 <TableContainer component={Paper} sx={{ width: 1 }}>
@@ -497,28 +499,32 @@ export default function Index() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {!currentState
-                        ? "NO DATA"
-                        : Object.values(groups).map(
-                            (row) => (
-                              // Get only the practices for each subject
-                              (subPractices = Object.values(practices).filter(
-                                (obj) =>
-                                  subjects[row.subjectId].practicesIds.includes(
-                                    obj.id
-                                  )
-                              )),
-                              (
-                                <Row
-                                  key={row.id}
-                                  row={row}
-                                  subject={subjects[row.subjectId]}
-                                  practices={subPractices}
-                                  dispatch={currentDispatch}
-                                />
-                              )
+                      {!currentState ? (
+                        <TableRow>
+                          <TableCell>NO DATA</TableCell>
+                        </TableRow>
+                      ) : (
+                        Object.values(groups).map(
+                          (row) => (
+                            // Get only the practices for each subject
+                            (subPractices = Object.values(practices).filter(
+                              (obj) =>
+                                subjects[row.subjectId].practicesIds.includes(
+                                  obj.id
+                                )
+                            )),
+                            (
+                              <Row
+                                key={row.id}
+                                row={row}
+                                subject={subjects[row.subjectId]}
+                                practices={subPractices}
+                                dispatch={currentDispatch}
+                              />
                             )
-                          )}
+                          )
+                        )
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>

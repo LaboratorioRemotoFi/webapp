@@ -3,6 +3,16 @@ import studentMockData from "../mockData/student.js";
 
 const studentsReducer = (state, action) => {
   switch (action.type) {
+    case "setUserData":
+      return {
+        ...state,
+        user: action.user,
+      };
+    case "logout":
+      return {
+        ...state,
+        user: undefined,
+      };
     case "studentLogin":
       return {
         ...state,

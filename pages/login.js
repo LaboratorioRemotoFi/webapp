@@ -11,13 +11,12 @@ import {
   Box,
 } from "@mui/material";
 import Layout from "../src/components/Layout";
-import { useSessionContext } from "../src/hooks/sessionProvider";
+import useStoreContext from "../src/hooks/storeContext";
 
 export default function Index() {
   const router = useRouter();
 
-  const [sessionState, sessionDispatch] = useSessionContext();
-  const { isAuthenticated, isStudent } = sessionState;
+  const [state, dispatch] = useStoreContext();
 
   const paperStyle1 = { height: "45vh", width: 500, margin: "60px auto" };
   const paperStyle2 = { height: "24vh", width: 570, margin: "5px auto" };
@@ -29,38 +28,29 @@ export default function Index() {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (user == "student" && password == "1234") {
-      sessionDispatch({ type: "studentLogin" });
+  const handleSubmit = async () => {
+    const response = await fetch("http://localhost:3000/api/authenticate", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password, user }),
+    });
+    const content = await response.json();
+
+    if (content?.type === "student") {
+      dispatch({ type: "setUserData", user: content });
       router.push("/practicas");
-    } else if (user == "professor" && password == "4567") {
-      sessionDispatch({ type: "professorLogin" });
+    } else if (content?.type === "proffesor") {
+      dispatch({ type: "setUserData", user: content });
       router.push("/grupos");
-    }
-    if (
-      (user == "student" && password != "1234") ||
-      (user == "professor" && password != "4567")
-    ) {
-      setAnchorEl(anchorEl ? null : event.currentTarget);
     }
   };
 
   const keyPress = (e) => {
     if (e.keyCode == 13) {
-      if (user == "student" && password == "1234") {
-        sessionDispatch({ type: "studentLogin" });
-        router.push("/practicas");
-      } else if (user == "professor" && password == "4567") {
-        sessionDispatch({ type: "professorLogin" });
-        router.push("/grupos");
-      }
-      if (
-        (user == "student" && password != "1234") ||
-        (user == "professor" && password != "4567")
-      ) {
-        setAnchorEl(anchorEl ? null : event.currentTarget);
-      }
+      handleSubmit();
     }
   };
 
@@ -116,7 +106,7 @@ export default function Index() {
             <Grid item>
               <Box sx={{ mx: "20px", mb: "10px" }}>
                 <Button
-                  onClick={handleSubmit}
+                  onClick={() => handleSubmit()}
                   type="submit"
                   sx={{
                     bgcolor: "#cd171e",

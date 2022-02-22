@@ -407,8 +407,8 @@ export default function Index() {
                     xs: "center",
                   }}
                   md
-                  sm={1}
-                  xs={1}
+                  sm={2}
+                  xs={2}
                 >
                   <Typography variant="inherit">
                     Seleccione un horario.

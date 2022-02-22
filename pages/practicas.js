@@ -483,7 +483,7 @@ export default function Index() {
               {currDateString[1]}.
             </Typography>
             <br />
-            <Typography variant="h4">Prácticas disponibles</Typography>
+            <Typography variant="h4" mb={2}>Prácticas disponibles</Typography>
             <Grid container spacing={4}>
               <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
                 <TableContainer component={Paper} sx={{ width: 1 }}>

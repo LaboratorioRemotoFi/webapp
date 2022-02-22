@@ -17,18 +17,7 @@ const clientSideEmotionCache = createEmotionCache();
 export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
-  const [sessionState, sessionDispatch] = SessionProvider();
-  const { isAuthenticated, isStudent } = sessionState;
-
   const [studentsState, studentsDispatch] = StudentsProvider();
-  const [professorsState, professorsDispatch] = ProfessorsProvider();
-
-  let currentState, currentDispatch;
-
-  if (isAuthenticated) {
-    currentState = isStudent ? studentsState : professorsState;
-    currentDispatch = isStudent ? studentsDispatch : professorsDispatch;
-  }
 
   return (
     <CacheProvider value={emotionCache}>
@@ -39,11 +28,9 @@ export default function MyApp(props) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <SessionContext.Provider value={[sessionState, sessionDispatch]}>
-          <StoreContext.Provider value={[currentState, currentDispatch]}>
-            <Component {...pageProps} />
-          </StoreContext.Provider>
-        </SessionContext.Provider>
+        <StoreContext.Provider value={[studentsState, studentsDispatch]}>
+          <Component {...pageProps} />
+        </StoreContext.Provider>
       </ThemeProvider>
     </CacheProvider>
   );

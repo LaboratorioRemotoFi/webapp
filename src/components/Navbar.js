@@ -4,48 +4,41 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { useSessionContext } from "../../src/hooks/sessionProvider";
+import useStoreContext from "../hooks/storeContext";
 import { useRouter } from "next/router";
 
 const Navbar = () => {
+  const [state, dispatch] = useStoreContext();
   const router = useRouter();
 
-  const [sessionState, sessionDispatch] = useSessionContext();
-  const { isAuthenticated } = sessionState;
-
   const handleLogout = () => {
-    sessionDispatch({ type: "logout" });
-    console.log("Navbar Logout");
-    console.log(isAuthenticated);
+    dispatch({ type: "logout" });
     router.push("/login");
   };
 
-  if (isAuthenticated) {
-    return (
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Laboratorio Remoto FI
-            </Typography>
-            <Button
-              onClick={handleLogout}
-              type="submit"
-              sx={{
-                bgcolor: "primary",
-                color: "primary",
-                "&:hover": { color: "white" },
-              }}
-              variant="contained"
-            >
-              Cerrar Sesión
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
-    );
-  }
-  return (
+  return state.user ? (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Laboratorio Remoto FI
+          </Typography>
+          <Button
+            onClick={handleLogout}
+            type="submit"
+            sx={{
+              bgcolor: "primary",
+              color: "primary",
+              "&:hover": { color: "white" },
+            }}
+            variant="contained"
+          >
+            Cerrar Sesión
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
+  ) : (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>

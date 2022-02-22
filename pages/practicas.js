@@ -125,7 +125,6 @@ function ScheduleLink(props) {
 
   switch (state) {
     case "Expired":
-      // Change for !done
       if (!hasSchedule) {
         return (
           <>
@@ -449,9 +448,6 @@ export default function Index() {
 
   let subPractices;
 
-  console.log("Data load Index");
-  console.log(currentState);
-
   currDate = Date.now();
   const currDateString = getDateString(currDate);
 
@@ -468,10 +464,6 @@ export default function Index() {
     buttonIsDisabled =
       nearestPractice.currentStudentSchedule - currDate > 0 ? true : false;
   }
-
-  console.log("Nearest practice id and date");
-  console.log(nearestPractice);
-  console.log(nearestPracticeDate);
 
   return (
     <>
@@ -504,20 +496,20 @@ export default function Index() {
                           <TableCell>NO DATA</TableCell>
                         </TableRow>
                       ) : (
-                        Object.values(groups).map(
-                          (row) => (
+                        user?.groupsIds.map(
+                          (groupId) => (
                             // Get only the practices for each subject
                             (subPractices = Object.values(practices).filter(
                               (obj) =>
-                                subjects[row.subjectId].practicesIds.includes(
-                                  obj.id
-                                )
+                                subjects[
+                                  groups[groupId].subjectId
+                                ].practicesIds.includes(obj.id)
                             )),
                             (
                               <Row
-                                key={row.id}
-                                row={row}
-                                subject={subjects[row.subjectId]}
+                                key={groupId}
+                                row={groups[groupId]}
+                                subject={subjects[groups[groupId].subjectId]}
                                 practices={subPractices}
                                 dispatch={currentDispatch}
                               />

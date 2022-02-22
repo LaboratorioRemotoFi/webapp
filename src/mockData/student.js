@@ -246,6 +246,7 @@ const studentMockData = {
       reservedSchedules: [
         // Reserved start times and days
         { studentId: 6, schedule: new Date("2022-03-22T07:45").getTime() },
+        { studentId: 9, schedule: new Date("2022-04-29T07:00").getTime() },
       ],
     },
   },

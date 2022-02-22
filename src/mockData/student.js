@@ -55,6 +55,7 @@ const studentMockData = {
       startDate: new Date("2022-01-24T07:00").getTime(),
       endDate: new Date("2022-01-28T18:00").getTime(),
       timeFrame: 45, // Minutes
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Another option (put student id here and remove "reservedSchedules" from user object):
@@ -72,6 +73,7 @@ const studentMockData = {
       startDate: new Date("2022-01-31T07:00").getTime(),
       endDate: new Date("2022-02-11T19:00").getTime(),
       timeFrame: 40,
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -89,6 +91,7 @@ const studentMockData = {
       startDate: new Date("2022-02-14T07:00").getTime(),
       endDate: new Date("2022-02-18T19:00").getTime(),
       timeFrame: 30,
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -103,11 +106,13 @@ const studentMockData = {
       startDate: new Date("2022-02-21T07:00").getTime(),
       endDate: new Date("2022-03-04T19:00").getTime(),
       timeFrame: 50,
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
         { studentId: 0, schedule: new Date("2022-02-21T07:00").getTime() },
         { studentId: 10, schedule: new Date("2022-02-21T08:40").getTime() },
+        { studentId: 3, schedule: new Date("2022-03-04T08:40").getTime() },
       ],
     },
     "1500-5": {
@@ -118,10 +123,12 @@ const studentMockData = {
       startDate: new Date("2022-03-07T07:00").getTime(),
       endDate: new Date("2022-04-29T22:00").getTime(),
       timeFrame: 30,
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
         { studentId: 5, schedule: new Date("2022-03-07T07:30").getTime() },
+        { studentId: 7, schedule: new Date("2022-03-07T09:00").getTime() },
       ],
     },
     "1501-1": {
@@ -132,6 +139,7 @@ const studentMockData = {
       startDate: new Date("2022-01-24T07:00").getTime(),
       endDate: new Date("2022-01-28T19:00").getTime(),
       timeFrame: 60,
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -145,6 +153,7 @@ const studentMockData = {
       startDate: new Date("2022-01-31T07:00").getTime(),
       endDate: new Date("2022-02-04T21:00").getTime(),
       timeFrame: 60,
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -159,6 +168,7 @@ const studentMockData = {
       startDate: new Date("2022-02-07T07:00").getTime(),
       endDate: new Date("2022-02-11T19:00").getTime(),
       timeFrame: 60,
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -172,6 +182,7 @@ const studentMockData = {
       startDate: new Date("2022-02-14T07:00").getTime(),
       endDate: new Date("2022-04-29T22:00").getTime(),
       timeFrame: 40,
+      invalidWeekdays: [0, 6],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -188,6 +199,7 @@ const studentMockData = {
       startDate: new Date("2022-01-24T07:00").getTime(),
       endDate: new Date("2022-01-28T18:00").getTime(),
       timeFrame: 60,
+      invalidWeekdays: [0],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -201,6 +213,7 @@ const studentMockData = {
       startDate: new Date("2022-01-31T07:00").getTime(),
       endDate: new Date("2022-02-04T21:00").getTime(),
       timeFrame: 50,
+      invalidWeekdays: [0],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -214,6 +227,7 @@ const studentMockData = {
       startDate: new Date("2022-02-07T07:00").getTime(),
       endDate: new Date("2022-02-11T22:00").getTime(),
       timeFrame: 60,
+      invalidWeekdays: [0],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
@@ -227,10 +241,12 @@ const studentMockData = {
       startDate: new Date("2022-02-14T07:00").getTime(),
       endDate: new Date("2022-04-29T22:00").getTime(),
       timeFrame: 45,
+      invalidWeekdays: [0],
       currentStudentSchedule: NaN,
       reservedSchedules: [
         // Reserved start times and days
         { studentId: 6, schedule: new Date("2022-03-22T07:45").getTime() },
+        { studentId: 9, schedule: new Date("2022-04-29T07:00").getTime() },
       ],
     },
   },

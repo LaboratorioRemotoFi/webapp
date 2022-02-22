@@ -105,9 +105,6 @@ export default function Index() {
   const [currentState, currentDispatch] = useStoreContext();
   const { user, subjects, groups, practices } = currentState ? currentState : 0;
 
-  console.log("currentState");
-  console.log(currentState);
-
   // Variables for selected date from date picker
   const [selectedDate, setSelectedDate] = React.useState(null);
   // Disable hour select if there's no date picked
@@ -115,9 +112,6 @@ export default function Index() {
 
   // Final new date selected, obtained after selecting hour
   const [newDate, setNewDate] = React.useState("");
-  console.log("New selected date");
-  console.log(newDate);
-  console.log(new Date(newDate));
 
   // String for final date
   const [convertedNewDate, setConvertedNewDate] = React.useState(null);
@@ -460,4 +454,10 @@ export default function Index() {
       </Layout>
     </LocalizationProvider>
   );
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {}, // will be passed to the page component as props
+  };
 }

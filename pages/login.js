@@ -22,8 +22,8 @@ export default function Index() {
   const [state, dispatch] = useStoreContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [fetching, setFetching] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
   React.useEffect(() => {
     if (status === "authenticated") {
@@ -32,10 +32,6 @@ export default function Index() {
   }, [status, router]);
 
   const paperStyle1 = { height: "45vh", width: 500, margin: "60px auto" };
-  const paperStyle2 = { height: "24vh", width: 570, margin: "5px auto" };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
 
   const handleSubmit = () => {
     setFetching(true);
@@ -43,6 +39,11 @@ export default function Index() {
       username,
       password,
       redirect: false,
+    }).then(({ error }) => {
+      if (error) {
+        setFetching(false);
+        setError(error);
+      }
     });
   };
 
@@ -98,11 +99,11 @@ export default function Index() {
                   variant="filled"
                   sx={{ pt: "5px" }}
                 />
-                <Typography sx={{ pt: "5px" }}>
-                  <Link href="#" sx={{ textDecoration: "none" }}>
-                    Restablecer contraseña
-                  </Link>
-                </Typography>
+                {error && (
+                  <Typography sx={{ color: "error.main", pt: "5px" }}>
+                    Usuario o contraseña no válidos
+                  </Typography>
+                )}
               </Box>
             </Grid>
             <Grid item>
@@ -121,39 +122,8 @@ export default function Index() {
                 >
                   Ingresar
                 </LoadingButton>
-                <Popper
-                  id={id}
-                  open={open}
-                  anchorEl={anchorEl}
-                  placement="auto"
-                >
-                  <Box
-                    sx={{
-                      border: 1,
-                      p: "5px",
-                      bgcolor: "background.paper",
-                    }}
-                  >
-                    Contraseña incorrecta
-                  </Box>
-                </Popper>
               </Box>
             </Grid>
-          </Grid>
-        </Paper>
-
-        <Paper elevation={10} style={paperStyle2}>
-          <Grid sx={{ ml: "5px" }}>
-            <Typography variant="h10">
-              Las credenciales de acceso se encuentran definidas de la siguiente
-              manera:
-            </Typography>
-            <Typography>Alumno:</Typography>
-            <Typography>Usuario: Número de cuenta</Typography>
-            <Typography>Contraseña: Fecha de Nacimiento (DDMMYYYY)</Typography>
-            <Typography>Profesor:</Typography>
-            <Typography>Usuario: RFC con homoclave</Typography>
-            <Typography>Contraseña: Número de trabajador</Typography>
           </Grid>
         </Paper>
       </Grid>

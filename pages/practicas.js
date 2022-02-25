@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import {
   Box,
   Button,
@@ -443,8 +445,15 @@ function getNextPractice(practices) {
 }
 
 export default function Index() {
+  const router = useRouter();
+  const { status, data } = useSession({
+    required: true,
+  });
+
+  const user = data?.user;
+
   const [currentState, currentDispatch] = useStoreContext();
-  const { user, subjects, groups, practices } = currentState ? currentState : 0;
+  const { subjects, groups, practices } = currentState ? currentState : 0;
 
   let subPractices;
 
@@ -463,6 +472,10 @@ export default function Index() {
     nearestPracticeDate = getDateString(nearestPractice.currentStudentSchedule);
     buttonIsDisabled =
       nearestPractice.currentStudentSchedule - currDate > 0 ? true : false;
+  }
+
+  if (status !== "authenticated") {
+    return <Layout></Layout>;
   }
 
   return (

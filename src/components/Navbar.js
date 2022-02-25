@@ -5,18 +5,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import useStoreContext from "../hooks/storeContext";
-import { useRouter } from "next/router";
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar = () => {
-  const [state, dispatch] = useStoreContext();
-  const router = useRouter();
+  const { status } = useSession();
 
-  const handleLogout = () => {
-    dispatch({ type: "logout" });
-    router.push("/login");
-  };
-
-  return state.user ? (
+  return status === "authenticated" ? (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -24,7 +18,9 @@ const Navbar = () => {
             Laboratorio Remoto FI
           </Typography>
           <Button
-            onClick={handleLogout}
+            onClick={() => {
+              signOut({ callbackUrl: "/login" });
+            }}
             type="submit"
             sx={{
               bgcolor: "primary",

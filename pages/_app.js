@@ -7,7 +7,7 @@ import { CacheProvider } from "@emotion/react";
 import theme from "../src/config/theme";
 import createEmotionCache from "../src/config/createEmotionCache";
 import { StoreContext } from "../src/hooks/storeContext";
-import SessionProvider, { SessionContext } from "../src/hooks/sessionProvider";
+import { SessionProvider } from "next-auth/react";
 import StudentsProvider from "../src/hooks/studentsProvider";
 import ProfessorsProvider from "../src/hooks/professorsProvider";
 
@@ -28,9 +28,11 @@ export default function MyApp(props) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <StoreContext.Provider value={[studentsState, studentsDispatch]}>
-          <Component {...pageProps} />
-        </StoreContext.Provider>
+        <SessionProvider session={pageProps.session}>
+          <StoreContext.Provider value={[studentsState, studentsDispatch]}>
+            <Component {...pageProps} />
+          </StoreContext.Provider>
+        </SessionProvider>
       </ThemeProvider>
     </CacheProvider>
   );

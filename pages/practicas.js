@@ -507,7 +507,7 @@ export default function Index() {
                       {nearestPractice.dateString[1]} horas.
                     </Typography>
                     <br />
-                    <Button variant="contained" disabled={buttonIsDisabled}>
+                    <Button variant="contained">
                       <Link href="#" color="primary.contrastText">
                         Ir a la práctica
                       </Link>

@@ -314,11 +314,11 @@ ScheduleLink.propTypes = {
   startDate: PropTypes.number.isRequired,
   endDate: PropTypes.number.isRequired,
   timeFrame: PropTypes.number.isRequired,
-  currentStudentSchedule: PropTypes.number.isRequired,
+  currentStudentSchedule: PropTypes.number,
 };
 
 function Row(props) {
-  const { row, practices, subject, dispatch } = props;
+  const { group, dispatch } = props;
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -334,10 +334,10 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.subjectId}
+          {group.subjectId}
         </TableCell>
-        <TableCell align="left">{subject.name}</TableCell>
-        <TableCell align="right">{row.groupNumber}</TableCell>
+        <TableCell align="left">{group.name}</TableCell>
+        <TableCell align="right">{group.groupNumber}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ padding: 0, paddingTop: 0 }} colSpan={6}>
@@ -352,7 +352,7 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Object.values(practices).map((practiceRow) => (
+                  {group?.practices.map((practiceRow) => (
                     <TableRow key={practiceRow.id}>
                       <TableCell component="th" scope="row">
                         {practiceRow.practiceNumber}
@@ -382,99 +382,79 @@ function Row(props) {
 }
 
 Row.propTypes = {
-  row: PropTypes.shape({
-    subjectId: PropTypes.number.isRequired,
-    groupNumber: PropTypes.number.isRequired,
-  }).isRequired,
-  practices: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      practiceNumber: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      startDate: PropTypes.number.isRequired,
-      endDate: PropTypes.number.isRequired,
-      currentStudentSchedule: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  subject: PropTypes.shape({
+  group: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    subjectId: PropTypes.string.isRequired,
+    groupNumber: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    practices: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        practiceNumber: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        startDate: PropTypes.number.isRequired,
+        endDate: PropTypes.number.isRequired,
+        currentStudentSchedule: PropTypes.number,
+      })
+    ).isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
-function getNextPractice(practices) {
-  if (!practices) {
-    return -1;
-  }
-  let nearestPractice = practices[Object.keys(practices)[0]];
-  for (const [practiceId, attributes] of Object.entries(practices)) {
-    if (!isNaN(attributes.currentStudentSchedule)) {
-      let temp = attributes.currentStudentSchedule - currDate;
-      // Check if the starting time of the practice has passed
-      if (temp < 0) {
-        // Check if it's outside the practice time frame
-        if (-temp > attributes.timeFrame * 60 * 1000) {
-          continue;
-        }
-      }
-      let previousPracticeTime =
-        nearestPractice.currentStudentSchedule - currDate;
-      if (previousPracticeTime > 0) {
-        if (temp < previousPracticeTime) {
-          nearestPractice = attributes;
-        }
-      } else {
-        if (temp > previousPracticeTime) {
-          nearestPractice = attributes;
-        }
-      }
-    }
-  }
-
-  const resultTimeDiff = nearestPractice.currentStudentSchedule - currDate;
-
-  // Check if the time of the resulting practice has passed/expired
-  if (
-    resultTimeDiff < 0 &&
-    -resultTimeDiff > nearestPractice.timeFrame * 60 * 1000
-  ) {
-    return -1;
-  }
-
-  return nearestPractice;
+function getNearestPractice(groups) {
+  return groups
+    .map((group) =>
+      group.practices.map((practice) =>
+        practice.currentStudentSchedule
+          ? {
+              practiceNumber: practice.practiceNumber,
+              name: practice.name,
+              subjectId: group.subjectId,
+              groupName: group.name,
+              dateString: getDateString(practice.currentStudentSchedule),
+              startTime: practice.currentStudentSchedule,
+              endTime:
+                practice.currentStudentSchedule +
+                practice.timeFrame * 60 * 1000,
+            }
+          : null
+      )
+    )
+    .flat()
+    .filter((s) => s)
+    .find(
+      (schedule) =>
+        Date.now() > schedule.startTime && Date.now() < schedule.endTime
+    );
 }
 
 export default function Index() {
   const router = useRouter();
+
+  const [currentState, currentDispatch] = useStoreContext();
+  const { groups } = currentState;
+
   const { status, data } = useSession({
     required: true,
   });
 
   const user = data?.user;
 
-  const [currentState, currentDispatch] = useStoreContext();
-  const { subjects, groups, practices } = currentState ? currentState : 0;
-
-  let subPractices;
+  React.useEffect(() => {
+    if (!groups) {
+      fetch("/api/groups")
+        .then((response) => response.json())
+        .then((fetchedGroups) => {
+          currentDispatch({ type: "setGroups", groups: fetchedGroups });
+        });
+    }
+  }, [groups, currentDispatch]);
 
   currDate = Date.now();
   const currDateString = getDateString(currDate);
+  const nearestPractice = groups && getNearestPractice(groups);
 
-  const nearestPractice = getNextPractice(practices);
-  const nearestPracticeExists = isNaN(nearestPractice);
-
-  let nearestPracticeSubject;
-  let nearestPracticeDate;
-  let buttonIsDisabled;
-
-  if (nearestPracticeExists) {
-    nearestPracticeSubject = subjects[nearestPractice.id.slice(0, 4)];
-    nearestPracticeDate = getDateString(nearestPractice.currentStudentSchedule);
-    buttonIsDisabled =
-      nearestPractice.currentStudentSchedule - currDate > 0 ? true : false;
-  }
-
-  if (status !== "authenticated") {
+  if (status !== "authenticated" || !groups) {
     return <Layout></Layout>;
   }
 
@@ -504,47 +484,27 @@ export default function Index() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {!currentState ? (
-                        <TableRow>
-                          <TableCell>NO DATA</TableCell>
-                        </TableRow>
-                      ) : (
-                        user?.groupsIds.map(
-                          (groupId) => (
-                            // Get only the practices for each subject
-                            (subPractices = Object.values(practices).filter(
-                              (obj) =>
-                                subjects[
-                                  groups[groupId].subjectId
-                                ].practicesIds.includes(obj.id)
-                            )),
-                            (
-                              <Row
-                                key={groupId}
-                                row={groups[groupId]}
-                                subject={subjects[groups[groupId].subjectId]}
-                                practices={subPractices}
-                                dispatch={currentDispatch}
-                              />
-                            )
-                          )
-                        )
-                      )}
+                      {groups.map((group) => (
+                        <Row
+                          key={group.id}
+                          group={group}
+                          dispatch={currentDispatch}
+                        />
+                      ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
               </Grid>
               <Grid item xs={12} md={5} order={{ xs: 1, md: 2 }}>
                 <Typography variant="h6">Próxima práctica:</Typography>
-                {nearestPracticeExists ? (
+                {nearestPractice ? (
                   <>
                     <Typography variant="body1">
                       Práctica no. {nearestPractice.practiceNumber} &quot;
                       {nearestPractice.name}&quot; de{" "}
-                      {nearestPracticeSubject.id} -{" "}
-                      {nearestPracticeSubject.name}, el día{" "}
-                      {nearestPracticeDate[0]} a las {nearestPracticeDate[1]}{" "}
-                      horas.
+                      {nearestPractice.subjectId} - {nearestPractice.groupName},
+                      el día {nearestPractice.dateString[0]} a las{" "}
+                      {nearestPractice.dateString[1]} horas.
                     </Typography>
                     <br />
                     <Button variant="contained" disabled={buttonIsDisabled}>

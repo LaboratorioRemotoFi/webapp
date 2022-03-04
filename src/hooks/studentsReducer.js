@@ -3,19 +3,15 @@ import studentMockData from "../mockData/student.js";
 
 const studentsReducer = (state, action) => {
   switch (action.type) {
-    case "setUserData":
+    case "setGroups":
       return {
         ...state,
-        user: action.user,
+        groups: action.groups,
       };
-    case "logout":
+    case "setPractices":
       return {
         ...state,
-        user: undefined,
-      };
-    case "studentLogin":
-      return {
-        ...state,
+        practices: action.practices,
       };
     case "reserveSchedule":
       let updatedSchedules = [
@@ -78,13 +74,11 @@ function updateCurrStudentPracticeAttr(studentId, practices) {
 }
 
 const initialState = {
-  user: studentMockData.user,
-  subjects: studentMockData.subjects,
-  groups: studentMockData.groups,
-  practices: updateCurrStudentPracticeAttr(
-    studentMockData.user.id,
-    studentMockData.practices
-  ),
+  // groups: studentMockData.groups,
+  /* practices: updateCurrStudentPracticeAttr(
+   *   studentMockData.user.id,
+   *   studentMockData.practices
+   * ), */
 };
 
 export { initialState };

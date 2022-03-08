@@ -407,8 +407,9 @@ function getNearestPractice(groups) {
       group.practices.map((practice) =>
         practice.currentStudentSchedule
           ? {
-              practiceNumber: practice.practiceNumber,
               name: practice.name,
+              practiceNumber: practice.practiceNumber,
+              ip: practice.raspIp,
               subjectId: group.subjectId,
               groupName: group.name,
               dateString: getDateString(practice.currentStudentSchedule),
@@ -508,7 +509,10 @@ export default function Index() {
                     </Typography>
                     <br />
                     <Button variant="contained">
-                      <Link href="#" color="primary.contrastText">
+                      <Link
+                        href={`/practica-server?ip=${nearestPractice.ip}`}
+                        color="primary.contrastText"
+                      >
                         Ir a la práctica
                       </Link>
                     </Button>

@@ -6,316 +6,32 @@ import { useSession } from "next-auth/react";
 import {
   Box,
   Button,
+  Collapse,
+  Container,
   Grid,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
+  Typography,
 } from "@mui/material";
 import Link from "../src/components/Link";
 import PropTypes from "prop-types";
-import Checkbox from "@mui/material/Checkbox";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Layout from "../src/components/Layout";
 import useStoreContext from "../src/hooks/storeContext";
+import { getDateString } from "../src/utils/timeUtils";
+import { getNearestPractice } from "../src/utils/scheduleUtils.js";
+import ScheduleLink from "../src/utils/ScheduleLinkUtil.js";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 let currDate = Date.now();
-
-function getDateString(date) {
-  let optionsDay = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-
-  let optionsHour = {
-    hour: "numeric",
-    minute: "numeric",
-  };
-
-  const dayString = new Date(date).toLocaleDateString("es-MX", optionsDay);
-  const hourString = new Date(date)
-    .toLocaleDateString("es-MX", optionsHour)
-    .slice(-5);
-
-  const dateString = [dayString, hourString];
-
-  return dateString;
-}
-
-function ScheduleDetails(props) {
-  const { details } = props;
-  const [open, setOpen] = React.useState(false);
-
-  return (
-    <>
-      <Grid container spacing={2} alignItems="center" mt={0} pt={0}>
-        <Grid item sm={1} xs={2} style={{ paddingTop: 0 }}>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </Grid>
-        <Grid item sm={11} xs={10} style={{ paddingTop: 0 }}>
-          <Typography variant="inherit" fontWeight="bold">
-            Detalles
-          </Typography>
-        </Grid>
-      </Grid>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        {details}
-      </Collapse>
-    </>
-  );
-}
-
-ScheduleDetails.propTypes = {
-  details: PropTypes.element.isRequired,
-};
-
-function ScheduleLink(props) {
-  const { practiceId, startDate, endDate, timeFrame, currentStudentSchedule } =
-    props;
-  const [open, setOpen] = React.useState(false);
-
-  // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
-  const reserveTime = 7 * 24 * 60 * 60 * 1000;
-
-  let state;
-
-  const hasSchedule = !isNaN(currentStudentSchedule);
-  const scheduleString = getDateString(currentStudentSchedule);
-  const schedulingDate = getDateString(startDate - reserveTime);
-  const availableDateStart = getDateString(startDate);
-  const availableDateEnd = getDateString(endDate);
-
-  if (currDate > endDate) {
-    state = "Expired";
-  } else if (
-    hasSchedule &&
-    currDate > currentStudentSchedule &&
-    currDate < endDate
-  ) {
-    state = "Late reschedule";
-  } else if (
-    hasSchedule &&
-    currDate < currentStudentSchedule &&
-    currDate < endDate
-  ) {
-    state = "Reschedule";
-  } else if (
-    !hasSchedule &&
-    currDate < endDate &&
-    currDate >= startDate - reserveTime
-  ) {
-    state = "Available";
-  } else if (currDate < startDate - reserveTime) {
-    state = "Not available";
-  }
-
-  switch (state) {
-    case "Expired":
-      if (!hasSchedule) {
-        return (
-          <>
-            <Typography variant="inherit" color="red" fontWeight="bold">
-              Expirada
-            </Typography>
-            <ScheduleDetails
-              details={
-                <>
-                  <Typography variant="inherit">No fue agendada.</Typography>
-                  <Typography variant="inherit" fontStyle="italic">
-                    Estuvo disponible para realizar del {availableDateStart[0]}{" "}
-                    a las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                    {availableDateEnd[1]}.
-                  </Typography>
-                  <Typography variant="inherit">
-                    Duración: {timeFrame} minutos.
-                  </Typography>
-                </>
-              }
-            />
-          </>
-        );
-      }
-      return (
-        <>
-          <Typography variant="inherit" fontWeight="bold">
-            Terminada
-          </Typography>
-          <ScheduleDetails
-            details={
-              <>
-                <Typography variant="inherit">
-                  Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]} y se realizó ([detalles])/no se realizó.
-                </Typography>
-                <Typography variant="inherit" fontStyle="italic">
-                  Estuvo disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
-                <Typography variant="inherit">
-                  Duración: {timeFrame} minutos.
-                </Typography>
-              </>
-            }
-          />
-        </>
-      );
-      break;
-    // ADD CHECK FOR DONE/NOT DONE
-    case "Late reschedule":
-      return (
-        <>
-          <Typography variant="inherit" color="red" fontWeight="bold">
-            Expirada (
-            <Link
-              href={`/agendar/${practiceId}`}
-              color="secondary"
-              fontWeight="bold"
-            >
-              Reagendar
-            </Link>
-            )
-          </Typography>
-          <ScheduleDetails
-            details={
-              <>
-                <Typography variant="inherit">
-                  Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]}.
-                </Typography>
-                <Typography variant="inherit" fontStyle="italic">
-                  Está disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
-                <Typography variant="inherit">
-                  Duración: {timeFrame} minutos.
-                </Typography>
-              </>
-            }
-          />
-        </>
-      );
-      break;
-    case "Reschedule":
-      return (
-        <>
-          <Typography variant="inherit" fontWeight="bold">
-            Agendada (
-            <Link
-              href={`/agendar/${practiceId}`}
-              color="secondary"
-              fontWeight="bold"
-            >
-              Reagendar
-            </Link>
-            )
-          </Typography>
-          <ScheduleDetails
-            details={
-              <>
-                <Typography variant="inherit">
-                  Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]}.
-                </Typography>
-                <Typography variant="inherit" fontStyle="italic">
-                  Está disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
-                <Typography variant="inherit">
-                  Duración: {timeFrame} minutos.
-                </Typography>
-              </>
-            }
-          />
-        </>
-      );
-      break;
-    case "Available":
-      return (
-        <>
-          <Link
-            href={`/agendar/${practiceId}`}
-            color="secondary"
-            fontWeight="bold"
-          >
-            Agendar
-          </Link>
-          <ScheduleDetails
-            details={
-              <>
-                <Typography variant="inherit" fontStyle="italic">
-                  Está disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
-                <Typography variant="inherit">
-                  Duración: {timeFrame} minutos.
-                </Typography>
-              </>
-            }
-          />
-        </>
-      );
-      break;
-    case "Not available":
-      return (
-        <>
-          <Typography variant="inherit" fontWeight="bold">
-            No disponible
-          </Typography>
-          <ScheduleDetails
-            details={
-              <>
-                <Typography variant="inherit">
-                  Estará disponible para agendar a partir del{" "}
-                  {schedulingDate[0]} a las {schedulingDate[1]}.
-                </Typography>
-                <Typography variant="inherit" fontStyle="italic">
-                  Estará disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
-              </>
-            }
-          />
-        </>
-      );
-      break;
-    default:
-      return (
-        <Typography variant="inherit" fontWeight="bold">
-          No disponible
-        </Typography>
-      );
-      break;
-  }
-}
-
-ScheduleLink.propTypes = {
-  practiceId: PropTypes.string.isRequired,
-  startDate: PropTypes.number.isRequired,
-  endDate: PropTypes.number.isRequired,
-  timeFrame: PropTypes.number.isRequired,
-  currentStudentSchedule: PropTypes.number,
-};
 
 function Row(props) {
   const { group, dispatch } = props;
@@ -400,34 +116,6 @@ Row.propTypes = {
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
-
-function getNearestPractice(groups) {
-  return groups
-    .map((group) =>
-      group.practices.map((practice) =>
-        practice.currentStudentSchedule
-          ? {
-              name: practice.name,
-              practiceNumber: practice.practiceNumber,
-              ip: practice.raspIp,
-              subjectId: group.subjectId,
-              groupName: group.name,
-              dateString: getDateString(practice.currentStudentSchedule),
-              startTime: practice.currentStudentSchedule,
-              endTime:
-                practice.currentStudentSchedule +
-                practice.timeFrame * 60 * 1000,
-            }
-          : null
-      )
-    )
-    .flat()
-    .filter((s) => s)
-    .find(
-      (schedule) =>
-        Date.now() > schedule.startTime && Date.now() < schedule.endTime
-    );
-}
 
 export default function Index() {
   const router = useRouter();

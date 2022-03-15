@@ -53,7 +53,7 @@ function Index() {
 
   React.useEffect(() => {
     connect(query.ip, "admin", "admin");
-  }, [query, connect]);
+  }, [query]);
 
   React.useEffect(() => {
     if (!isConnected) {

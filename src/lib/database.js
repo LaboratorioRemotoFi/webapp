@@ -36,8 +36,9 @@ export async function getStudentGroups(studentId, groupsIds) {
     const db = mongoClient.db("laboratorioremotofi");
     const subjectsCollection = db.collection("subjects");
     const schedulesCollection = db.collection("schedules");
+    const practicesCollection = db.collection("practices");
 
-    let groups = [];
+    const groups = [];
 
     for (const index in groupsIds) {
       const groupId = groupsIds[index];
@@ -47,18 +48,24 @@ export async function getStudentGroups(studentId, groupsIds) {
 
       const subject = await subjectsCollection.findOne({ id: subjectId });
 
-      for (const practice of subject?.practices) {
-        const schedules = await schedulesCollection.findOne({
-          practiceId: practice.id,
+      const practices = [];
+
+      for (const practiceId of subject?.practicesIds) {
+        const practice = await practicesCollection.findOne({
+          id: practiceId,
         });
 
-        const currentStudentSchedule = schedules.reservedSchedules.find(
-          (schedule) => schedule.studentId === studentId
-        );
+        const currentStudentSchedule = await schedulesCollection.findOne({
+          subjectId,
+          practiceId,
+          studentId,
+        });
 
         if (currentStudentSchedule) {
           practice.currentStudentSchedule = currentStudentSchedule.schedule;
         }
+
+        practices.push(practice);
       }
 
       const group = {
@@ -67,16 +74,11 @@ export async function getStudentGroups(studentId, groupsIds) {
         groupNumber,
         subjectId,
         id: groupId,
+        practices,
       };
 
       groups.push(group);
     }
-
-    groupsIds.forEach((groupId) => {
-      const semester = groupId.split("_")[0];
-      const subjectId = groupId.split("_")[1];
-      const groupNumber = groupId.split("_")[2];
-    });
 
     return groups;
   } finally {

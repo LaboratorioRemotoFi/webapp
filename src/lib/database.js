@@ -65,8 +65,10 @@ export async function getStudentGroups(studentId, groupsIds) {
           practice.currentStudentSchedule = currentStudentSchedule.schedule;
         }
 
-        const reservedSchedules = await schedulesCollection.find({ practiceId: practiceId}).toArray();
-                
+        const reservedSchedules = await schedulesCollection
+          .find({ practiceId: practiceId })
+          .toArray();
+
         const reservedSchedulesArray = [];
         for (const idx in reservedSchedules) {
           reservedSchedulesArray.push(reservedSchedules[idx].schedule);

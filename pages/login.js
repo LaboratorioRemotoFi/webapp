@@ -61,7 +61,16 @@ export default function Index() {
   return (
     <Layout>
       <Container maxWidth="false">
-        <Grid container item component={Paper} elevation={10} style={paperStyle1} direction="column" xs={12} md={7}>
+        <Grid
+          container
+          item
+          component={Paper}
+          elevation={10}
+          style={paperStyle1}
+          direction="column"
+          xs={12}
+          md={7}
+        >
           <Grid item container direction="column">
             <Grid item xs align="center">
               <Box

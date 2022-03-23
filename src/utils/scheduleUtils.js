@@ -38,7 +38,10 @@ export function isNotAvailable(scheduleToValidate, scheduleList, currPractice) {
         // If the schedule isn't on the reserved schedules array
         // or is the schedule the current student reserved,
         // then enable it
-        !currPractice.reservedSchedules.find(function (scheduleReserved, index) {
+        !currPractice.reservedSchedules.find(function (
+          scheduleReserved,
+          index
+        ) {
           if (scheduleReserved == currPractice.currentStudentSchedule)
             return false;
           if (scheduleReserved == schedule) return true;

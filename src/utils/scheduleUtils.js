@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ScheduleReservation from "../utils/reservationUtils.js";
+import { getDateString } from "../utils/timeUtils";
 
 let currDate = Date.now();
 
@@ -28,7 +29,7 @@ export function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
   return scheduleList;
 }
 
-export function isNotAvailable(schedule, scheduleList, currPractice) {
+export function isNotAvailable(scheduleToValidate, scheduleList, currPractice) {
   let disable = !scheduleList
     .filter(
       (schedule) =>
@@ -37,18 +38,18 @@ export function isNotAvailable(schedule, scheduleList, currPractice) {
         // If the schedule isn't on the reserved schedules array
         // or is the schedule the current student reserved,
         // then enable it
-        !currPractice.reservedSchedules.find(function (scheduleObj, index) {
-          if (scheduleObj.schedule == currPractice.currentStudentSchedule)
+        !currPractice.reservedSchedules.find(function (scheduleReserved, index) {
+          if (scheduleReserved == currPractice.currentStudentSchedule)
             return false;
-          if (scheduleObj.schedule == schedule) return true;
+          if (scheduleReserved == schedule) return true;
         })
     )
-    .includes(schedule);
+    .includes(scheduleToValidate);
   return disable;
 }
 
 export function ScheduleModal(
-  practiceId,
+  practice,
   openModal,
   setOpenModal,
   handleCloseModal
@@ -74,7 +75,7 @@ export function ScheduleModal(
         <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
           Selecciona una fecha y hora
         </Typography>
-        {ScheduleReservation(practiceId, handleCloseModal)}
+        {ScheduleReservation(practice, handleCloseModal)}
       </Box>
     </Modal>
   );

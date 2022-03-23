@@ -1,6 +1,4 @@
 import React, { useContext } from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import {
@@ -76,7 +74,7 @@ function Row(props) {
                       <TableCell>{practiceRow.name}</TableCell>
                       <TableCell>
                         <ScheduleLink
-                          practiceId={practiceRow.id}
+                          practice={practiceRow}
                           startDate={practiceRow.startDate}
                           endDate={practiceRow.endDate}
                           timeFrame={practiceRow.timeFrame}
@@ -106,7 +104,7 @@ Row.propTypes = {
     practices: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
-        practiceNumber: PropTypes.number.isRequired,
+        practiceNumber: PropTypes.number,
         name: PropTypes.string.isRequired,
         startDate: PropTypes.number.isRequired,
         endDate: PropTypes.number.isRequired,

@@ -58,6 +58,15 @@ function AlertDialog(openAlert, setOpenAlert, handleCloseAlert) {
   );
 }
 
+function groupFromPractice(practiceId, groups) {
+  for (let i = 0; i < groups.length; i++) {
+    if (groups[0].practicesIds.includes(practiceId)) {
+      return groups[0];
+    }
+  }
+  return NaN;
+}
+
 function schedulesPerDay(startDate, endDate, timeFrame) {
   const firstDayEndTime = [
     new Date(startDate).getFullYear(),
@@ -74,9 +83,8 @@ function schedulesPerDay(startDate, endDate, timeFrame) {
   return noAvailSchedPerDay;
 }
 
-export default function ScheduleReservation(practiceId, handleCloseModal) {
+export default function ScheduleReservation(currPractice, handleCloseModal) {
   const [currentState, currentDispatch] = useStoreContext();
-  const { user, subjects, groups, practices } = currentState ? currentState : 0;
 
   console.log("currentState");
   console.log(currentState);
@@ -88,9 +96,9 @@ export default function ScheduleReservation(practiceId, handleCloseModal) {
 
   // Final new date selected, obtained after selecting hour
   const [newDate, setNewDate] = React.useState("");
-  console.log("New selected date");
-  console.log(newDate);
-  console.log(new Date(newDate));
+  //console.log("New selected date");
+  //console.log(newDate);
+  //console.log(new Date(newDate));
 
   // String for final date
   const [convertedNewDate, setConvertedNewDate] = React.useState(null);
@@ -110,21 +118,15 @@ export default function ScheduleReservation(practiceId, handleCloseModal) {
     return <Typography variant="h4">NO DATA</Typography>;
   }
 
-  const currPractice = practiceId && currentState.practices[practiceId];
+  //const currGroup = groupFromPractice(practiceId, groups);
 
-  const currSubject = subjects[currPractice.id.slice(0, 4)];
+  //console.log("OBTAINED GROUP");
+  //console.log(currGroup);
 
-  const groupsIds = Object.getOwnPropertyNames(groups);
+  //const currPractice = currGroup.practices[practiceId];
 
-  let currGroup;
-
-  // Find current group id from subject id
-  for (let i = 0; i < groupsIds.length; i++) {
-    if (groupsIds[i].includes(currSubject.id.toString())) {
-      currGroup = groups[groupsIds[i]];
-      break;
-    }
-  }
+  //console.log("OBTAINED PRACTICE");
+  //console.log(currPractice);
 
   const noAvailSchedPerDay = schedulesPerDay(
     currPractice.startDate,
@@ -161,10 +163,30 @@ export default function ScheduleReservation(practiceId, handleCloseModal) {
   }
 
   // Minimum date available to select on day picker
-  const minDate =
+  let minDate =
     new Date().getTime() > currPractice.startDate
       ? new Date().getTime()
       : currPractice.startDate;
+
+  const minDayEndTime = [
+    new Date(minDate).getFullYear(),
+    new Date(minDate).getMonth(),
+    new Date(minDate).getDate(),
+    new Date(currPractice.endDate).getHours(),
+    new Date(currPractice.endDate).getMinutes(),
+  ];
+  const minDateEndTime = new Date(...minDayEndTime).getTime();
+
+  if (minDate > minDateEndTime) {
+    const tempDate = [
+      new Date(minDate).getFullYear(),
+      new Date(minDate).getMonth(),
+      new Date(minDate).getDate(),
+      new Date(currPractice.startDate).getHours(),
+      new Date(currPractice.startDate).getMinutes(),
+    ];
+    minDate = new Date(...tempDate).getTime() + 24 * 60 * 60 * 1000;
+  }
 
   const handleDayChange = (value) => {
     if (value !== null) {
@@ -218,6 +240,7 @@ export default function ScheduleReservation(practiceId, handleCloseModal) {
   };
 
   let convertedDate;
+  const invalidWeekdays = [0, 6];
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
@@ -248,7 +271,7 @@ export default function ScheduleReservation(practiceId, handleCloseModal) {
             minDate={minDate}
             maxDate={currPractice.endDate}
             shouldDisableDate={(day) => {
-              return currPractice.invalidWeekdays.includes(day.getDay());
+              return invalidWeekdays.includes(day.getDay());
             }}
             onChange={handleDayChange}
             renderInput={(params) => <TextField {...params} />}

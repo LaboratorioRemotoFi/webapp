@@ -8,8 +8,11 @@ import { ScheduleModal, ScheduleDetails } from "../utils/scheduleUtils.js";
 let currDate = Date.now();
 
 export default function ScheduleLink(props) {
-  const { practiceId, startDate, endDate, timeFrame, currentStudentSchedule } =
-    props;
+  const { practice } = props;
+  const startDate = practice.startDate;
+  const endDate = practice.endDate;
+  const timeFrame = practice.timeFrame;
+  const currentStudentSchedule = practice.currentStudentSchedule;
 
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -130,7 +133,7 @@ export default function ScheduleLink(props) {
                 </Button>
                 )
                 {ScheduleModal(
-                  practiceId,
+                  practice,
                   openModal,
                   setOpenModal,
                   handleCloseModal
@@ -179,7 +182,7 @@ export default function ScheduleLink(props) {
                 </Button>
                 )
                 {ScheduleModal(
-                  practiceId,
+                  practice,
                   openModal,
                   setOpenModal,
                   handleCloseModal
@@ -226,7 +229,7 @@ export default function ScheduleLink(props) {
                   Agendar
                 </Button>
                 {ScheduleModal(
-                  practiceId,
+                  practice,
                   openModal,
                   setOpenModal,
                   handleCloseModal
@@ -286,9 +289,5 @@ export default function ScheduleLink(props) {
 }
 
 ScheduleLink.propTypes = {
-  practiceId: PropTypes.string.isRequired,
-  startDate: PropTypes.number.isRequired,
-  endDate: PropTypes.number.isRequired,
-  timeFrame: PropTypes.number.isRequired,
-  currentStudentSchedule: PropTypes.number,
+  practice: PropTypes.object.isRequired,
 };

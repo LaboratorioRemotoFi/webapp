@@ -1,12 +1,6 @@
 import React from "react";
 import PracticeStep from "./PracticeStep";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Link,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Link, Typography } from "@mui/material";
 
 function PracticePage({
   socket,

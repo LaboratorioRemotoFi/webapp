@@ -1,13 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import Link from "/src/components/Link";
 import Layout from "/src/components/Layout";
 import useStoreContext from "/src/hooks/storeContext";

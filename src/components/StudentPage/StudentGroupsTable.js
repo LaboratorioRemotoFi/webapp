@@ -1,12 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import StudentGroupsTableRow from "./StudentGroupsTableRow";
 import {
-  Box,
-  Button,
-  Collapse,
-  Container,
-  Grid,
-  IconButton,
   Paper,
   Table,
   TableBody,
@@ -14,7 +8,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 
 function StudentGroupsTable({ groups }) {

@@ -1,31 +1,18 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import {
   Box,
   Button,
-  Collapse,
   Container,
   Grid,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
 } from "@mui/material";
 import Link from "/src/components/Link";
-import PropTypes from "prop-types";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Layout from "/src/components/Layout";
 import useStoreContext from "/src/hooks/storeContext";
 import { getDateString } from "/src/utils/timeUtils";
 import { getNearestPractice } from "/src/utils/scheduleUtils";
-import ScheduleLink from "/src/utils/ScheduleLinkUtil";
 import StudentGroupsTable from "./StudentGroupsTable";
 
 let currDate = Date.now();

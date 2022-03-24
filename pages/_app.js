@@ -9,7 +9,6 @@ import createEmotionCache from "../src/config/createEmotionCache";
 import { StoreContext } from "../src/hooks/storeContext";
 import { SessionProvider } from "next-auth/react";
 import StudentsProvider from "../src/hooks/studentsProvider";
-import ProfessorsProvider from "../src/hooks/professorsProvider";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

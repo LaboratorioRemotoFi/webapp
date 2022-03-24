@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import useStoreContext from "/src/hooks/storeContext";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -6,19 +6,13 @@ import ScheduleLink from "/src/utils/ScheduleLinkUtil";
 import PropTypes from "prop-types";
 import {
   Box,
-  Button,
   Collapse,
-  Container,
-  Grid,
   IconButton,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 
 function StudentGroupsTableRow({ group }) {

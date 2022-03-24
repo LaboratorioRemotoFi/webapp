@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { LoadingButton } from "@mui/lab";
 import { useSession, signIn } from "next-auth/react";
@@ -7,10 +7,7 @@ import {
   Grid,
   Paper,
   TextField,
-  Button,
   Typography,
-  Link,
-  Popper,
   Box,
 } from "@mui/material";
 import Layout from "../src/components/Layout";
@@ -28,7 +25,7 @@ export default function Index() {
 
   React.useEffect(() => {
     if (status === "authenticated") {
-      router.push("/practicas");
+      router.push("/");
     }
   }, [status, router]);
 

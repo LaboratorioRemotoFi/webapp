@@ -1,7 +1,3 @@
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
-import esLocale from "date-fns/locale/es";
-
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 export function convertDate(date, timeFrame) {

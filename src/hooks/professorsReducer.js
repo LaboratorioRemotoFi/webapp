@@ -1,4 +1,3 @@
-import { useReducer } from "react";
 import professorMockData from "../mockData/professor.js";
 
 const professorsReducer = (state, action) => {

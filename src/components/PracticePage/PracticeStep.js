@@ -1,18 +1,5 @@
 import React from "react";
-import ClearIcon from "@mui/icons-material/Clear";
-import {
-  Box,
-  Button,
-  Paper,
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-  Link,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 function PracticeStep({
   index,

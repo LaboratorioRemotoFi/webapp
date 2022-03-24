@@ -2,22 +2,17 @@ import React from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import useSocket from "/src/hooks/useSocket";
-import PracticePage from "/src/components/PracticePage";
+import PracticePage from "/src/components/PracticePage/PracticePage";
 import { useRouter } from "next/router";
 import {
   AppBar,
   Box,
-  Button,
   CircularProgress,
   Container,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Input,
-  Modal,
-  Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -53,7 +48,7 @@ function Index() {
 
   React.useEffect(() => {
     connect(query.ip, "admin", "admin");
-  }, [query]);
+  }, [query, connect]);
 
   React.useEffect(() => {
     if (!isConnected) {

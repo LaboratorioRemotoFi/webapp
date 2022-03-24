@@ -1,20 +1,6 @@
 import React from "react";
-import ClearIcon from "@mui/icons-material/Clear";
 import PracticeStep from "./PracticeStep";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Link,
-  Paper,
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Link, Typography } from "@mui/material";
 
 function PracticePage({
   socket,

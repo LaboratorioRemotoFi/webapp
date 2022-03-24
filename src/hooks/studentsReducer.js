@@ -1,6 +1,3 @@
-import { useReducer } from "react";
-import studentMockData from "../mockData/student.js";
-
 const studentsReducer = (state, action) => {
   switch (action.type) {
     case "setGroups":

@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
 import PropTypes from "prop-types";
-import Link from "../../src/components/Link";
 import { getDateString } from "../utils/timeUtils";
 import { ScheduleModal, ScheduleDetails } from "../utils/scheduleUtils.js";
 

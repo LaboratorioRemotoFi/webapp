@@ -2,7 +2,7 @@ import React from "react";
 import useStoreContext from "/src/hooks/storeContext";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import ScheduleLink from "/src/utils/ScheduleLinkUtil";
+import ScheduleLink from "/src/utils/scheduleLinkUtil";
 import PropTypes from "prop-types";
 import {
   Box,

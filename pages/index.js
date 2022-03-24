@@ -3,23 +3,21 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import MuiLink from "@mui/material/Link";
-import Link from "../src/components/Link";
+import Layout from "/src/components/Layout";
+import Link from "/src/components/Link";
+import StudentPage from "/src/components/StudentPage/StudentPage";
+import { useSession } from "next-auth/react";
 
 export default function Index() {
-  return (
-    <Container maxWidth="md">
-      <Box my={4}>
-        <Typography variant="h1" component="h1" gutterBottom>
-          Laboratorio remoto
-        </Typography>
-        <Link href="/login" color="secondary">
-          Ir al login
-        </Link>
-        <br />
-        <Link href="/about" color="secondary">
-          Acerca de
-        </Link>
-      </Box>
-    </Container>
-  );
+  const { status, data } = useSession({
+    required: true,
+  });
+
+  console.log(status);
+
+  if (status !== "authenticated") {
+    return <Layout></Layout>;
+  }
+
+  return <StudentPage />;
 }

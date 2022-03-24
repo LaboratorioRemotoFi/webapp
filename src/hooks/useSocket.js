@@ -11,11 +11,13 @@ function useSocket() {
   const [sensorsData, setSensorsData] = React.useState({});
   const [actuatorsStatus, setActuatorsStatus] = React.useState({});
 
-  function connect(serverIp, user, password) {
+  const disconnect = () => {
     if (socket) {
       socket.close();
     }
+  };
 
+  const connect = React.useCallback((serverIp, user, password) => {
     const newSocket = io(serverIp);
     setErrorMessage("");
 
@@ -59,7 +61,7 @@ function useSocket() {
     });
 
     setSocket(newSocket);
-  }
+  }, []);
 
   return {
     socket,

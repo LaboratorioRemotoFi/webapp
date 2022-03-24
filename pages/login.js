@@ -28,7 +28,7 @@ export default function Index() {
 
   React.useEffect(() => {
     if (status === "authenticated") {
-      router.push("/practicas");
+      router.push("/");
     }
   }, [status, router]);
 

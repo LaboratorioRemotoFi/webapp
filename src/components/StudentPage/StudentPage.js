@@ -5,7 +5,7 @@ import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import Link from "/src/components/Link";
 import Layout from "/src/components/Layout";
 import useStoreContext from "/src/hooks/storeContext";
-import { getDateString } from "/src/utils/timeUtils";
+import convertDateToSpanishString from "/src/utils/timeUtils";
 import { getNearestPractice } from "/src/utils/scheduleUtils";
 import StudentGroupsTable from "./StudentGroupsTable";
 
@@ -34,7 +34,7 @@ function StudentPage() {
   }, [groups, currentDispatch]);
 
   currDate = Date.now();
-  const currDateString = getDateString(currDate);
+  const currDateString = convertDateToSpanishString(currDate);
   const nearestPractice = groups && getNearestPractice(groups);
 
   if (status !== "authenticated" || !groups) {

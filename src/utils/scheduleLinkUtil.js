@@ -1,8 +1,9 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
 import PropTypes from "prop-types";
-import { getDateString } from "../utils/timeUtils";
-import { ScheduleModal, ScheduleDetails } from "../utils/scheduleUtils.js";
+import convertDateToSpanishString from "../utils/timeUtils";
+import StudentScheduleReservationModal from "../components/StudentPage/StudentScheduleReservationModal.js";
+import { ScheduleDetails } from "../utils/scheduleUtils.js";
 
 let currDate = Date.now();
 
@@ -23,10 +24,10 @@ export default function ScheduleLink(props) {
   let state;
 
   const hasSchedule = !isNaN(currentStudentSchedule);
-  const scheduleString = getDateString(currentStudentSchedule);
-  const schedulingDate = getDateString(startDate - reserveTime);
-  const availableDateStart = getDateString(startDate);
-  const availableDateEnd = getDateString(endDate);
+  const scheduleString = convertDateToSpanishString(currentStudentSchedule);
+  const schedulingDate = convertDateToSpanishString(startDate - reserveTime);
+  const availableDateStart = convertDateToSpanishString(startDate);
+  const availableDateEnd = convertDateToSpanishString(endDate);
 
   if (currDate > endDate) {
     state = "Expired";
@@ -131,7 +132,7 @@ export default function ScheduleLink(props) {
                   Reagendar
                 </Button>
                 )
-                {ScheduleModal(
+                {StudentScheduleReservationModal(
                   practice,
                   openModal,
                   setOpenModal,
@@ -180,7 +181,7 @@ export default function ScheduleLink(props) {
                   Reagendar
                 </Button>
                 )
-                {ScheduleModal(
+                {StudentScheduleReservationModal(
                   practice,
                   openModal,
                   setOpenModal,
@@ -227,7 +228,7 @@ export default function ScheduleLink(props) {
                 >
                   Agendar
                 </Button>
-                {ScheduleModal(
+                {StudentScheduleReservationModal(
                   practice,
                   openModal,
                   setOpenModal,

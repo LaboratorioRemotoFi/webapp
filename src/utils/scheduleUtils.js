@@ -1,17 +1,9 @@
 import React from "react";
-import {
-  Box,
-  Collapse,
-  Grid,
-  IconButton,
-  Modal,
-  Typography,
-} from "@mui/material";
+import { Collapse, Grid, IconButton } from "@mui/material";
 import PropTypes from "prop-types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import ScheduleReservation from "../utils/reservationUtils.js";
-import { getDateString } from "../utils/timeUtils";
+import convertDateToSpanishString from "../utils/timeUtils";
 
 let currDate = Date.now();
 
@@ -29,7 +21,11 @@ export function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
   return scheduleList;
 }
 
-export function isNotAvailable(scheduleToValidate, scheduleList, currPractice) {
+export function scheduleIsNotAvailable(
+  scheduleToValidate,
+  scheduleList,
+  currPractice
+) {
   let disable = !scheduleList
     .filter(
       (schedule) =>
@@ -49,39 +45,6 @@ export function isNotAvailable(scheduleToValidate, scheduleList, currPractice) {
     )
     .includes(scheduleToValidate);
   return disable;
-}
-
-export function ScheduleModal(
-  practice,
-  openModal,
-  setOpenModal,
-  handleCloseModal
-) {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    borderRadius: 2,
-    p: 4,
-  };
-
-  return (
-    <Modal
-      open={openModal}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style} width={{ lg: "70%", xs: "95%" }}>
-        <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
-          Selecciona una fecha y hora
-        </Typography>
-        {ScheduleReservation(practice, handleCloseModal)}
-      </Box>
-    </Modal>
-  );
 }
 
 export function ScheduleDetails(props) {
@@ -127,7 +90,9 @@ export function getNearestPractice(groups) {
               ip: practice.raspIp,
               subjectId: group.subjectId,
               groupName: group.name,
-              dateString: getDateString(practice.currentStudentSchedule),
+              dateString: convertDateToSpanishString(
+                practice.currentStudentSchedule
+              ),
               startTime: practice.currentStudentSchedule,
               endTime:
                 practice.currentStudentSchedule +

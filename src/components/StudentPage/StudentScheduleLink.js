@@ -1,13 +1,13 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
 import PropTypes from "prop-types";
-import convertDateToSpanishString from "../utils/timeUtils";
-import StudentScheduleReservationModal from "../components/StudentPage/StudentScheduleReservationModal.js";
-import StudentScheduleDetails from "../components/StudentPage/StudentScheduleDetails.js";
+import convertDateToSpanishString from "../../utils/timeUtils";
+import StudentScheduleReservationModal from "./StudentScheduleReservationModal.js";
+import StudentScheduleDetails from "./StudentScheduleDetails.js";
 
 let currDate = Date.now();
 
-function ScheduleLink(props) {
+function StudentScheduleLink(props) {
   const { practice } = props;
   const startDate = practice.startDate;
   const endDate = practice.endDate;
@@ -288,8 +288,8 @@ function ScheduleLink(props) {
   }
 }
 
-ScheduleLink.propTypes = {
+StudentScheduleLink.propTypes = {
   practice: PropTypes.object.isRequired,
 };
 
-export default ScheduleLink;
+export default StudentScheduleLink;

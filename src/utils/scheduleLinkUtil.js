@@ -3,11 +3,11 @@ import { Button, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import convertDateToSpanishString from "../utils/timeUtils";
 import StudentScheduleReservationModal from "../components/StudentPage/StudentScheduleReservationModal.js";
-import { ScheduleDetails } from "../utils/scheduleUtils.js";
+import StudentScheduleDetails from "../components/StudentPage/StudentScheduleDetails.js";
 
 let currDate = Date.now();
 
-export default function ScheduleLink(props) {
+function ScheduleLink(props) {
   const { practice } = props;
   const startDate = practice.startDate;
   const endDate = practice.endDate;
@@ -59,7 +59,7 @@ export default function ScheduleLink(props) {
       if (!hasSchedule) {
         return (
           <>
-            <ScheduleDetails
+            <StudentScheduleDetails
               header={
                 <Typography variant="inherit" color="red" fontWeight="bold">
                   Expirada
@@ -84,7 +84,7 @@ export default function ScheduleLink(props) {
       }
       return (
         <>
-          <ScheduleDetails
+          <StudentScheduleDetails
             header={
               <Typography variant="inherit" fontWeight="bold">
                 Terminada
@@ -114,7 +114,7 @@ export default function ScheduleLink(props) {
     case "Late reschedule":
       return (
         <>
-          <ScheduleDetails
+          <StudentScheduleDetails
             header={
               <Typography variant="inherit" color="red" fontWeight="bold">
                 Expirada (
@@ -163,7 +163,7 @@ export default function ScheduleLink(props) {
     case "Reschedule":
       return (
         <>
-          <ScheduleDetails
+          <StudentScheduleDetails
             header={
               <Typography variant="inherit" fontWeight="bold">
                 Agendada (
@@ -212,7 +212,7 @@ export default function ScheduleLink(props) {
     case "Available":
       return (
         <>
-          <ScheduleDetails
+          <StudentScheduleDetails
             header={
               <>
                 <Button
@@ -255,7 +255,7 @@ export default function ScheduleLink(props) {
     case "Not available":
       return (
         <>
-          <ScheduleDetails
+          <StudentScheduleDetails
             header={
               <Typography variant="inherit" fontWeight="bold">
                 No disponible
@@ -291,3 +291,5 @@ export default function ScheduleLink(props) {
 ScheduleLink.propTypes = {
   practice: PropTypes.object.isRequired,
 };
+
+export default ScheduleLink;

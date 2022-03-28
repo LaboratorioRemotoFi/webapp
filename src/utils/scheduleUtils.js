@@ -1,13 +1,8 @@
-import React from "react";
-import { Collapse, Grid, IconButton } from "@mui/material";
-import PropTypes from "prop-types";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import convertDateToSpanishString from "../utils/timeUtils";
 
 let currDate = Date.now();
 
-export function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
+function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
   let scheduleList = [];
 
   let temp = new Date(day).getTime();
@@ -21,7 +16,7 @@ export function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
   return scheduleList;
 }
 
-export function scheduleIsNotAvailable(
+function scheduleIsNotAvailable(
   scheduleToValidate,
   scheduleList,
   currPractice
@@ -47,39 +42,7 @@ export function scheduleIsNotAvailable(
   return disable;
 }
 
-export function ScheduleDetails(props) {
-  const { header, details } = props;
-  const [open, setOpen] = React.useState(false);
-
-  return (
-    <>
-      <Grid container spacing={2} alignItems="center" mt={0} pt={0}>
-        <Grid item sm={1} xs={2} style={{ paddingTop: 0 }}>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </Grid>
-        <Grid item sm={11} xs={10} style={{ paddingTop: 0 }}>
-          {header}
-        </Grid>
-      </Grid>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        {details}
-      </Collapse>
-    </>
-  );
-}
-
-ScheduleDetails.propTypes = {
-  header: PropTypes.object.isRequired,
-  details: PropTypes.element.isRequired,
-};
-
-export function getNearestPractice(groups) {
+function getNearestPractice(groups) {
   return groups
     .map((group) =>
       group.practices.map((practice) =>
@@ -108,3 +71,5 @@ export function getNearestPractice(groups) {
         Date.now() > schedule.startTime && Date.now() < schedule.endTime
     );
 }
+
+export { getDaySchedules, scheduleIsNotAvailable, getNearestPractice };

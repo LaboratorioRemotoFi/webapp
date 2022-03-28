@@ -33,6 +33,7 @@ function StudentScheduleReservationModal(
   setOpenModal,
   handleCloseModal
 ) {
+  
   const style = {
     position: "absolute",
     top: "50%",

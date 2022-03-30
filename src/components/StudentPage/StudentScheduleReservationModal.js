@@ -22,7 +22,6 @@ import {
 } from "../../utils/scheduleUtils.js";
 import {
   getFullReservationDate,
-  groupFromPractice,
   schedulesPerDay,
 } from "../../utils/reservationUtils.js";
 import StudentConfirmReservationDialog from "./StudentConfirmReservationDialog";

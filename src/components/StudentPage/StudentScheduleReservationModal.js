@@ -66,10 +66,13 @@ function StudentScheduleReservationModal(
   const handleClickOpenAlert = () => {
     setOpenAlert(true);
   };
-  const handleCloseAlert = () => {
+  const handleConfirmScheduleDialog = () => {
     setOpenAlert(false);
     handleReserveSchedule();
     handleCloseModal();
+  };
+  const handleCancelScheduleDialog = () => {
+    setOpenAlert(false);
   };
 
   if (!currentState) {
@@ -366,8 +369,8 @@ function StudentScheduleReservationModal(
                   </Button>
                   {StudentConfirmReservationDialog(
                     openAlert,
-                    setOpenAlert,
-                    handleCloseAlert
+                    handleConfirmScheduleDialog,
+                    handleCancelScheduleDialog
                   )}
                 </Grid>
                 <Grid

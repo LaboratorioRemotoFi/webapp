@@ -19,7 +19,8 @@ function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
 function scheduleIsNotAvailable(
   scheduleToValidate,
   scheduleList,
-  currPractice
+  currPractice,
+  reservedSchedules
 ) {
   let disable = !scheduleList
     .filter(
@@ -28,7 +29,7 @@ function scheduleIsNotAvailable(
         schedule + (currPractice.timeFrame - 1) * 60 * 1000 > currDate &&
         // If the schedule isn't on the reserved schedules array
         // then enable it
-        !currPractice.reservedSchedules.find(function (
+        !reservedSchedules.find(function (
           scheduleReserved,
           index
         ) {

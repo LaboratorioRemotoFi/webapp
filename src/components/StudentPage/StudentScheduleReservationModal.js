@@ -30,7 +30,6 @@ import StudentConfirmReservationDialog from "./StudentConfirmReservationDialog";
 function StudentScheduleReservationModal(
   practice,
   openModal,
-  setOpenModal,
   handleCloseModal
 ) {
   const style = {
@@ -46,6 +45,8 @@ function StudentScheduleReservationModal(
 
   const [currentState, currentDispatch] = useStoreContext();
   const { groups } = currentState;
+
+  const [reservedSchedules, setReservedSchedules] = React.useState(null);
 
   // Variables for selected date from date picker
   const [selectedDate, setSelectedDate] = React.useState(null);
@@ -74,10 +75,6 @@ function StudentScheduleReservationModal(
   const handleCancelScheduleDialog = () => {
     setOpenAlert(false);
   };
-
-  if (!currentState) {
-    return <Typography variant="h4">NO DATA</Typography>;
-  }
 
   const currGroup = groupFromPractice(practice.id, groups);
 
@@ -166,6 +163,14 @@ function StudentScheduleReservationModal(
     }
   };
 
+  React.useEffect(() => {
+    fetch(`/api/schedules/reserved?practiceId=${practice.id}&subjectId=${currGroup.subjectId}&status=SCHEDULED`, { method: "GET" })
+      .then((response) => response.json())
+      .then((fetchedReservedSchedules) => {
+        setReservedSchedules(fetchedReservedSchedules);
+      });
+  }, [practice, currGroup.subjectId]);
+
   const handleReserveSchedule = () => {
     const reqOptions = {
       method: "POST",
@@ -207,6 +212,10 @@ function StudentScheduleReservationModal(
 
   let convertedDate;
   const invalidWeekdays = [0, 6];
+
+  if (!currentState) {
+    return <Typography variant="h4">NO DATA</Typography>;
+  }
 
   return (
     <Modal
@@ -308,7 +317,8 @@ function StudentScheduleReservationModal(
                             disabled={scheduleIsNotAvailable(
                               schedule,
                               daySchedules,
-                              practice
+                              practice,
+                              reservedSchedules
                             )}
                           >
                             {convertedDate[1]}

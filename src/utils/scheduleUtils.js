@@ -40,15 +40,13 @@ function scheduleIsNotAvailable(
 }
 
 function getNearestPractice(groups) {
-  console.log("GET NEAREST PRACTICE");
-  console.log(groups);
   return groups
     .map((group) =>
       group.practices.map((practice) =>
         practice.currentStudentSchedule
           ? {
               name: practice.name,
-              practiceNumber: practice.practiceNumber,
+              practiceNumber: group.practices.indexOf(practice),
               ip: practice.raspIp,
               subjectId: group.subjectId,
               groupName: group.name,

@@ -62,7 +62,7 @@ export async function getStudentGroups(studentId, groupsIds) {
         });
 
         if (currentStudentSchedule) {
-          practice.currentStudentSchedule = currentStudentSchedule.schedule;
+          practice.currentStudentSchedule = currentStudentSchedule.timestamp;
         }
 
         const reservedSchedules = await schedulesCollection
@@ -71,7 +71,7 @@ export async function getStudentGroups(studentId, groupsIds) {
 
         const reservedSchedulesArray = [];
         for (const idx in reservedSchedules) {
-          reservedSchedulesArray.push(reservedSchedules[idx].schedule);
+          reservedSchedulesArray.push(reservedSchedules[idx].timestamp);
         }
 
         practice.reservedSchedules = reservedSchedulesArray;

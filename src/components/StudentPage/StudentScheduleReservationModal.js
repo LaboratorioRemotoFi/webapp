@@ -47,12 +47,6 @@ function StudentScheduleReservationModal(
   const [currentState, currentDispatch] = useStoreContext();
   const { groups } = currentState;
 
-  console.log("groups");
-  console.log(groups);
-
-  //console.log("PRACTICE");
-  //console.log(practice);
-
   // Variables for selected date from date picker
   const [selectedDate, setSelectedDate] = React.useState(null);
   // Disable hour select if there's no date picked

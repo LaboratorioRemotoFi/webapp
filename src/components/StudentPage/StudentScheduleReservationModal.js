@@ -164,7 +164,10 @@ function StudentScheduleReservationModal(
   };
 
   React.useEffect(() => {
-    fetch(`/api/schedules/reserved?practiceId=${practice.id}&subjectId=${currGroup.subjectId}&status=SCHEDULED`, { method: "GET" })
+    fetch(
+      `/api/schedules/reserved?practiceId=${practice.id}&subjectId=${currGroup.subjectId}&status=SCHEDULED`,
+      { method: "GET" }
+    )
       .then((response) => response.json())
       .then((fetchedReservedSchedules) => {
         setReservedSchedules(fetchedReservedSchedules);

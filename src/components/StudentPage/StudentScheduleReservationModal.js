@@ -22,6 +22,7 @@ import {
 } from "../../utils/scheduleUtils.js";
 import {
   getFullReservationDate,
+  groupFromPractice,
   schedulesPerDay,
 } from "../../utils/reservationUtils.js";
 import StudentConfirmReservationDialog from "./StudentConfirmReservationDialog";
@@ -44,9 +45,13 @@ function StudentScheduleReservationModal(
   };
 
   const [currentState, currentDispatch] = useStoreContext();
+  const { groups } = currentState;
 
-  console.log("currentState");
-  console.log(currentState);
+  console.log("groups");
+  console.log(groups);
+
+  //console.log("PRACTICE");
+  //console.log(practice);
 
   // Variables for selected date from date picker
   const [selectedDate, setSelectedDate] = React.useState(null);
@@ -77,7 +82,11 @@ function StudentScheduleReservationModal(
     return <Typography variant="h4">NO DATA</Typography>;
   }
 
-  //const currGroup = groupFromPractice(practiceId, groups);
+  const currGroup = groupFromPractice(practice.id, groups);
+  //console.log("GROUP");
+  //console.log(currGroup);
+
+  //const currSubject = subjects[currPractice.id.slice(0, 4)];
 
   //console.log("OBTAINED GROUP");
   //console.log(currGroup);
@@ -173,16 +182,28 @@ function StudentScheduleReservationModal(
   };
 
   const handleReserveSchedule = () => {
-    currentDispatch({
+    
+    const reqOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subjectId: currGroup.subjectId, practiceId: practice.id, timestamp: newDate, }),
+    };
+    fetch("/api/reserve", reqOptions)
+      .then((response) => response.json())
+      .then((reservedSchedule) => {
+        currentDispatch({ type: "reserveSchedule", reservedSchedule: reservedSchedule });
+        });
+    /* currentDispatch({
       type: "reserveSchedule",
       payload: {
         practiceId: practice.id,
         reservedSchedule: {
-          studentId: user.id,
+          //studentId: user.id,
+          subjectId: currentState.subjectId,
           schedule: newDate,
         },
       },
-    });
+    }); */
     setSelectedDate(null);
     disableHourSelection(true);
     setNewDate("");

@@ -11,7 +11,10 @@ const studentsReducer = (state, action) => {
         practices: action.practices,
       };
     case "reserveSchedule":
-      let updatedSchedules = [
+      console.log("IN REDUCER");
+      console.log("ACTION PAYLOAD");
+      console.log(action.payload);
+      /* let updatedSchedules = [
         ...state.practices[action.payload.currPracticeId].reservedSchedules,
       ];
 
@@ -46,7 +49,7 @@ const studentsReducer = (state, action) => {
             reservedSchedules: updatedSchedules,
           },
         },
-      };
+      }; */
     default:
       return {
         ...state,

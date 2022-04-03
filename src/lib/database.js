@@ -96,3 +96,28 @@ export async function getStudentGroups(studentId, groupsIds) {
     await mongoClient.close();
   }
 }
+
+export async function reserveSchedule(studentId, subjectId, practiceId, schedule) {
+  let mongoClient;
+
+  try {
+    mongoClient = await connectToCluster();
+    const db = mongoClient.db("laboratorioremotofi");
+    const schedulesCollection = db.collection("schedules");
+
+    const reservedSchedule = await schedulesCollection.updateOne(
+      {
+        studentId: studentId,
+        subjectId: subjectId,
+        practiceId: practiceId,
+        status: "SCHEDULED",
+      },
+      { $set: { timestamp: schedule } },
+      { upsert: true }
+    );
+
+    return reservedSchedule;
+  } finally {
+    await mongoClient.close();
+  }
+}

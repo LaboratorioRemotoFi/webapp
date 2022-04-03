@@ -27,14 +27,11 @@ function scheduleIsNotAvailable(
         // Only enable schedule if its end time has not yet come
         schedule + (currPractice.timeFrame - 1) * 60 * 1000 > currDate &&
         // If the schedule isn't on the reserved schedules array
-        // or is the schedule the current student reserved,
         // then enable it
         !currPractice.reservedSchedules.find(function (
           scheduleReserved,
           index
         ) {
-          if (scheduleReserved == currPractice.currentStudentSchedule)
-            return false;
           if (scheduleReserved == schedule) return true;
         })
     )

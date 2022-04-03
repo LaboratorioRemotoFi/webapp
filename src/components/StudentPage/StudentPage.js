@@ -17,6 +17,9 @@ function StudentPage() {
   const [currentState, currentDispatch] = useStoreContext();
   const { groups } = currentState;
 
+  console.log("groups");
+  console.log(groups);
+
   const { status, data } = useSession({
     required: true,
   });

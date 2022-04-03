@@ -11,12 +11,56 @@ const studentsReducer = (state, action) => {
         practices: action.practices,
       };
     case "reserveSchedule":
-      console.log("IN REDUCER");
-      console.log("ACTION PAYLOAD");
-      console.log(action.payload);
+      const groupIndex = state.groups.findIndex(group => {
+        return group.id === action.payload.groupId;
+      });
+      const practiceIndex = state.groups[groupIndex].practices.findIndex(practice => {
+        return practice.id === action.payload.reservedSchedule.practiceId;
+      });
+      return {
+        ...state,
+        groups: state.groups.map(
+          (group, i) => i === groupIndex ? {
+            ...group,
+            practices: state.groups[groupIndex].practices.map(
+              (practice, j) => j === practiceIndex ? {
+                ...practice,
+                currentStudentSchedule: action.payload.reservedSchedule.timestamp
+              }
+              : practice
+            )
+          }
+          : group
+        )
+      };
+      /*
+      return {
+        ...state,
+        groups: [
+          ...state.groups,
+          [groupIndex] = {
+            ...state.groups[groupIndex],
+            practices: {
+              ...state.groups[groupIndex].practices,
+              [practiceIndex]: {
+                ...state.groups[groupIndex].practices[practiceIndex],
+                currentStudentSchedule: action.payload.reservedSchedule.timestamp,
+              },
+            },
+          },
+        ],
+      };*/
       /* let updatedSchedules = [
         ...state.practices[action.payload.currPracticeId].reservedSchedules,
       ];
+        practices: {
+          ...state.practices,
+          [action.payload.currPracticeId]: {
+            ...state.practices[action.payload.currPracticeId],
+            currentStudentSchedule: action.payload.reservedSchedule.schedule,
+            reservedSchedules: updatedSchedules,
+          },
+        },
 
       // If currentStudentSchedule has a value, find its index in the reservedSchedules array
       // and delete it

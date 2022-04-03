@@ -191,7 +191,13 @@ function StudentScheduleReservationModal(
     fetch("/api/reserve", reqOptions)
       .then((response) => response.json())
       .then((reservedSchedule) => {
-        currentDispatch({ type: "reserveSchedule", reservedSchedule: reservedSchedule });
+        currentDispatch({
+          type: "reserveSchedule",
+          payload: {
+            groupId: currGroup.id,
+            reservedSchedule: reservedSchedule,
+          },
+        });
         });
     /* currentDispatch({
       type: "reserveSchedule",

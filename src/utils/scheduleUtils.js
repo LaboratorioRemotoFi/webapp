@@ -40,6 +40,8 @@ function scheduleIsNotAvailable(
 }
 
 function getNearestPractice(groups) {
+  console.log("GET NEAREST PRACTICE");
+  console.log(groups);
   return groups
     .map((group) =>
       group.practices.map((practice) =>

@@ -105,7 +105,7 @@ export async function reserveSchedule(studentId, subjectId, practiceId, schedule
     const db = mongoClient.db("laboratorioremotofi");
     const schedulesCollection = db.collection("schedules");
 
-    const reservedSchedule = await schedulesCollection.updateOne(
+    const reserve = await schedulesCollection.updateOne(
       {
         studentId: studentId,
         subjectId: subjectId,
@@ -115,6 +115,12 @@ export async function reserveSchedule(studentId, subjectId, practiceId, schedule
       { $set: { timestamp: schedule } },
       { upsert: true }
     );
+
+    const reservedSchedule = await schedulesCollection.findOne({
+      studentId,
+      subjectId,
+      practiceId
+    });
 
     return reservedSchedule;
   } finally {

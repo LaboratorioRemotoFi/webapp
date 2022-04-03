@@ -1,5 +1,4 @@
 import React from "react";
-import useStoreContext from "/src/hooks/storeContext";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import StudentScheduleLink from "/src/components/StudentPage/StudentScheduleLink.js";
@@ -16,7 +15,6 @@ import {
 } from "@mui/material";
 
 function StudentGroupsTableRow({ group }) {
-  const [state, dispatch] = useStoreContext();
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -50,10 +48,10 @@ function StudentGroupsTableRow({ group }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {group?.practices.map((practiceRow) => (
+                  {group?.practices.map((practiceRow, idx) => (
                     <TableRow key={practiceRow.id}>
                       <TableCell component="th" scope="row">
-                        {practiceRow.practiceNumber}
+                        {idx + 1}
                       </TableCell>
                       <TableCell>{practiceRow.name}</TableCell>
                       <TableCell>

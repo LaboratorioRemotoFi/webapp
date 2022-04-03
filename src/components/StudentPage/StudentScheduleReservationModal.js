@@ -176,11 +176,14 @@ function StudentScheduleReservationModal(
   };
 
   const handleReserveSchedule = () => {
-    
     const reqOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subjectId: currGroup.subjectId, practiceId: practice.id, timestamp: newDate, }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subjectId: currGroup.subjectId,
+        practiceId: practice.id,
+        timestamp: newDate,
+      }),
     };
     fetch("/api/reserve", reqOptions)
       .then((response) => response.json())
@@ -192,7 +195,7 @@ function StudentScheduleReservationModal(
             reservedSchedule: reservedSchedule,
           },
         });
-        });
+      });
     /* currentDispatch({
       type: "reserveSchedule",
       payload: {

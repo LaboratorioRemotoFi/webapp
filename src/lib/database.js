@@ -97,7 +97,12 @@ export async function getStudentGroups(studentId, groupsIds) {
   }
 }
 
-export async function reserveSchedule(studentId, subjectId, practiceId, schedule) {
+export async function reserveSchedule(
+  studentId,
+  subjectId,
+  practiceId,
+  schedule
+) {
   let mongoClient;
 
   try {
@@ -119,7 +124,7 @@ export async function reserveSchedule(studentId, subjectId, practiceId, schedule
     const reservedSchedule = await schedulesCollection.findOne({
       studentId,
       subjectId,
-      practiceId
+      practiceId,
     });
 
     return reservedSchedule;

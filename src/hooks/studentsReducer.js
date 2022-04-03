@@ -11,29 +11,35 @@ const studentsReducer = (state, action) => {
         practices: action.practices,
       };
     case "reserveSchedule":
-      const groupIndex = state.groups.findIndex(group => {
+      const groupIndex = state.groups.findIndex((group) => {
         return group.id === action.payload.groupId;
       });
-      const practiceIndex = state.groups[groupIndex].practices.findIndex(practice => {
-        return practice.id === action.payload.reservedSchedule.practiceId;
-      });
+      const practiceIndex = state.groups[groupIndex].practices.findIndex(
+        (practice) => {
+          return practice.id === action.payload.reservedSchedule.practiceId;
+        }
+      );
       return {
         ...state,
-        groups: state.groups.map(
-          (group, i) => i === groupIndex ? {
-            ...group,
-            practices: state.groups[groupIndex].practices.map(
-              (practice, j) => j === practiceIndex ? {
-                ...practice,
-                currentStudentSchedule: action.payload.reservedSchedule.timestamp
+        groups: state.groups.map((group, i) =>
+          i === groupIndex
+            ? {
+                ...group,
+                practices: state.groups[groupIndex].practices.map(
+                  (practice, j) =>
+                    j === practiceIndex
+                      ? {
+                          ...practice,
+                          currentStudentSchedule:
+                            action.payload.reservedSchedule.timestamp,
+                        }
+                      : practice
+                ),
               }
-              : practice
-            )
-          }
-          : group
-        )
+            : group
+        ),
       };
-      /*
+    /*
       return {
         ...state,
         groups: [
@@ -50,7 +56,7 @@ const studentsReducer = (state, action) => {
           },
         ],
       };*/
-      /* let updatedSchedules = [
+    /* let updatedSchedules = [
         ...state.practices[action.payload.currPracticeId].reservedSchedules,
       ];
         practices: {

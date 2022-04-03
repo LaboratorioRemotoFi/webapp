@@ -80,18 +80,6 @@ function StudentScheduleReservationModal(
   }
 
   const currGroup = groupFromPractice(practice.id, groups);
-  //console.log("GROUP");
-  //console.log(currGroup);
-
-  //const currSubject = subjects[currPractice.id.slice(0, 4)];
-
-  //console.log("OBTAINED GROUP");
-  //console.log(currGroup);
-
-  //const practice = currGroup.practices[practiceId];
-
-  //console.log("OBTAINED PRACTICE");
-  //console.log(practice);
 
   const noAvailSchedPerDay = schedulesPerDay(
     practice.startDate,
@@ -188,7 +176,7 @@ function StudentScheduleReservationModal(
         timestamp: newDate,
       }),
     };
-    fetch("/api/reserve", reqOptions)
+    fetch("/api/schedules/reserve", reqOptions)
       .then((response) => response.json())
       .then((reservedSchedule) => {
         currentDispatch({

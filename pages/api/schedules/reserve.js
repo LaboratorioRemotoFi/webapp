@@ -3,9 +3,8 @@ import { reserveSchedule } from "/src/lib/database";
 
 const handler = async (req, res) => {
   const session = await getSession({ req });
-  console.log("RESERVATION");
   if (session) {
-    console.log(req.method, req.body);
+    // CHANGE TO USE SCHEDULE _ID INSTEAD OF USER ID, SUBJECT ID AND PRACTICE ID
     const result = await reserveSchedule(
       session.user.id,
       req.body.subjectId,

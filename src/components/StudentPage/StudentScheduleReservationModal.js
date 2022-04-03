@@ -176,7 +176,7 @@ function StudentScheduleReservationModal(
         timestamp: newDate,
       }),
     };
-    fetch("/api/schedules/reserve", reqOptions)
+    fetch("/api/reserve", reqOptions)
       .then((response) => response.json())
       .then((reservedSchedule) => {
         currentDispatch({

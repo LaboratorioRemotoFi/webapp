@@ -2,7 +2,7 @@ import React from "react";
 import useStoreContext from "/src/hooks/storeContext";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import ScheduleLink from "/src/utils/scheduleLinkUtil";
+import StudentScheduleLink from "/src/components/StudentPage/StudentScheduleLink.js";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -57,7 +57,7 @@ function StudentGroupsTableRow({ group }) {
                       </TableCell>
                       <TableCell>{practiceRow.name}</TableCell>
                       <TableCell>
-                        <ScheduleLink
+                        <StudentScheduleLink
                           practice={practiceRow}
                           startDate={practiceRow.startDate}
                           endDate={practiceRow.endDate}

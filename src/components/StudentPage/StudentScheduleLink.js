@@ -135,7 +135,6 @@ function StudentScheduleLink(props) {
                 {StudentScheduleReservationModal(
                   practice,
                   openModal,
-                  setOpenModal,
                   handleCloseModal
                 )}
               </Typography>
@@ -184,7 +183,6 @@ function StudentScheduleLink(props) {
                 {StudentScheduleReservationModal(
                   practice,
                   openModal,
-                  setOpenModal,
                   handleCloseModal
                 )}
               </Typography>
@@ -231,7 +229,6 @@ function StudentScheduleLink(props) {
                 {StudentScheduleReservationModal(
                   practice,
                   openModal,
-                  setOpenModal,
                   handleCloseModal
                 )}
               </>

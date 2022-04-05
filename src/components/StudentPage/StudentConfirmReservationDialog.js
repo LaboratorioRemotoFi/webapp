@@ -10,13 +10,13 @@ import {
 
 function StudentConfirmReservationDialog(
   openAlert,
-  setOpenAlert,
-  handleCloseAlert
+  handleConfirmScheduleDialog,
+  handleCancelScheduleDialog
 ) {
   return (
     <Dialog
       open={openAlert}
-      onClose={handleCloseAlert}
+      onClose={handleCancelScheduleDialog}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -30,8 +30,8 @@ function StudentConfirmReservationDialog(
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseAlert}>Cancelar</Button>
-        <Button onClick={handleCloseAlert} autoFocus>
+        <Button onClick={handleCancelScheduleDialog}>Cancelar</Button>
+        <Button onClick={handleConfirmScheduleDialog} autoFocus>
           Reservar
         </Button>
       </DialogActions>

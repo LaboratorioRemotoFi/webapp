@@ -22,6 +22,7 @@ import {
 } from "../../utils/scheduleUtils.js";
 import {
   getFullReservationDate,
+  groupFromPractice,
   schedulesPerDay,
 } from "../../utils/reservationUtils.js";
 import StudentConfirmReservationDialog from "./StudentConfirmReservationDialog";
@@ -29,7 +30,6 @@ import StudentConfirmReservationDialog from "./StudentConfirmReservationDialog";
 function StudentScheduleReservationModal(
   practice,
   openModal,
-  setOpenModal,
   handleCloseModal
 ) {
   const style = {
@@ -44,9 +44,9 @@ function StudentScheduleReservationModal(
   };
 
   const [currentState, currentDispatch] = useStoreContext();
+  const { groups } = currentState;
 
-  console.log("currentState");
-  console.log(currentState);
+  const [reservedSchedules, setReservedSchedules] = React.useState(null);
 
   // Variables for selected date from date picker
   const [selectedDate, setSelectedDate] = React.useState(null);
@@ -67,25 +67,16 @@ function StudentScheduleReservationModal(
   const handleClickOpenAlert = () => {
     setOpenAlert(true);
   };
-  const handleCloseAlert = () => {
+  const handleConfirmScheduleDialog = () => {
     setOpenAlert(false);
     handleReserveSchedule();
     handleCloseModal();
   };
+  const handleCancelScheduleDialog = () => {
+    setOpenAlert(false);
+  };
 
-  if (!currentState) {
-    return <Typography variant="h4">NO DATA</Typography>;
-  }
-
-  //const currGroup = groupFromPractice(practiceId, groups);
-
-  //console.log("OBTAINED GROUP");
-  //console.log(currGroup);
-
-  //const practice = currGroup.practices[practiceId];
-
-  //console.log("OBTAINED PRACTICE");
-  //console.log(practice);
+  const currGroup = groupFromPractice(practice.id, groups);
 
   const noAvailSchedPerDay = schedulesPerDay(
     practice.startDate,
@@ -172,17 +163,49 @@ function StudentScheduleReservationModal(
     }
   };
 
+  React.useEffect(() => {
+    fetch(
+      `/api/schedules/reserved?practiceId=${practice.id}&subjectId=${currGroup.subjectId}&status=SCHEDULED`,
+      { method: "GET" }
+    )
+      .then((response) => response.json())
+      .then((fetchedReservedSchedules) => {
+        setReservedSchedules(fetchedReservedSchedules);
+      });
+  }, [practice, currGroup.subjectId]);
+
   const handleReserveSchedule = () => {
-    currentDispatch({
+    const reqOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subjectId: currGroup.subjectId,
+        practiceId: practice.id,
+        timestamp: newDate,
+      }),
+    };
+    fetch("/api/reserve", reqOptions)
+      .then((response) => response.json())
+      .then((reservedSchedule) => {
+        currentDispatch({
+          type: "reserveSchedule",
+          payload: {
+            groupId: currGroup.id,
+            reservedSchedule: reservedSchedule,
+          },
+        });
+      });
+    /* currentDispatch({
       type: "reserveSchedule",
       payload: {
         practiceId: practice.id,
         reservedSchedule: {
-          studentId: user.id,
+          //studentId: user.id,
+          subjectId: currentState.subjectId,
           schedule: newDate,
         },
       },
-    });
+    }); */
     setSelectedDate(null);
     disableHourSelection(true);
     setNewDate("");
@@ -192,6 +215,10 @@ function StudentScheduleReservationModal(
 
   let convertedDate;
   const invalidWeekdays = [0, 6];
+
+  if (!currentState) {
+    return <Typography variant="h4">NO DATA</Typography>;
+  }
 
   return (
     <Modal
@@ -293,7 +320,8 @@ function StudentScheduleReservationModal(
                             disabled={scheduleIsNotAvailable(
                               schedule,
                               daySchedules,
-                              practice
+                              practice,
+                              reservedSchedules
                             )}
                           >
                             {convertedDate[1]}
@@ -342,8 +370,8 @@ function StudentScheduleReservationModal(
                   </Button>
                   {StudentConfirmReservationDialog(
                     openAlert,
-                    setOpenAlert,
-                    handleCloseAlert
+                    handleConfirmScheduleDialog,
+                    handleCancelScheduleDialog
                   )}
                 </Grid>
                 <Grid

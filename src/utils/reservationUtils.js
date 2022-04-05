@@ -33,8 +33,8 @@ function getFullReservationDate(date, timeFrame) {
 
 function groupFromPractice(practiceId, groups) {
   for (let i = 0; i < groups.length; i++) {
-    if (groups[0].practicesIds.includes(practiceId)) {
-      return groups[0];
+    if (groups[i].practicesIds.includes(practiceId)) {
+      return groups[i];
     }
   }
   return NaN;

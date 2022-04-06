@@ -57,12 +57,8 @@ function StudentGroupsTableRow({ group }) {
                       <TableCell>
                         <StudentScheduleLink
                           practice={practiceRow}
-                          startDate={practiceRow.startDate}
-                          endDate={practiceRow.endDate}
-                          timeFrame={practiceRow.timeFrame}
-                          currentStudentSchedule={
-                            practiceRow.currentStudentSchedule
-                          }
+                          groupId={group.id}
+                          subjectId={group.subjectId}
                         />
                       </TableCell>
                     </TableRow>
@@ -90,7 +86,13 @@ StudentGroupsTableRow.propTypes = {
         name: PropTypes.string.isRequired,
         startDate: PropTypes.number.isRequired,
         endDate: PropTypes.number.isRequired,
-        currentStudentSchedule: PropTypes.number,
+        currentStudentSchedule: PropTypes.shape({
+          practiceId: PropTypes.string.isRequired,
+          status: PropTypes.string.isRequired,
+          studentId: PropTypes.string.isRequired,
+          subjectId: PropTypes.string.isRequired,
+          timestamp: PropTypes.number.isRequired,
+        }),
       })
     ).isRequired,
   }).isRequired,

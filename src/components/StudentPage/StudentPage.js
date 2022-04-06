@@ -6,25 +6,25 @@ import Link from "/src/components/Link";
 import Layout from "/src/components/Layout";
 import useStoreContext from "/src/hooks/storeContext";
 import convertDateToSpanishString from "/src/utils/timeUtils";
-import { getNearestPractice } from "/src/utils/scheduleUtils";
 import StudentGroupsTable from "./StudentGroupsTable";
-
-let currDate = Date.now();
 
 function StudentPage() {
   const router = useRouter();
 
   const [currentState, currentDispatch] = useStoreContext();
-  const { groups } = currentState;
-
-  console.log("groups");
-  console.log(groups);
+  const { groups, nearestPractice } = currentState;
 
   const { status, data } = useSession({
     required: true,
   });
 
   const user = data?.user;
+
+  React.useEffect(() => {
+    if (groups) {
+      currentDispatch({ type: "calculateNearestPractice" });
+    }
+  }, [groups, currentDispatch]);
 
   React.useEffect(() => {
     if (!groups) {
@@ -36,9 +36,8 @@ function StudentPage() {
     }
   }, [groups, currentDispatch]);
 
-  currDate = Date.now();
+  const currDate = Date.now();
   const currDateString = convertDateToSpanishString(currDate);
-  const nearestPractice = groups && getNearestPractice(groups);
 
   if (status !== "authenticated" || !groups) {
     return <Layout></Layout>;

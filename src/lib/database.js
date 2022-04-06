@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 async function connectToCluster() {
   const uri = process.env.DB_URI;
@@ -60,10 +60,7 @@ export async function getStudentGroups(studentId, groupsIds) {
           practiceId,
           studentId,
         });
-
-        if (currentStudentSchedule) {
-          practice.currentStudentSchedule = currentStudentSchedule.timestamp;
-        }
+        practice.currentStudentSchedule = currentStudentSchedule;
 
         practices.push(practice);
       }
@@ -86,11 +83,31 @@ export async function getStudentGroups(studentId, groupsIds) {
   }
 }
 
+export async function updateSchedule(id, scheduleData) {
+  let mongoClient;
+
+  try {
+    mongoClient = await connectToCluster();
+    const db = mongoClient.db("laboratorioremotofi");
+    const schedulesCollection = db.collection("schedules");
+
+    const result = await schedulesCollection.findOneAndUpdate(
+      { _id: ObjectId(id) },
+      { $set: scheduleData },
+      { returnDocument: "after" }
+    );
+
+    return result;
+  } finally {
+    await mongoClient.close();
+  }
+}
+
 export async function reserveSchedule(
   studentId,
   subjectId,
   practiceId,
-  schedule
+  timestamp
 ) {
   let mongoClient;
 
@@ -106,7 +123,7 @@ export async function reserveSchedule(
         practiceId: practiceId,
         status: "SCHEDULED",
       },
-      { $set: { timestamp: schedule } },
+      { $set: { timestamp } },
       { upsert: true }
     );
 
@@ -122,7 +139,7 @@ export async function reserveSchedule(
   }
 }
 
-export async function getReservedSchedules(practiceId, subjectId, status) {
+export async function getSchedules({ practiceId, subjectId, status }) {
   let mongoClient;
 
   try {
@@ -130,16 +147,11 @@ export async function getReservedSchedules(practiceId, subjectId, status) {
     const db = mongoClient.db("laboratorioremotofi");
     const schedulesCollection = db.collection("schedules");
 
-    const reservedSchedules = await schedulesCollection
-      .find({ practiceId: practiceId, subjectId: subjectId, status: status })
+    const schedules = await schedulesCollection
+      .find({ practiceId, subjectId, status })
       .toArray();
 
-    const reservedSchedulesArray = [];
-    for (const idx in reservedSchedules) {
-      reservedSchedulesArray.push(reservedSchedules[idx].timestamp);
-    }
-
-    return reservedSchedulesArray;
+    return schedules;
   } finally {
     await mongoClient.close();
   }

@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import studentsReducer, { initialState } from "./studentsReducer";
+import studentsReducer from "./studentsReducer";
 
 const StudentsContext = createContext("");
 
@@ -8,16 +8,10 @@ export function useStudentsContext() {
 }
 
 const StudentsProvider = () => {
-  const [studentsState, studentsDispatch] = useReducer(
-    studentsReducer,
-    initialState
-  );
+  const [studentsState, studentsDispatch] = useReducer(studentsReducer, {});
 
   return [studentsState, studentsDispatch];
 };
-
-//const useStore = () => useContext(StoreContext)[0]
-//const useDispatch = () => useContext(StoreContext)[1]
 
 export { StudentsContext };
 export default StudentsProvider;

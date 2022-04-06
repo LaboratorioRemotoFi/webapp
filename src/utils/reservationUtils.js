@@ -31,15 +31,6 @@ function getFullReservationDate(date, timeFrame) {
   return newDate;
 }
 
-function groupFromPractice(practiceId, groups) {
-  for (let i = 0; i < groups.length; i++) {
-    if (groups[i].practicesIds.includes(practiceId)) {
-      return groups[i];
-    }
-  }
-  return NaN;
-}
-
 function schedulesPerDay(startDate, endDate, timeFrame) {
   const firstDayEndTime = [
     new Date(startDate).getFullYear(),
@@ -56,4 +47,4 @@ function schedulesPerDay(startDate, endDate, timeFrame) {
   return noAvailSchedPerDay;
 }
 
-export { getFullReservationDate, groupFromPractice, schedulesPerDay };
+export { getFullReservationDate, schedulesPerDay };

@@ -1,5 +1,6 @@
 import React from "react";
 import PracticeStep from "./PracticeStep";
+import useStoreContext from "/src/hooks/storeContext";
 import { Box, Button, CircularProgress, Link, Typography } from "@mui/material";
 
 function PracticePage({
@@ -10,14 +11,24 @@ function PracticePage({
   actuatorsStatus,
   errorMessage,
 }) {
+  const [currentState, currentDispatch] = useStoreContext();
+  const practice = currentState.nearestPractice;
+  const schedule = practice && practice.schedule;
+
   const [hideMessage, setHideMessage] = React.useState(false);
   const [pageIndex, setPageIndex] = React.useState(-1);
 
-  /* React.useEffect(() => {
-   *   if (hideMessage) {
-   *     setHideMessage(false);
-   *   }
-   * }, [errorMessage]); */
+  React.useEffect(() => {
+    if (schedule.status === "SCHEDULED") {
+      fetch(`/api/schedules/${schedule._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({ status: "STARTED" }),
+      });
+    }
+  }, [schedule]);
 
   const sendCommand = (command) => {
     socket.emit("command", command);

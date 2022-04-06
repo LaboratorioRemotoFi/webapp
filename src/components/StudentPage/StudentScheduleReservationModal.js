@@ -22,16 +22,13 @@ import {
 } from "../../utils/scheduleUtils.js";
 import {
   getFullReservationDate,
-  groupFromPractice,
   schedulesPerDay,
 } from "../../utils/reservationUtils.js";
 import StudentConfirmReservationDialog from "./StudentConfirmReservationDialog";
 
-function StudentScheduleReservationModal(
-  practice,
-  openModal,
-  handleCloseModal
-) {
+function StudentScheduleReservationModal(props) {
+  const { practice, closeModal, groupId, subjectId } = props;
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -44,20 +41,17 @@ function StudentScheduleReservationModal(
   };
 
   const [currentState, currentDispatch] = useStoreContext();
-  const { groups } = currentState;
 
   const [reservedSchedules, setReservedSchedules] = React.useState(null);
 
   // Variables for selected date from date picker
   const [selectedDate, setSelectedDate] = React.useState(null);
+
   // Disable hour select if there's no date picked
   const [hourIsDisabled, disableHourSelection] = React.useState(true);
 
   // Final new date selected, obtained after selecting hour
   const [newDate, setNewDate] = React.useState("");
-  //console.log("New selected date");
-  //console.log(newDate);
-  //console.log(new Date(newDate));
 
   // String for final date
   const [convertedNewDate, setConvertedNewDate] = React.useState(null);
@@ -70,13 +64,11 @@ function StudentScheduleReservationModal(
   const handleConfirmScheduleDialog = () => {
     setOpenAlert(false);
     handleReserveSchedule();
-    handleCloseModal();
+    closeModal();
   };
   const handleCancelScheduleDialog = () => {
     setOpenAlert(false);
   };
-
-  const currGroup = groupFromPractice(practice.id, groups);
 
   const noAvailSchedPerDay = schedulesPerDay(
     practice.startDate,
@@ -156,7 +148,6 @@ function StudentScheduleReservationModal(
       setConvertedNewDate(
         getFullReservationDate(event.target.value, practice.timeFrame)
       );
-      //convertedNewDate = getFullReservationDate(event.target.value, practice.timeFrame);
     } else {
       setNewDate("");
       setConvertedNewDate(null);
@@ -165,52 +156,36 @@ function StudentScheduleReservationModal(
 
   React.useEffect(() => {
     fetch(
-      `/api/schedules/reserved?practiceId=${practice.id}&subjectId=${currGroup.subjectId}&status=SCHEDULED`,
+      `/api/schedules/timestamp?practiceId=${practice.id}&subjectId=${subjectId}&status=SCHEDULED`,
       { method: "GET" }
     )
       .then((response) => response.json())
       .then((fetchedReservedSchedules) => {
         setReservedSchedules(fetchedReservedSchedules);
       });
-  }, [practice, currGroup.subjectId]);
+  }, [practice, subjectId]);
 
   const handleReserveSchedule = () => {
     const reqOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        subjectId: currGroup.subjectId,
+        subjectId: subjectId,
         practiceId: practice.id,
         timestamp: newDate,
       }),
     };
-    fetch("/api/reserve", reqOptions)
+    fetch("/api/schedules/reserve", reqOptions)
       .then((response) => response.json())
       .then((reservedSchedule) => {
         currentDispatch({
-          type: "reserveSchedule",
+          type: "setReservedSchedule",
           payload: {
-            groupId: currGroup.id,
-            reservedSchedule: reservedSchedule,
+            groupId,
+            reservedSchedule,
           },
         });
       });
-    /* currentDispatch({
-      type: "reserveSchedule",
-      payload: {
-        practiceId: practice.id,
-        reservedSchedule: {
-          //studentId: user.id,
-          subjectId: currentState.subjectId,
-          schedule: newDate,
-        },
-      },
-    }); */
-    setSelectedDate(null);
-    disableHourSelection(true);
-    setNewDate("");
-    setConvertedNewDate(null);
-    //convertedNewDate = null;
   };
 
   let convertedDate;
@@ -222,7 +197,7 @@ function StudentScheduleReservationModal(
 
   return (
     <Modal
-      open={openModal}
+      open
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -408,7 +383,7 @@ function StudentScheduleReservationModal(
               sm={4}
               xs={4}
             >
-              <Button variant="contained" onClick={handleCloseModal}>
+              <Button variant="contained" onClick={closeModal}>
                 Cancelar
               </Button>
             </Grid>

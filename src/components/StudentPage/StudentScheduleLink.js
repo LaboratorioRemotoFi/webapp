@@ -8,23 +8,26 @@ import StudentScheduleDetails from "./StudentScheduleDetails.js";
 let currDate = Date.now();
 
 function StudentScheduleLink(props) {
-  const { practice } = props;
+  const { practice, groupId, subjectId } = props;
   const startDate = practice.startDate;
   const endDate = practice.endDate;
   const timeFrame = practice.timeFrame;
-  const currentStudentSchedule = practice.currentStudentSchedule;
+  const currentStudentScheduleTimestamp =
+    practice?.currentStudentSchedule?.timestamp;
 
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
   const reserveTime = 7 * 24 * 60 * 60 * 1000;
 
   let state;
 
-  const hasSchedule = !isNaN(currentStudentSchedule);
-  const scheduleString = convertDateToSpanishString(currentStudentSchedule);
+  const hasSchedule = currentStudentScheduleTimestamp > 0;
+  const scheduleString = convertDateToSpanishString(
+    currentStudentScheduleTimestamp
+  );
   const schedulingDate = convertDateToSpanishString(startDate - reserveTime);
   const availableDateStart = convertDateToSpanishString(startDate);
   const availableDateEnd = convertDateToSpanishString(endDate);
@@ -33,13 +36,13 @@ function StudentScheduleLink(props) {
     state = "Expired";
   } else if (
     hasSchedule &&
-    currDate > currentStudentSchedule &&
+    currDate > currentStudentScheduleTimestamp &&
     currDate < endDate
   ) {
     state = "Late reschedule";
   } else if (
     hasSchedule &&
-    currDate < currentStudentSchedule &&
+    currDate < currentStudentScheduleTimestamp &&
     currDate < endDate
   ) {
     state = "Reschedule";
@@ -53,11 +56,13 @@ function StudentScheduleLink(props) {
     state = "Not available";
   }
 
+  let component;
+
   switch (state) {
     case "Expired":
       // Change for !done
       if (!hasSchedule) {
-        return (
+        component = (
           <>
             <StudentScheduleDetails
               header={
@@ -81,38 +86,39 @@ function StudentScheduleLink(props) {
             />
           </>
         );
+      } else {
+        component = (
+          <>
+            <StudentScheduleDetails
+              header={
+                <Typography variant="inherit" fontWeight="bold">
+                  Terminada
+                </Typography>
+              }
+              details={
+                <>
+                  <Typography variant="inherit">
+                    Fue agendada para el {scheduleString[0]} a las{" "}
+                    {scheduleString[1]} y se realizó ([detalles])/no se realizó.
+                  </Typography>
+                  <Typography variant="inherit" fontStyle="italic">
+                    Estuvo disponible para realizar del {availableDateStart[0]}{" "}
+                    a las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
+                    {availableDateEnd[1]}.
+                  </Typography>
+                  <Typography variant="inherit">
+                    Duración: {timeFrame} minutos.
+                  </Typography>
+                </>
+              }
+            />
+          </>
+        );
       }
-      return (
-        <>
-          <StudentScheduleDetails
-            header={
-              <Typography variant="inherit" fontWeight="bold">
-                Terminada
-              </Typography>
-            }
-            details={
-              <>
-                <Typography variant="inherit">
-                  Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]} y se realizó ([detalles])/no se realizó.
-                </Typography>
-                <Typography variant="inherit" fontStyle="italic">
-                  Estuvo disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
-                <Typography variant="inherit">
-                  Duración: {timeFrame} minutos.
-                </Typography>
-              </>
-            }
-          />
-        </>
-      );
       break;
     // ADD CHECK FOR DONE/NOT DONE
     case "Late reschedule":
-      return (
+      component = (
         <>
           <StudentScheduleDetails
             header={
@@ -127,16 +133,11 @@ function StudentScheduleLink(props) {
                   }}
                   color="secondary"
                   fontWeight="bold"
-                  onClick={handleOpenModal}
+                  onClick={openModal}
                 >
                   Reagendar
                 </Button>
                 )
-                {StudentScheduleReservationModal(
-                  practice,
-                  openModal,
-                  handleCloseModal
-                )}
               </Typography>
             }
             details={
@@ -160,7 +161,7 @@ function StudentScheduleLink(props) {
       );
       break;
     case "Reschedule":
-      return (
+      component = (
         <>
           <StudentScheduleDetails
             header={
@@ -175,16 +176,11 @@ function StudentScheduleLink(props) {
                   }}
                   color="secondary"
                   fontWeight="bold"
-                  onClick={handleOpenModal}
+                  onClick={openModal}
                 >
                   Reagendar
                 </Button>
                 )
-                {StudentScheduleReservationModal(
-                  practice,
-                  openModal,
-                  handleCloseModal
-                )}
               </Typography>
             }
             details={
@@ -208,7 +204,7 @@ function StudentScheduleLink(props) {
       );
       break;
     case "Available":
-      return (
+      component = (
         <>
           <StudentScheduleDetails
             header={
@@ -222,15 +218,10 @@ function StudentScheduleLink(props) {
                   }}
                   color="secondary"
                   fontWeight="bold"
-                  onClick={handleOpenModal}
+                  onClick={openModal}
                 >
                   Agendar
                 </Button>
-                {StudentScheduleReservationModal(
-                  practice,
-                  openModal,
-                  handleCloseModal
-                )}
               </>
             }
             details={
@@ -250,7 +241,7 @@ function StudentScheduleLink(props) {
       );
       break;
     case "Not available":
-      return (
+      component = (
         <>
           <StudentScheduleDetails
             header={
@@ -283,6 +274,20 @@ function StudentScheduleLink(props) {
       );
       break;
   }
+
+  return (
+    <>
+      {component}
+      {isModalOpen && (
+        <StudentScheduleReservationModal
+          practice={practice}
+          groupId={groupId}
+          subjectId={subjectId}
+          closeModal={closeModal}
+        />
+      )}
+    </>
+  );
 }
 
 StudentScheduleLink.propTypes = {

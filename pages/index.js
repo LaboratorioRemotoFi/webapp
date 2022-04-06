@@ -8,8 +8,6 @@ export default function Index() {
     required: true,
   });
 
-  console.log(status);
-
   if (status !== "authenticated") {
     return <Layout></Layout>;
   }

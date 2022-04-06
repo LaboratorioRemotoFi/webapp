@@ -51,10 +51,11 @@ function getNearestPractice(groups) {
               dateString: convertDateToSpanishString(
                 practice.currentStudentSchedule
               ),
-              startTime: practice.currentStudentSchedule,
+              startTime: practice.currentStudentSchedule.timestamp,
               endTime:
-                practice.currentStudentSchedule +
+                practice.currentStudentSchedule.timestamp +
                 practice.timeFrame * 60 * 1000,
+              schedule: practice.currentStudentSchedule,
             }
           : null
       )

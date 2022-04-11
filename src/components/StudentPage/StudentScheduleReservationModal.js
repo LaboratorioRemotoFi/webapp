@@ -4,6 +4,7 @@ import {
   Button,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Modal,
@@ -11,6 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import useStoreContext from "../../hooks/storeContext";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
@@ -27,9 +29,9 @@ import {
 import StudentConfirmReservationDialog from "./StudentConfirmReservationDialog";
 
 function StudentScheduleReservationModal(props) {
-  const { practice, closeModal, groupId, subjectId } = props;
+  const { practice, open, closeModal, groupId, subjectId } = props;
 
-  const style = {
+  const styleModal = {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -39,6 +41,12 @@ function StudentScheduleReservationModal(props) {
     borderRadius: 2,
     p: 4,
   };
+
+  const styleCloseButton = {
+    position: "absolute",
+    top: "0%",
+    right: "0%"
+  }
 
   const [currentState, currentDispatch] = useStoreContext();
 
@@ -197,14 +205,18 @@ function StudentScheduleReservationModal(props) {
 
   return (
     <Modal
-      open
+      open={open}
+      onClose={closeModal}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style} width={{ lg: "70%", xs: "95%" }}>
+      <Box sx={styleModal} width={{ lg: "70%", xs: "95%" }}>
         <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
           Selecciona una fecha y hora
         </Typography>
+        <IconButton sx={styleCloseButton} onClick={closeModal} color="primary">
+            <CloseIcon />
+        </IconButton>
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
           <Grid
             container
@@ -371,22 +383,6 @@ function StudentScheduleReservationModal(props) {
                 </Grid>
               </>
             )}
-            <Grid
-              container
-              item
-              justifyContent={{
-                md: "flex-end",
-                sm: "center",
-                xs: "center",
-              }}
-              md={4}
-              sm={4}
-              xs={4}
-            >
-              <Button variant="contained" onClick={closeModal}>
-                Cancelar
-              </Button>
-            </Grid>
           </Grid>
         </LocalizationProvider>
       </Box>

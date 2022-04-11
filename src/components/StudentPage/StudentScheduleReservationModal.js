@@ -321,68 +321,52 @@ function StudentScheduleReservationModal(props) {
               </FormControl>
             </Grid>
             <Box width={{ md: "0%", sm: "100%", sx: "0%" }} />
-            {!convertedNewDate ? (
-              <Grid
-                container
-                item
-                justifyContent={{
-                  md: "flex-start",
-                  sm: "center",
-                  xs: "center",
-                }}
-                md
-                sm={2}
-                xs={2}
-              >
+            <Grid
+              container
+              item
+              justifyContent={{
+                md: "flex-start",
+                sm: "flex-end",
+                xs: "center",
+              }}
+              md="auto"
+              sm="auto"
+              xs={2}
+            >
+              <Button variant="contained" onClick={handleClickOpenAlert} disabled={!convertedNewDate}>
+                Reservar
+              </Button>
+              {StudentConfirmReservationDialog(
+                openAlert,
+                handleConfirmScheduleDialog,
+                handleCancelScheduleDialog
+              )}
+            </Grid>
+            <Grid
+              container
+              item
+              justifyContent={{
+                md: "flex-start",
+                sm: "flex-start",
+                xs: "center",
+              }}
+              md
+              sm="auto"
+              xs={2}
+            >
+              {!convertedNewDate ? (
                 <Typography variant="inherit">
                   Seleccione un horario.
                 </Typography>
-              </Grid>
-            ) : (
-              <>
-                <Grid
-                  container
-                  item
-                  justifyContent={{
-                    md: "flex-start",
-                    sm: "flex-end",
-                    xs: "center",
-                  }}
-                  md="auto"
-                  sm="auto"
-                  xs={2}
-                >
-                  <Button variant="contained" onClick={handleClickOpenAlert}>
-                    Reservar
-                  </Button>
-                  {StudentConfirmReservationDialog(
-                    openAlert,
-                    handleConfirmScheduleDialog,
-                    handleCancelScheduleDialog
-                  )}
-                </Grid>
-                <Grid
-                  container
-                  item
-                  justifyContent={{
-                    md: "flex-start",
-                    sm: "flex-start",
-                    xs: "center",
-                  }}
-                  md
-                  sm="auto"
-                  xs={2}
-                >
-                  <Typography
-                    variant="inherit"
-                    textAlign={{ md: "left", sm: "center", xs: "center" }}
-                  >
-                    Horario seleccionado: {convertedNewDate[0]} a las{" "}
-                    {convertedNewDate[1]}.
-                  </Typography>
-                </Grid>
-              </>
-            )}
+              ) : (
+              <Typography
+                variant="inherit"
+                textAlign={{ md: "left", sm: "center", xs: "center" }}
+              >
+                Horario seleccionado: {convertedNewDate[0]} a las{" "}
+                {convertedNewDate[1]}.
+              </Typography>)}
+            </Grid>
           </Grid>
         </LocalizationProvider>
       </Box>

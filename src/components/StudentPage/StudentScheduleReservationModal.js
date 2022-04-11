@@ -193,6 +193,10 @@ function StudentScheduleReservationModal(props) {
             reservedSchedule,
           },
         });
+      })
+      .catch(err => {
+        console.log("CATCHED");
+        
       });
   };
 

@@ -116,7 +116,7 @@ export async function reserveSchedule(
     const db = mongoClient.db("laboratorioremotofi");
     const schedulesCollection = db.collection("schedules");
 
-    const reserve = await schedulesCollection.updateOne(
+    await schedulesCollection.updateOne(
       {
         studentId: studentId,
         subjectId: subjectId,

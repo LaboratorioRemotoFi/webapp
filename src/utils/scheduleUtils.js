@@ -44,12 +44,12 @@ function getNearestPractice(groups) {
         practice.currentStudentSchedule
           ? {
               name: practice.name,
-              practiceNumber: group.practices.indexOf(practice),
+              practiceNumber: group.practices.indexOf(practice) + 1,
               ip: practice.raspIp,
               subjectId: group.subjectId,
               groupName: group.name,
               dateString: convertDateToSpanishString(
-                practice.currentStudentSchedule
+                practice.currentStudentSchedule.timestamp
               ),
               startTime: practice.currentStudentSchedule.timestamp,
               endTime:

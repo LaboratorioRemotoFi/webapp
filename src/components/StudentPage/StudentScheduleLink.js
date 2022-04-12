@@ -279,11 +279,11 @@ function StudentScheduleLink(props) {
     <>
       {component}
       <StudentScheduleReservationModal
-          practice={practice}
-          groupId={groupId}
-          subjectId={subjectId}
-          open={isModalOpen}
-          closeModal={closeModal}
+        practice={practice}
+        groupId={groupId}
+        subjectId={subjectId}
+        open={isModalOpen}
+        closeModal={closeModal}
       />
     </>
   );

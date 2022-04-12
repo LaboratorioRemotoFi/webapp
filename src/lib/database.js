@@ -142,14 +142,14 @@ export async function reserveSchedule(
     });
 
     return reservedSchedule;
-  } catch(err) {
+  } catch (err) {
     throw new Error(err);
   } finally {
     await mongoClient.close();
   }
 }
 
-export async function getSchedules({ practiceId, subjectId, status }) {
+export async function getSchedules({ practiceId, subjectId }) {
   let mongoClient;
 
   try {
@@ -158,7 +158,7 @@ export async function getSchedules({ practiceId, subjectId, status }) {
     const schedulesCollection = db.collection("schedules");
 
     const schedules = await schedulesCollection
-      .find({ practiceId, subjectId, status })
+      .find({ practiceId, subjectId })
       .toArray();
 
     return schedules;

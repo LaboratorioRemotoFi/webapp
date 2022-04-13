@@ -73,10 +73,7 @@ function StudentPage() {
                     </Typography>
                     <br />
                     <Button variant="contained">
-                      <Link
-                        href={`/practica?ip=${nearestPractice.ip}`}
-                        color="primary.contrastText"
-                      >
+                      <Link href={"/practica"} color="primary.contrastText">
                         Ir a la práctica
                       </Link>
                     </Button>

@@ -103,6 +103,30 @@ export async function updateSchedule(id, scheduleData) {
   }
 }
 
+export async function logScheduleEvent(id, message) {
+  let mongoClient;
+
+  try {
+    mongoClient = await connectToCluster();
+    const db = mongoClient.db("laboratorioremotofi");
+    const schedulesCollection = db.collection("schedules");
+
+    const result = await schedulesCollection.findOneAndUpdate(
+      { _id: ObjectId(id) },
+      {
+        $push: {
+          log: { date: new Date(), message },
+        },
+      },
+      { returnDocument: "after" }
+    );
+
+    return result;
+  } finally {
+    await mongoClient.close();
+  }
+}
+
 export async function reserveSchedule(
   studentId,
   subjectId,
@@ -129,9 +153,8 @@ export async function reserveSchedule(
         studentId: studentId,
         subjectId: subjectId,
         practiceId: practiceId,
-        status: "SCHEDULED",
       },
-      { $set: { timestamp } },
+      { $set: { timestamp, status: "SCHEDULED", log: [] } },
       { upsert: true }
     );
 

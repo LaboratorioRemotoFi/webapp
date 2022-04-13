@@ -8,6 +8,7 @@ function PracticeStep({
   actuators,
   actions,
   sendCommand,
+  logCommand,
   setPageIndex,
 }) {
   return (
@@ -31,9 +32,9 @@ function PracticeStep({
       {actuators && (
         <ul>
           {actuators.map((actuator) => {
-            const { name, info, labels, value } = actuator;
+            const { id, name, info, labels, value } = actuator;
             return (
-              <li key={actuator.n}>
+              <li key={id}>
                 <Typography>
                   {name + ": "}
                   {labels ? labels[value] : value}
@@ -62,7 +63,10 @@ function PracticeStep({
                 key={index}
                 size="small"
                 variant="text"
-                onClick={() => sendCommand(command)}
+                onClick={() => {
+                  logCommand(name);
+                  sendCommand(command);
+                }}
                 sx={{ ml: 0, mr: 2 }}
               >
                 {name}

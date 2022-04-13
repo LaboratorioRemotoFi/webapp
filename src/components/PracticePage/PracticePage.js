@@ -1,6 +1,8 @@
 import React from "react";
 import PracticeStep from "./PracticeStep";
 import useStoreContext from "/src/hooks/storeContext";
+import { useRouter } from "next/router";
+import { logScheduleAction, updateSchedule } from "/src/utils/practiceUtils.js";
 import { Box, Button, CircularProgress, Link, Typography } from "@mui/material";
 
 function PracticePage({
@@ -11,6 +13,8 @@ function PracticePage({
   actuatorsStatus,
   errorMessage,
 }) {
+  const router = useRouter();
+
   const [currentState, currentDispatch] = useStoreContext();
   const practice = currentState.nearestPractice;
   const schedule = practice && practice.schedule;
@@ -20,18 +24,34 @@ function PracticePage({
 
   React.useEffect(() => {
     if (schedule.status === "SCHEDULED") {
-      fetch(`/api/schedules/${schedule._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({ status: "STARTED" }),
-      });
+      updateSchedule(schedule._id, { status: "STARTED" });
+      logScheduleAction(schedule._id, "Se inició la práctica");
     }
   }, [schedule]);
 
   const sendCommand = (command) => {
     socket.emit("command", command);
+  };
+
+  const logCommand = (name) => {
+    logScheduleAction(schedule._id, `Se mandó comando: ${name}`);
+  };
+
+  const onNextStepClick = () => {
+    logScheduleAction(schedule._id, `Se empezó el paso ${pageIndex + 2}`);
+    setPageIndex(pageIndex + 1);
+  };
+
+  const onFinishPractice = () => {
+    fetch(`/api/schedules/${schedule._id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({ status: "FINISHED" }),
+    });
+    logScheduleAction(schedule._id, "Se terminó la práctica");
+    router.push("/");
   };
 
   const page = pageIndex >= 0 ? metadata.pages[pageIndex] : undefined;
@@ -77,7 +97,7 @@ function PracticePage({
               size="small"
               variant="contained"
               disabled={practiceStatus !== "ready"}
-              onClick={() => setPageIndex(0)}
+              onClick={onNextStepClick}
               sx={{ ml: 0, mr: 2 }}
             >
               Empezar práctica
@@ -94,6 +114,7 @@ function PracticePage({
               actuators={actuators}
               actions={actions}
               sendCommand={sendCommand}
+              logCommand={logCommand}
               setPageIndex={setPageIndex}
             />
           </Box>
@@ -102,7 +123,7 @@ function PracticePage({
               <Button
                 size="sm"
                 variant="outlined"
-                onClick={() => setPageIndex(pageIndex + 1)}
+                onClick={onNextStepClick}
                 sx={{ ml: 0, mr: 2 }}
               >
                 Siguiente paso
@@ -112,7 +133,7 @@ function PracticePage({
               <Button
                 size="sm"
                 variant="outlined"
-                onClick={() => console.log("Práctica terminada")}
+                onClick={onFinishPractice}
                 sx={{ ml: 0, mr: 2 }}
               >
                 Terminar práctica

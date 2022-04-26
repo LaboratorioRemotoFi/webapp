@@ -11,9 +11,21 @@ function StudentScheduleLink(props) {
   const { practice, groupId, subjectId } = props;
   const startDate = practice.startDate;
   const endDate = practice.endDate;
-  const timeFrame = practice.timeFrame;
   const currentStudentScheduleTimestamp =
     practice?.currentStudentSchedule?.timestamp;
+
+  const [scheduleStatus, setScheduleStatus] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch(
+      `/api/schedules/status?_id=${practice?.currentStudentSchedule?._id}`,
+      { method: "GET" }
+    )
+      .then((response) => response.json())
+      .then((fetchedStatus) => {
+        setScheduleStatus(fetchedStatus?.status);
+      });
+  }, [practice]);
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -22,36 +34,36 @@ function StudentScheduleLink(props) {
   // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
   const reserveTime = 7 * 24 * 60 * 60 * 1000;
 
-  let state;
-
-  const hasSchedule = currentStudentScheduleTimestamp > 0;
   const scheduleString = convertDateToSpanishString(
     currentStudentScheduleTimestamp
   );
   const schedulingDate = convertDateToSpanishString(startDate - reserveTime);
-  const availableDateStart = convertDateToSpanishString(startDate);
-  const availableDateEnd = convertDateToSpanishString(endDate);
 
-  if (currDate > endDate) {
-    state = "Expired";
+  let state;
+
+  if (scheduleStatus?.localeCompare("FINISHED") === 0) {
+    state = "Finished";
+  } else if (scheduleStatus?.localeCompare("STARTED") === 0) {
+    state = "Started";
   } else if (
-    hasSchedule &&
-    currDate > currentStudentScheduleTimestamp &&
-    currDate < endDate
+    scheduleStatus?.localeCompare("SCHEDULED") === 0 &&
+    currDate < currentStudentScheduleTimestamp
   ) {
-    state = "Late reschedule";
+    state = "Scheduled";
   } else if (
-    hasSchedule &&
-    currDate < currentStudentScheduleTimestamp &&
+    scheduleStatus?.localeCompare("SCHEDULED") === 0 &&
+    currDate > currentStudentScheduleTimestamp &&
     currDate < endDate
   ) {
     state = "Reschedule";
   } else if (
-    !hasSchedule &&
+    scheduleStatus?.localeCompare("NOT SCHEDULED") === 0 &&
     currDate < endDate &&
     currDate >= startDate - reserveTime
   ) {
     state = "Available";
+  } else if (currDate > endDate) {
+    state = "Expired";
   } else if (currDate < startDate - reserveTime) {
     state = "Not available";
   }
@@ -59,100 +71,20 @@ function StudentScheduleLink(props) {
   let component;
 
   switch (state) {
-    case "Expired":
-      // Change for !done
-      if (!hasSchedule) {
-        component = (
-          <>
-            <StudentScheduleDetails
-              header={
-                <Typography variant="inherit" color="red" fontWeight="bold">
-                  Expirada
-                </Typography>
-              }
-              details={
-                <>
-                  <Typography variant="inherit">No fue agendada.</Typography>
-                  <Typography variant="inherit" fontStyle="italic">
-                    Estuvo disponible para realizar del {availableDateStart[0]}{" "}
-                    a las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                    {availableDateEnd[1]}.
-                  </Typography>
-                  <Typography variant="inherit">
-                    Duración: {timeFrame} minutos.
-                  </Typography>
-                </>
-              }
-            />
-          </>
-        );
-      } else {
-        component = (
-          <>
-            <StudentScheduleDetails
-              header={
-                <Typography variant="inherit" fontWeight="bold">
-                  Terminada
-                </Typography>
-              }
-              details={
-                <>
-                  <Typography variant="inherit">
-                    Fue agendada para el {scheduleString[0]} a las{" "}
-                    {scheduleString[1]} y se realizó ([detalles])/no se realizó.
-                  </Typography>
-                  <Typography variant="inherit" fontStyle="italic">
-                    Estuvo disponible para realizar del {availableDateStart[0]}{" "}
-                    a las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                    {availableDateEnd[1]}.
-                  </Typography>
-                  <Typography variant="inherit">
-                    Duración: {timeFrame} minutos.
-                  </Typography>
-                </>
-              }
-            />
-          </>
-        );
-      }
-      break;
-    // ADD CHECK FOR DONE/NOT DONE
-    case "Late reschedule":
+    case "Finished":
       component = (
         <>
           <StudentScheduleDetails
             header={
-              <Typography variant="inherit" color="red" fontWeight="bold">
-                Expirada (
-                <Button
-                  sx={{
-                    minHeight: 0,
-                    minWidth: 0,
-                    padding: 0,
-                    textTransform: "none",
-                  }}
-                  color="secondary"
-                  fontWeight="bold"
-                  onClick={openModal}
-                >
-                  Reagendar
-                </Button>
-                )
+              <Typography variant="inherit" fontWeight="bold">
+                Terminada
               </Typography>
             }
             details={
               <>
                 <Typography variant="inherit">
                   Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]}.
-                </Typography>
-                <Typography variant="inherit" fontStyle="italic">
-                  Está disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
-                <Typography variant="inherit">
-                  Duración: {timeFrame} minutos.
+                  {scheduleString[1]}. Ver [detalles].
                 </Typography>
               </>
             }
@@ -160,7 +92,28 @@ function StudentScheduleLink(props) {
         </>
       );
       break;
-    case "Reschedule":
+    case "Started":
+      component = (
+        <>
+          <StudentScheduleDetails
+            header={
+              <Typography variant="inherit" fontWeight="bold">
+                Empezada
+              </Typography>
+            }
+            details={
+              <>
+                <Typography variant="inherit">
+                  Fue agendada para el {scheduleString[0]} a las{" "}
+                  {scheduleString[1]}. No ha sido terminada.
+                </Typography>
+              </>
+            }
+          />
+        </>
+      );
+      break;
+    case "Scheduled":
       component = (
         <>
           <StudentScheduleDetails
@@ -189,13 +142,40 @@ function StudentScheduleLink(props) {
                   Fue agendada para el {scheduleString[0]} a las{" "}
                   {scheduleString[1]}.
                 </Typography>
-                <Typography variant="inherit" fontStyle="italic">
-                  Está disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
+              </>
+            }
+          />
+        </>
+      );
+      break;
+    case "Reschedule":
+      component = (
+        <>
+          <StudentScheduleDetails
+            header={
+              <Typography variant="inherit" color="red" fontWeight="bold">
+                Por agendar (
+                <Button
+                  sx={{
+                    minHeight: 0,
+                    minWidth: 0,
+                    padding: 0,
+                    textTransform: "none",
+                  }}
+                  color="secondary"
+                  fontWeight="bold"
+                  onClick={openModal}
+                >
+                  Reagendar
+                </Button>
+                )
+              </Typography>
+            }
+            details={
+              <>
                 <Typography variant="inherit">
-                  Duración: {timeFrame} minutos.
+                  Fue agendada para el {scheduleString[0]} a las{" "}
+                  {scheduleString[1]}.
                 </Typography>
               </>
             }
@@ -226,19 +206,54 @@ function StudentScheduleLink(props) {
             }
             details={
               <>
-                <Typography variant="inherit" fontStyle="italic">
-                  Está disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
                 <Typography variant="inherit">
-                  Duración: {timeFrame} minutos.
+                  Aún no ha sido agendada.
                 </Typography>
               </>
             }
           />
         </>
       );
+      break;
+    case "Expired":
+      if (!scheduleStatus?.localeCompare("NOT SCHEDULED")) {
+        component = (
+          <>
+            <StudentScheduleDetails
+              header={
+                <Typography variant="inherit" color="red" fontWeight="bold">
+                  Expirada
+                </Typography>
+              }
+              details={
+                <>
+                  <Typography variant="inherit">No fue agendada.</Typography>
+                </>
+              }
+            />
+          </>
+        );
+      } else {
+        component = (
+          <>
+            <StudentScheduleDetails
+              header={
+                <Typography variant="inherit" color="red" fontWeight="bold">
+                  Expirada
+                </Typography>
+              }
+              details={
+                <>
+                  <Typography variant="inherit">
+                    Fue agendada para el {scheduleString[0]} a las{" "}
+                    {scheduleString[1]} y no se realizó.
+                  </Typography>
+                </>
+              }
+            />
+          </>
+        );
+      }
       break;
     case "Not available":
       component = (
@@ -255,11 +270,6 @@ function StudentScheduleLink(props) {
                   Estará disponible para agendar a partir del{" "}
                   {schedulingDate[0]} a las {schedulingDate[1]}.
                 </Typography>
-                <Typography variant="inherit" fontStyle="italic">
-                  Estará disponible para realizar del {availableDateStart[0]} a
-                  las {availableDateStart[1]} al {availableDateEnd[0]} a las{" "}
-                  {availableDateEnd[1]}.
-                </Typography>
               </>
             }
           />
@@ -272,7 +282,6 @@ function StudentScheduleLink(props) {
           No disponible
         </Typography>
       );
-      break;
   }
 
   return (

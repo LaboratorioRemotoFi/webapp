@@ -189,3 +189,21 @@ export async function getSchedules({ practiceId, subjectId }) {
     await mongoClient.close();
   }
 }
+
+export async function getStatus({ id }) {
+  let mongoClient;
+
+  try {
+    mongoClient = await connectToCluster();
+    const db = mongoClient.db("laboratorioremotofi");
+    const schedulesCollection = db.collection("schedules");
+
+    const schedule = await schedulesCollection.findOne({ _id: ObjectId(id) });
+
+    console.log({ status: schedule.status });
+
+    return { status: schedule.status };
+  } finally {
+    await mongoClient.close();
+  }
+}

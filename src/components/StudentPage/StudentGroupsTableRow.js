@@ -13,9 +13,13 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import convertDateToSpanishString from "../../utils/timeUtils";
 
 function StudentGroupsTableRow({ group }) {
   const [open, setOpen] = React.useState(false);
+
+  let initialDate;
+  let finalDate;
 
   return (
     <>
@@ -42,27 +46,53 @@ function StudentGroupsTableRow({ group }) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell width="10%">No.</TableCell>
+                    <TableCell width="5%">No.</TableCell>
                     <TableCell width="20%">Nombre</TableCell>
-                    <TableCell width="70%">Agendar</TableCell>
+                    <TableCell width="10%">Duración</TableCell>
+                    <TableCell width="15%">Fecha de inicio</TableCell>
+                    <TableCell width="15%">Fecha final</TableCell>
+                    <TableCell width="35%">Agendar</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {group?.practices.map((practiceRow, idx) => (
-                    <TableRow key={practiceRow.id}>
-                      <TableCell component="th" scope="row">
-                        {idx + 1}
-                      </TableCell>
-                      <TableCell>{practiceRow.name}</TableCell>
-                      <TableCell>
-                        <StudentScheduleLink
-                          practice={practiceRow}
-                          groupId={group.id}
-                          subjectId={group.subjectId}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {group?.practices.map(
+                    (practiceRow, idx) => (
+                      ((initialDate = convertDateToSpanishString(
+                        practiceRow.startDate
+                      )),
+                      (finalDate = convertDateToSpanishString(
+                        practiceRow.endDate
+                      )),
+                      (initialDate[0] =
+                        initialDate[0].charAt(0).toUpperCase() +
+                        initialDate[0].slice(1)),
+                      (finalDate[0] =
+                        finalDate[0].charAt(0).toUpperCase() +
+                        finalDate[0].slice(1))),
+                      (
+                        <TableRow key={practiceRow.id}>
+                          <TableCell component="th" scope="row">
+                            {idx + 1}
+                          </TableCell>
+                          <TableCell>{practiceRow.name}</TableCell>
+                          <TableCell>{practiceRow.timeFrame} minutos</TableCell>
+                          <TableCell>
+                            {initialDate[0]} a las {initialDate[1]}
+                          </TableCell>
+                          <TableCell>
+                            {finalDate[0]} a las {finalDate[1]}
+                          </TableCell>
+                          <TableCell>
+                            <StudentScheduleLink
+                              practice={practiceRow}
+                              groupId={group.id}
+                              subjectId={group.subjectId}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )
+                  )}
                 </TableBody>
               </Table>
             </Box>

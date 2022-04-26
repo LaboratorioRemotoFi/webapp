@@ -62,7 +62,8 @@ function StudentPage() {
               </Grid>
               <Grid item xs={12} md={5} order={{ xs: 1, md: 2 }}>
                 <Typography variant="h6">Próxima práctica:</Typography>
-                {nearestPractice ? (
+                {nearestPractice &&
+                nearestPractice?.schedule?.status !== "FINISHED" ? (
                   <>
                     <Typography variant="body1">
                       Práctica no. {nearestPractice.practiceNumber} &quot;
@@ -86,9 +87,6 @@ function StudentPage() {
               </Grid>
             </Grid>
           </Box>
-          <Link href="/" color="secondary">
-            Ir a la página principal
-          </Link>
         </Container>
       </Layout>
     </>

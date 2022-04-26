@@ -12,6 +12,11 @@ const studentsReducer = (state, action) => {
         ...state,
         nearestPractice: getNearestPractice(state.groups),
       };
+    case "clearData":
+      return {
+        ...state,
+        groups: null,
+      };
     case "setReservedSchedule":
       const groupIndex = state.groups.findIndex((group) => {
         return group.id === action.payload.groupId;

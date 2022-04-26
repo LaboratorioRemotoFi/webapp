@@ -51,6 +51,8 @@ function PracticePage({
       body: JSON.stringify({ status: "FINISHED" }),
     });
     logScheduleAction(schedule._id, "Se terminó la práctica");
+    currentDispatch({ type: "clearData" });
+    socket.close();
     router.push("/");
   };
 

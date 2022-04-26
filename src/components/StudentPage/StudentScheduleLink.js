@@ -14,18 +14,11 @@ function StudentScheduleLink(props) {
   const currentStudentScheduleTimestamp =
     practice?.currentStudentSchedule?.timestamp;
 
-  const [scheduleStatus, setScheduleStatus] = React.useState(null);
+  let scheduleStatus = practice?.currentStudentSchedule?.status;
 
-  React.useEffect(() => {
-    fetch(
-      `/api/schedules/status?_id=${practice?.currentStudentSchedule?._id}`,
-      { method: "GET" }
-    )
-      .then((response) => response.json())
-      .then((fetchedStatus) => {
-        setScheduleStatus(fetchedStatus?.status);
-      });
-  }, [practice]);
+  if (typeof scheduleStatus === "undefined") {
+    scheduleStatus = "NOT SCHEDULED";
+  }
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const openModal = () => setIsModalOpen(true);

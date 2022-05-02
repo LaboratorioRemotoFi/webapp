@@ -8,7 +8,7 @@ import StudentModalConfirmReservation from "./StudentModalConfirmReservation.js"
 import StudentModalReservationResult from "./StudentModalReservationResult.js";
 
 function StudentScheduleReservationModal(props) {
-  const { practice, open, closeModal, groupId, subjectId } = props;
+  const { practice, open, closeModal, groupId, subjectId, state } = props;
 
   const styleModal = {
     position: "absolute",

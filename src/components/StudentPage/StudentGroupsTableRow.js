@@ -48,9 +48,6 @@ function StudentGroupsTableRow({ group }) {
                   <TableRow>
                     <TableCell width="5%">No.</TableCell>
                     <TableCell width="20%">Nombre</TableCell>
-                    <TableCell width="10%">Duración</TableCell>
-                    <TableCell width="15%">Fecha de inicio</TableCell>
-                    <TableCell width="15%">Fecha final</TableCell>
                     <TableCell width="35%">Agendar</TableCell>
                   </TableRow>
                 </TableHead>
@@ -75,13 +72,6 @@ function StudentGroupsTableRow({ group }) {
                             {idx + 1}
                           </TableCell>
                           <TableCell>{practiceRow.name}</TableCell>
-                          <TableCell>{practiceRow.timeFrame} minutos</TableCell>
-                          <TableCell>
-                            {initialDate[0]} a las {initialDate[1]}
-                          </TableCell>
-                          <TableCell>
-                            {finalDate[0]} a las {finalDate[1]}
-                          </TableCell>
                           <TableCell>
                             <StudentScheduleLink
                               practice={practiceRow}

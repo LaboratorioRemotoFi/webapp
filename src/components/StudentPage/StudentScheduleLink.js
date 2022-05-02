@@ -1,6 +1,7 @@
 import React from "react";
-import { Button, Typography } from "@mui/material";
+import { Grid, IconButton, Typography } from "@mui/material";
 import PropTypes from "prop-types";
+import InfoIcon from "@mui/icons-material/Info";
 import convertDateToSpanishString from "../../utils/timeUtils";
 import StudentScheduleReservationModal from "./StudentScheduleReservationModal.js";
 import StudentScheduleDetails from "./StudentScheduleDetails.js";
@@ -66,185 +67,114 @@ function StudentScheduleLink(props) {
   switch (state) {
     case "Finished":
       component = (
-        <>
-          <StudentScheduleDetails
-            header={
-              <Typography variant="inherit" fontWeight="bold">
-                Terminada
-              </Typography>
-            }
-            details={
-              <>
-                <Typography variant="inherit">
-                  Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]}. Ver [detalles].
-                </Typography>
-              </>
-            }
-          />
-        </>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>
+            <Typography variant="inherit" fontWeight="bold">
+              Terminada
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton aria-label="info" color="secondary" size="small">
+              <InfoIcon fontSize="inherit" />
+            </IconButton>
+          </Grid>
+        </Grid>
       );
       break;
     case "Started":
       component = (
-        <>
-          <StudentScheduleDetails
-            header={
-              <Typography variant="inherit" fontWeight="bold">
-                Empezada
-              </Typography>
-            }
-            details={
-              <>
-                <Typography variant="inherit">
-                  Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]}. No ha sido terminada.
-                </Typography>
-              </>
-            }
-          />
-        </>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>
+            <Typography variant="inherit" fontWeight="bold">
+              Empezada
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton aria-label="info" color="secondary" size="small">
+              <InfoIcon fontSize="inherit" />
+            </IconButton>
+          </Grid>
+        </Grid>
       );
       break;
     case "Scheduled":
       component = (
-        <>
-          <StudentScheduleDetails
-            header={
-              <Typography variant="inherit" fontWeight="bold">
-                Agendada (
-                <Button
-                  sx={{
-                    minHeight: 0,
-                    minWidth: 0,
-                    padding: 0,
-                    textTransform: "none",
-                  }}
-                  color="secondary"
-                  fontWeight="bold"
-                  onClick={openModal}
-                >
-                  Reagendar
-                </Button>
-                )
-              </Typography>
-            }
-            details={
-              <>
-                <Typography variant="inherit">
-                  Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]}.
-                </Typography>
-              </>
-            }
-          />
-        </>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>
+            <Typography variant="inherit" fontWeight="bold">
+              Agendada
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton aria-label="info" color="secondary" size="small">
+              <InfoIcon fontSize="inherit" />
+            </IconButton>
+          </Grid>
+        </Grid>
       );
       break;
     case "Reschedule":
       component = (
-        <>
-          <StudentScheduleDetails
-            header={
-              <Typography variant="inherit" color="red" fontWeight="bold">
-                Por agendar (
-                <Button
-                  sx={{
-                    minHeight: 0,
-                    minWidth: 0,
-                    padding: 0,
-                    textTransform: "none",
-                  }}
-                  color="secondary"
-                  fontWeight="bold"
-                  onClick={openModal}
-                >
-                  Reagendar
-                </Button>
-                )
-              </Typography>
-            }
-            details={
-              <>
-                <Typography variant="inherit">
-                  Fue agendada para el {scheduleString[0]} a las{" "}
-                  {scheduleString[1]}.
-                </Typography>
-              </>
-            }
-          />
-        </>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>
+            <Typography variant="inherit" color="red" fontWeight="bold">
+              Por agendar
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton aria-label="info" color="secondary" size="small">
+              <InfoIcon fontSize="inherit" />
+            </IconButton>
+          </Grid>
+        </Grid>
       );
       break;
     case "Available":
       component = (
-        <>
-          <StudentScheduleDetails
-            header={
-              <>
-                <Button
-                  sx={{
-                    minHeight: 0,
-                    minWidth: 0,
-                    padding: 0,
-                    textTransform: "none",
-                  }}
-                  color="secondary"
-                  fontWeight="bold"
-                  onClick={openModal}
-                >
-                  Agendar
-                </Button>
-              </>
-            }
-            details={
-              <>
-                <Typography variant="inherit">
-                  Aún no ha sido agendada.
-                </Typography>
-              </>
-            }
-          />
-        </>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>
+            <Typography variant="inherit" fontWeight="bold">
+              Por agendar
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton aria-label="info" color="secondary" size="small">
+              <InfoIcon fontSize="inherit" />
+            </IconButton>
+          </Grid>
+        </Grid>
       );
       break;
     case "Expired":
       if (!scheduleStatus?.localeCompare("NOT SCHEDULED")) {
         component = (
-          <>
-            <StudentScheduleDetails
-              header={
-                <Typography variant="inherit" color="red" fontWeight="bold">
-                  Expirada
-                </Typography>
-              }
-              details={
-                <>
-                  <Typography variant="inherit">No fue agendada.</Typography>
-                </>
-              }
-            />
-          </>
+          <Grid container direction="row" alignItems="center">
+            <Grid item>
+              <Typography variant="inherit" color="red" fontWeight="bold">
+                Expirada
+              </Typography>
+            </Grid>
+            <Grid item>
+              <IconButton aria-label="info" color="secondary" size="small">
+                <InfoIcon fontSize="inherit" />
+              </IconButton>
+            </Grid>
+          </Grid>
         );
       } else {
         component = (
-          <>
-            <StudentScheduleDetails
-              header={
-                <Typography variant="inherit" color="red" fontWeight="bold">
-                  Expirada
-                </Typography>
-              }
-              details={
-                <>
-                  <Typography variant="inherit">
-                    Fue agendada para el {scheduleString[0]} a las{" "}
-                    {scheduleString[1]} y no se realizó.
-                  </Typography>
-                </>
-              }
-            />
-          </>
+          <Grid container direction="row" alignItems="center">
+            <Grid item>
+              <Typography variant="inherit" color="red" fontWeight="bold">
+                Expirada
+              </Typography>
+            </Grid>
+            <Grid item>
+              <IconButton aria-label="info" color="secondary" size="small">
+                <InfoIcon fontSize="inherit" />
+              </IconButton>
+            </Grid>
+          </Grid>
         );
       }
       break;

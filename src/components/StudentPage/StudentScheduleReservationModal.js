@@ -74,7 +74,7 @@ function StudentScheduleReservationModal(props) {
         });
         setReservationSuccessful(true);
       })
-      .catch((err) => {
+      .catch(() => {
         setReservationSuccessful(false);
       });
   };

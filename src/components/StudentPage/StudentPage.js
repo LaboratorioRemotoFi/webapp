@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import Link from "/src/components/Link";
@@ -9,8 +8,6 @@ import convertDateToSpanishString from "/src/utils/timeUtils";
 import StudentGroupsTable from "./StudentGroupsTable";
 
 function StudentPage() {
-  const router = useRouter();
-
   const [currentState, currentDispatch] = useStoreContext();
   const { groups, nearestPractice } = currentState;
 

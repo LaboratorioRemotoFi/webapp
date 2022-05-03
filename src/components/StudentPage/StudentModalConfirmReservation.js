@@ -1,10 +1,59 @@
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import CheckIcon from '@mui/icons-material/Check';
 
 function StudentModalConfirmReservation(props) {
-  const { reserveSchedule, newDateString } = props;
+  const { reserveSchedule, newDateString, reservationSuccess, resetModal, closeModal } = props;
   const [isLoading, setIsLoading] = React.useState(false);
+  const [reservationState, changeReservationState] = React.useState("init");
+
+  let action;
+
+  React.useEffect(() => {
+    console.log("USE EFFECT");
+    console.log(reservationSuccess);
+
+    if (reservationSuccess) {
+      changeReservationState("success");
+
+      const timer = setTimeout(() => {
+        resetModal(0);
+        closeModal();
+      }, 3000);
+    
+      return () => clearTimeout(timer);
+    };
+  }, [closeModal, reservationSuccess, resetModal]);
+
+  if (reservationState === "init") {
+    action = (
+      <LoadingButton
+        loading={isLoading}
+        variant="contained"
+        onClick={() => {
+          setIsLoading(true);
+          reserveSchedule();
+        }}
+      >
+        Confirmar
+      </LoadingButton>
+    );
+  } else if (reservationState === "success") {
+    action = (
+      <Button
+        variant="contained"
+        color="success"
+        startIcon={<CheckIcon />}
+        onClick={() => {
+          resetModal(0);
+          closeModal();
+        }}
+      >
+        ¡Éxito!
+      </Button>
+    );
+  }
 
   return (
     <>
@@ -19,16 +68,7 @@ function StudentModalConfirmReservation(props) {
         Horario seleccionado: {newDateString[0]} a las {newDateString[1]}.
       </Typography>
       <Grid container justifyContent="center">
-        <LoadingButton
-          loading={isLoading}
-          variant="contained"
-          onClick={() => {
-            setIsLoading(true);
-            reserveSchedule();
-          }}
-        >
-          Confirmar
-        </LoadingButton>
+        {action}
       </Grid>
     </>
   );

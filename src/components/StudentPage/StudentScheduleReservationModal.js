@@ -32,8 +32,14 @@ function StudentScheduleReservationModal(props) {
 
   const [modalState, setModalState] = React.useState(0);
 
+  const [reservationSuccessful, setReservationSuccessful] =
+    React.useState(false);
+
   const handleModalStateChange = () => {
     modalState < 4 ? setModalState(modalState + 1) : setModalState(0);
+    if (modalState === 0) {
+      setReservationSuccessful(false);
+    }
   };
 
   // Final new date selected, obtained after selecting hour
@@ -46,9 +52,6 @@ function StudentScheduleReservationModal(props) {
 
   // String for final date
   const [convertedNewDate, setConvertedNewDate] = React.useState(null);
-
-  const [reservationSuccessful, setReservationSuccessful] =
-    React.useState(false);
 
   const handleReserveSchedule = () => {
     const reqOptions = {
@@ -71,7 +74,7 @@ function StudentScheduleReservationModal(props) {
           },
         });
         setReservationSuccessful(true);
-        setModalState(3);
+        //setModalState(3);
       })
       .catch((err) => {
         setReservationSuccessful(false);
@@ -113,6 +116,9 @@ function StudentScheduleReservationModal(props) {
         <StudentModalConfirmReservation
           reserveSchedule={handleReserveSchedule}
           newDateString={convertedNewDate}
+          reservationSuccess={reservationSuccessful}
+          resetModal={setModalState}
+          closeModal={closeModal}
         />
       );
       break;
@@ -137,7 +143,7 @@ function StudentScheduleReservationModal(props) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={styleModal}>
+      <Box sx={styleModal} width={{ md: "auto", sm: "70%", xs: "95%" }}>
         <IconButton
           sx={styleCloseButton}
           onClick={() => {

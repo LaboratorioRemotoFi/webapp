@@ -11,7 +11,6 @@ function PracticePage({
   practiceStatus,
   sensorsData,
   actuatorsStatus,
-  errorMessage,
 }) {
   const router = useRouter();
 
@@ -19,7 +18,6 @@ function PracticePage({
   const practice = currentState.nearestPractice;
   const schedule = practice && practice.schedule;
 
-  const [hideMessage, setHideMessage] = React.useState(false);
   const [pageIndex, setPageIndex] = React.useState(-1);
 
   React.useEffect(() => {

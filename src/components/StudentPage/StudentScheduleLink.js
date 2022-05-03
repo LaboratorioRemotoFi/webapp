@@ -22,15 +22,12 @@ function StudentScheduleLink(props) {
   }
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const openModal = () => setIsModalOpen(true);
+  // const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
   const reserveTime = 7 * 24 * 60 * 60 * 1000;
 
-  const scheduleString = convertDateToSpanishString(
-    currentStudentScheduleTimestamp
-  );
   const schedulingDate = convertDateToSpanishString(startDate - reserveTime);
 
   let state;

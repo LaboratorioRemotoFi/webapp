@@ -72,7 +72,7 @@ function StudentScheduleReservationModal(props) {
         setReservationSuccessful(true);
         setModalState(2);
       })
-      .catch((err) => {
+      .catch(() => {
         setReservationSuccessful(false);
         setModalState(2);
       });

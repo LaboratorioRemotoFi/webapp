@@ -6,7 +6,7 @@ export default NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const { password, username } = credentials;
 
         const user = await getUser(username);
@@ -32,7 +32,7 @@ export default NextAuth({
       return token;
     },
     // Adds the user id and groupsId data to the session
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       session.user.id = token.id;
       session.user.groupsIds = token.groupsIds;
       return session;

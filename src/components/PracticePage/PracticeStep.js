@@ -9,7 +9,6 @@ function PracticeStep({
   actions,
   sendCommand,
   logCommand,
-  setPageIndex,
 }) {
   return (
     <div>
@@ -32,7 +31,7 @@ function PracticeStep({
       {actuators && (
         <ul>
           {actuators.map((actuator) => {
-            const { id, name, info, labels, value } = actuator;
+            const { id, name, labels, value } = actuator;
             return (
               <li key={id}>
                 <Typography>

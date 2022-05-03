@@ -19,9 +19,8 @@ import {
 } from "@mui/material";
 
 function Index() {
-  const [currentState, currentDispatch] = useStoreContext();
+  const [currentState] = useStoreContext();
   const practice = currentState.nearestPractice;
-  const schedule = practice && practice.schedule;
 
   const {
     socket,
@@ -33,9 +32,6 @@ function Index() {
     sensorsData,
     actuatorsStatus,
   } = useSocket();
-
-  const [showDisconnectedDialog, setShowDiconnectedDialog] =
-    React.useState(false);
 
   React.useEffect(() => {
     connect(practice.ip, "admin", "admin");

@@ -4,7 +4,7 @@ import StudentPage from "/src/components/StudentPage/StudentPage";
 import { useSession } from "next-auth/react";
 
 export default function Index() {
-  const { status, data } = useSession({
+  const { status } = useSession({
     required: true,
   });
 

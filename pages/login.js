@@ -11,13 +11,11 @@ import {
   Box,
 } from "@mui/material";
 import Layout from "../src/components/Layout";
-import useStoreContext from "../src/hooks/storeContext";
 
 export default function Index() {
   const router = useRouter();
-  const { status, data: session } = useSession();
+  const { status } = useSession();
 
-  const [state, dispatch] = useStoreContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

@@ -1,29 +1,35 @@
 import React from "react";
-import { Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 function StudentModalConfirmReservation(props) {
-  const { reserveSchedule, newDateString, reservationSuccess, resetModal, closeModal } = props;
+  const {
+    reserveSchedule,
+    newDateString,
+    reservationSuccess,
+    resetModal,
+    closeModal,
+  } = props;
   const [isLoading, setIsLoading] = React.useState(false);
   const [reservationState, changeReservationState] = React.useState("init");
 
   let action;
 
   React.useEffect(() => {
-    console.log("USE EFFECT");
-    console.log(reservationSuccess);
-
-    if (reservationSuccess) {
+    if (reservationSuccess == true) {
       changeReservationState("success");
 
       const timer = setTimeout(() => {
         resetModal(0);
         closeModal();
-      }, 3000);
-    
+      }, 2500);
+
       return () => clearTimeout(timer);
-    };
+    } else if (reservationSuccess == false) {
+      changeReservationState("fail");
+    }
   }, [closeModal, reservationSuccess, resetModal]);
 
   if (reservationState === "init") {
@@ -53,6 +59,27 @@ function StudentModalConfirmReservation(props) {
         ¡Éxito!
       </Button>
     );
+  } else if (reservationState === "fail") {
+    action = (
+      <>
+        <Typography fontWeight="bold" color="red" mt={2} mb={1}>
+          ¡Error!
+        </Typography>
+        <Typography mb={2}>
+          No se pudo reservar el horario, inténtelo más tarde.
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<CloseIcon />}
+          onClick={() => {
+            resetModal(0);
+            closeModal();
+          }}
+        >
+          Entendido
+        </Button>
+      </>
+    );
   }
 
   return (
@@ -64,12 +91,10 @@ function StudentModalConfirmReservation(props) {
         Podrás cambiar el horario más adelante, siempre que queden horarios
         libres.
       </Typography>
-      <Typography id="modal-modal-description" mb={2} fontStyle="italic">
+      <Typography id="modal-modal-description" mb={3} fontStyle="italic">
         Horario seleccionado: {newDateString[0]} a las {newDateString[1]}.
       </Typography>
-      <Grid container justifyContent="center">
-        {action}
-      </Grid>
+      <Box textAlign="center">{action}</Box>
     </>
   );
 }

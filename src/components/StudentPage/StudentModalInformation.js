@@ -104,7 +104,11 @@ function StudentModalInformation(props) {
       break;
     case "Expired":
       if (!scheduleStatus?.localeCompare("NOT SCHEDULED")) {
-        component = <Typography variant="inherit" mb={2} fontWeight="bold">No fue agendada.</Typography>;
+        component = (
+          <Typography variant="inherit" mb={2} fontWeight="bold">
+            No fue agendada.
+          </Typography>
+        );
       } else {
         component = (
           <Typography variant="inherit" fontWeight="bold">

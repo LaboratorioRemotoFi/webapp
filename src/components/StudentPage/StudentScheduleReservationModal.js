@@ -6,7 +6,6 @@ import { getFullReservationDate } from "../../utils/reservationUtils.js";
 import StudentModalInformation from "./StudentModalInformation.js";
 import StudentModalDateReservation from "./StudentModalDateReservation.js";
 import StudentModalConfirmReservation from "./StudentModalConfirmReservation.js";
-import StudentModalReservationResult from "./StudentModalReservationResult.js";
 
 function StudentScheduleReservationModal(props) {
   const { practice, open, closeModal, groupId, subjectId, state } = props;
@@ -33,12 +32,12 @@ function StudentScheduleReservationModal(props) {
   const [modalState, setModalState] = React.useState(0);
 
   const [reservationSuccessful, setReservationSuccessful] =
-    React.useState(false);
+    React.useState(null);
 
   const handleModalStateChange = () => {
     modalState < 4 ? setModalState(modalState + 1) : setModalState(0);
     if (modalState === 0) {
-      setReservationSuccessful(false);
+      setReservationSuccessful(null);
     }
   };
 
@@ -74,11 +73,9 @@ function StudentScheduleReservationModal(props) {
           },
         });
         setReservationSuccessful(true);
-        //setModalState(3);
       })
       .catch((err) => {
         setReservationSuccessful(false);
-        setModalState(3);
       });
   };
 
@@ -117,16 +114,6 @@ function StudentScheduleReservationModal(props) {
           reserveSchedule={handleReserveSchedule}
           newDateString={convertedNewDate}
           reservationSuccess={reservationSuccessful}
-          resetModal={setModalState}
-          closeModal={closeModal}
-        />
-      );
-      break;
-    // Result
-    case 3:
-      component = (
-        <StudentModalReservationResult
-          reservationSuccessful={reservationSuccessful}
           resetModal={setModalState}
           closeModal={closeModal}
         />

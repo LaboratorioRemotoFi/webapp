@@ -32,14 +32,14 @@ function StudentModalInformation(props) {
   switch (state) {
     case "Finished":
       component = (
-        <Typography variant="inherit">
+        <Typography variant="inherit" mb={2} fontWeight="bold">
           Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.
         </Typography>
       );
       break;
     case "Started":
       component = (
-        <Typography variant="inherit" color="red">
+        <Typography variant="inherit" mb={2} color="red" fontWeight="bold">
           Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}. No
           ha sido terminada.
         </Typography>
@@ -48,7 +48,7 @@ function StudentModalInformation(props) {
     case "Scheduled":
       component = (
         <>
-          <Typography variant="inherit" mb={2}>
+          <Typography variant="inherit" mb={2} fontWeight="bold">
             Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.
           </Typography>
           <Box textAlign="center">
@@ -67,7 +67,7 @@ function StudentModalInformation(props) {
     case "Reschedule":
       component = (
         <>
-          <Typography variant="inherit" mb={2} color="red">
+          <Typography variant="inherit" mb={2} color="red" fontWeight="bold">
             Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.
           </Typography>
           <Box textAlign="center">
@@ -86,7 +86,7 @@ function StudentModalInformation(props) {
     case "Available":
       component = (
         <>
-          <Typography variant="inherit" mb={2}>
+          <Typography variant="inherit" mb={2} fontWeight="bold">
             Aún no ha sido agendada.
           </Typography>
           <Box textAlign="center">
@@ -104,10 +104,10 @@ function StudentModalInformation(props) {
       break;
     case "Expired":
       if (!scheduleStatus?.localeCompare("NOT SCHEDULED")) {
-        component = <Typography variant="inherit">No fue agendada.</Typography>;
+        component = <Typography variant="inherit" mb={2} fontWeight="bold">No fue agendada.</Typography>;
       } else {
         component = (
-          <Typography variant="inherit">
+          <Typography variant="inherit" fontWeight="bold">
             Fue agendada para el {scheduleString[0]} a las {scheduleString[1]} y
             no se realizó.
           </Typography>
@@ -116,7 +116,7 @@ function StudentModalInformation(props) {
       break;
     case "Not available":
       component = (
-        <Typography variant="inherit">
+        <Typography variant="inherit" mb={2} fontWeight="bold">
           Estará disponible para agendar a partir del {schedulingDate[0]} a las{" "}
           {schedulingDate[1]}.
         </Typography>
@@ -124,8 +124,8 @@ function StudentModalInformation(props) {
       break;
     default:
       return (
-        <Typography variant="inherit" fontWeight="bold">
-          No disponible
+        <Typography variant="inherit" mb={2} fontWeight="bold">
+          No disponible.
         </Typography>
       );
   }

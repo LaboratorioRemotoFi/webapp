@@ -26,6 +26,8 @@ import {
 function StudentModalDateReservation(props) {
   const { practice, subjectId, handleNewDate, changeModalState } = props;
 
+  const componentMounted = React.useRef(true);
+
   const [reservedSchedules, setReservedSchedules] = React.useState(null);
 
   // Variables for selected date from date picker
@@ -115,7 +117,12 @@ function StudentModalDateReservation(props) {
     )
       .then((response) => response.json())
       .then((fetchedReservedSchedules) => {
-        setReservedSchedules(fetchedReservedSchedules);
+        if (componentMounted.current) {
+          setReservedSchedules(fetchedReservedSchedules);
+        }
+        return () => {
+          componentMounted.current = false;
+        };
       });
   }, [practice, subjectId]);
 
@@ -133,7 +140,7 @@ function StudentModalDateReservation(props) {
           container
           spacing={2}
           mb={2}
-          columns={{ md: 4, sm: 2, xs: 2 }}
+          columns={{ md: 2, sm: 2, xs: 2 }}
           alignItems="center"
           justifyContent={{ md: "flex-start", sm: "center", xs: "center" }}
         >
@@ -229,56 +236,20 @@ function StudentModalDateReservation(props) {
               )}
             </FormControl>
           </Grid>
-          <Box width={{ md: "0%", sm: "100%", sx: "0%" }} />
-          <Grid
-            container
-            item
-            justifyContent={{
-              md: "flex-start",
-              sm: "flex-end",
-              xs: "center",
-            }}
-            md="auto"
-            sm="auto"
-            xs={2}
-          >
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleNewDate(newDate);
-                changeModalState();
-              }}
-              disabled={!convertedNewDate}
-            >
-              Reservar
-            </Button>
-          </Grid>
-          <Grid
-            container
-            item
-            justifyContent={{
-              md: "flex-start",
-              sm: "flex-start",
-              xs: "center",
-            }}
-            md
-            sm="auto"
-            xs={2}
-          >
-            {!convertedNewDate ? (
-              <Typography variant="inherit">Seleccione un horario.</Typography>
-            ) : (
-              <Typography
-                variant="inherit"
-                textAlign={{ md: "left", sm: "center", xs: "center" }}
-              >
-                Horario seleccionado: {convertedNewDate[0]} a las{" "}
-                {convertedNewDate[1]}.
-              </Typography>
-            )}
-          </Grid>
         </Grid>
       </LocalizationProvider>
+      <Box textAlign="center">
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleNewDate(newDate);
+            changeModalState();
+          }}
+          disabled={!convertedNewDate}
+        >
+          Reservar
+        </Button>
+      </Box>
     </>
   );
 }

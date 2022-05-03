@@ -67,7 +67,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small" onClick={openModal}>
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -83,7 +88,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small" onClick={openModal}>
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -99,7 +109,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small" onClick={openModal}>
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -115,7 +130,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small" onClick={openModal}>
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -131,7 +151,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small" onClick={openModal}>
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -148,7 +173,12 @@ function StudentScheduleLink(props) {
               </Typography>
             </Grid>
             <Grid item>
-              <IconButton aria-label="info" color="secondary" size="small" onClick={openModal}>
+              <IconButton
+                aria-label="info"
+                color="secondary"
+                size="small"
+                onClick={openModal}
+              >
                 <InfoIcon fontSize="inherit" />
               </IconButton>
             </Grid>
@@ -163,7 +193,12 @@ function StudentScheduleLink(props) {
               </Typography>
             </Grid>
             <Grid item>
-              <IconButton aria-label="info" color="secondary" size="small" onClick={openModal}>
+              <IconButton
+                aria-label="info"
+                color="secondary"
+                size="small"
+                onClick={openModal}
+              >
                 <InfoIcon fontSize="inherit" />
               </IconButton>
             </Grid>
@@ -180,7 +215,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small" onClick={openModal}>
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>

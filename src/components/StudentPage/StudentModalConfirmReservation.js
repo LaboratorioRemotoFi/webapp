@@ -18,7 +18,7 @@ function StudentModalConfirmReservation(props) {
       <Typography id="modal-modal-description" mb={2} fontStyle="italic">
         Horario seleccionado: {newDateString[0]} a las {newDateString[1]}.
       </Typography>
-      <Grid container justifyContent="flex-end">
+      <Grid container justifyContent="center">
         <LoadingButton
           loading={isLoading}
           variant="contained"
@@ -27,7 +27,7 @@ function StudentModalConfirmReservation(props) {
             reserveSchedule();
           }}
         >
-          Reservar
+          Confirmar
         </LoadingButton>
       </Grid>
     </>

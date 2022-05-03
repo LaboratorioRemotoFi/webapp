@@ -24,7 +24,7 @@ function StudentModalConfirmReservation(props) {
       const timer = setTimeout(() => {
         resetModal(0);
         closeModal();
-      }, 2500);
+      }, 1500);
 
       return () => clearTimeout(timer);
     } else if (reservationSuccess == false) {

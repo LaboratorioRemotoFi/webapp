@@ -15,6 +15,10 @@ const theme = createTheme({
       //main: "#19857b",
       main: "#116BD1",
     },
+    success: {
+      main: "#33B55A",
+      contrastText: "#fff",
+    },
     error: {
       main: red.A400,
     },

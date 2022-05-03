@@ -2,9 +2,7 @@ import React from "react";
 import { Grid, IconButton, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import InfoIcon from "@mui/icons-material/Info";
-import convertDateToSpanishString from "../../utils/timeUtils";
 import StudentScheduleReservationModal from "./StudentScheduleReservationModal.js";
-import StudentScheduleDetails from "./StudentScheduleDetails.js";
 
 let currDate = Date.now();
 
@@ -27,8 +25,6 @@ function StudentScheduleLink(props) {
 
   // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
   const reserveTime = 7 * 24 * 60 * 60 * 1000;
-
-  const schedulingDate = convertDateToSpanishString(startDate - reserveTime);
 
   let state;
 
@@ -71,7 +67,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -87,7 +88,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -103,7 +109,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -119,7 +130,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -135,7 +151,12 @@ function StudentScheduleLink(props) {
             </Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
               <InfoIcon fontSize="inherit" />
             </IconButton>
           </Grid>
@@ -152,7 +173,12 @@ function StudentScheduleLink(props) {
               </Typography>
             </Grid>
             <Grid item>
-              <IconButton aria-label="info" color="secondary" size="small">
+              <IconButton
+                aria-label="info"
+                color="secondary"
+                size="small"
+                onClick={openModal}
+              >
                 <InfoIcon fontSize="inherit" />
               </IconButton>
             </Grid>
@@ -167,7 +193,12 @@ function StudentScheduleLink(props) {
               </Typography>
             </Grid>
             <Grid item>
-              <IconButton aria-label="info" color="secondary" size="small">
+              <IconButton
+                aria-label="info"
+                color="secondary"
+                size="small"
+                onClick={openModal}
+              >
                 <InfoIcon fontSize="inherit" />
               </IconButton>
             </Grid>
@@ -177,23 +208,23 @@ function StudentScheduleLink(props) {
       break;
     case "Not available":
       component = (
-        <>
-          <StudentScheduleDetails
-            header={
-              <Typography variant="inherit" fontWeight="bold">
-                No disponible
-              </Typography>
-            }
-            details={
-              <>
-                <Typography variant="inherit">
-                  Estará disponible para agendar a partir del{" "}
-                  {schedulingDate[0]} a las {schedulingDate[1]}.
-                </Typography>
-              </>
-            }
-          />
-        </>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>
+            <Typography variant="inherit" fontWeight="bold">
+              No disponible
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton
+              aria-label="info"
+              color="secondary"
+              size="small"
+              onClick={openModal}
+            >
+              <InfoIcon fontSize="inherit" />
+            </IconButton>
+          </Grid>
+        </Grid>
       );
       break;
     default:
@@ -213,6 +244,7 @@ function StudentScheduleLink(props) {
         subjectId={subjectId}
         open={isModalOpen}
         closeModal={closeModal}
+        state={state}
       />
     </>
   );

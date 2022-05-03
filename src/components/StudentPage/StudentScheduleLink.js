@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import InfoIcon from "@mui/icons-material/Info";
 import convertDateToSpanishString from "../../utils/timeUtils";
 import StudentScheduleReservationModal from "./StudentScheduleReservationModal.js";
-import StudentScheduleDetails from "./StudentScheduleDetails.js";
 
 let currDate = Date.now();
 
@@ -33,183 +32,52 @@ function StudentScheduleLink(props) {
   );
   const schedulingDate = convertDateToSpanishString(startDate - reserveTime);
 
-  let state;
+  let label;
+  let color;
 
   if (scheduleStatus?.localeCompare("FINISHED") === 0) {
-    state = "Finished";
+    label = "Terminada";
   } else if (scheduleStatus?.localeCompare("STARTED") === 0) {
-    state = "Started";
+    label = "Empezada";
   } else if (
     scheduleStatus?.localeCompare("SCHEDULED") === 0 &&
     currDate < currentStudentScheduleTimestamp
   ) {
-    state = "Scheduled";
+    label = "Agendada";
   } else if (
     scheduleStatus?.localeCompare("SCHEDULED") === 0 &&
     currDate > currentStudentScheduleTimestamp &&
     currDate < endDate
   ) {
-    state = "Reschedule";
+    color = "red";
+    label = "Por agendar";
   } else if (
     scheduleStatus?.localeCompare("NOT SCHEDULED") === 0 &&
     currDate < endDate &&
     currDate >= startDate - reserveTime
   ) {
-    state = "Available";
+    label = "Por agendar";
   } else if (currDate > endDate) {
-    state = "Expired";
+    color = "red";
+    label = "Expirada";
   } else if (currDate < startDate - reserveTime) {
-    state = "Not available";
-  }
-
-  let component;
-
-  switch (state) {
-    case "Finished":
-      component = (
-        <Grid container direction="row" alignItems="center">
-          <Grid item>
-            <Typography variant="inherit" fontWeight="bold">
-              Terminada
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
-              <InfoIcon fontSize="inherit" />
-            </IconButton>
-          </Grid>
-        </Grid>
-      );
-      break;
-    case "Started":
-      component = (
-        <Grid container direction="row" alignItems="center">
-          <Grid item>
-            <Typography variant="inherit" fontWeight="bold">
-              Empezada
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
-              <InfoIcon fontSize="inherit" />
-            </IconButton>
-          </Grid>
-        </Grid>
-      );
-      break;
-    case "Scheduled":
-      component = (
-        <Grid container direction="row" alignItems="center">
-          <Grid item>
-            <Typography variant="inherit" fontWeight="bold">
-              Agendada
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
-              <InfoIcon fontSize="inherit" />
-            </IconButton>
-          </Grid>
-        </Grid>
-      );
-      break;
-    case "Reschedule":
-      component = (
-        <Grid container direction="row" alignItems="center">
-          <Grid item>
-            <Typography variant="inherit" color="red" fontWeight="bold">
-              Por agendar
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
-              <InfoIcon fontSize="inherit" />
-            </IconButton>
-          </Grid>
-        </Grid>
-      );
-      break;
-    case "Available":
-      component = (
-        <Grid container direction="row" alignItems="center">
-          <Grid item>
-            <Typography variant="inherit" fontWeight="bold">
-              Por agendar
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton aria-label="info" color="secondary" size="small">
-              <InfoIcon fontSize="inherit" />
-            </IconButton>
-          </Grid>
-        </Grid>
-      );
-      break;
-    case "Expired":
-      if (!scheduleStatus?.localeCompare("NOT SCHEDULED")) {
-        component = (
-          <Grid container direction="row" alignItems="center">
-            <Grid item>
-              <Typography variant="inherit" color="red" fontWeight="bold">
-                Expirada
-              </Typography>
-            </Grid>
-            <Grid item>
-              <IconButton aria-label="info" color="secondary" size="small">
-                <InfoIcon fontSize="inherit" />
-              </IconButton>
-            </Grid>
-          </Grid>
-        );
-      } else {
-        component = (
-          <Grid container direction="row" alignItems="center">
-            <Grid item>
-              <Typography variant="inherit" color="red" fontWeight="bold">
-                Expirada
-              </Typography>
-            </Grid>
-            <Grid item>
-              <IconButton aria-label="info" color="secondary" size="small">
-                <InfoIcon fontSize="inherit" />
-              </IconButton>
-            </Grid>
-          </Grid>
-        );
-      }
-      break;
-    case "Not available":
-      component = (
-        <>
-          <StudentScheduleDetails
-            header={
-              <Typography variant="inherit" fontWeight="bold">
-                No disponible
-              </Typography>
-            }
-            details={
-              <>
-                <Typography variant="inherit">
-                  Estará disponible para agendar a partir del{" "}
-                  {schedulingDate[0]} a las {schedulingDate[1]}.
-                </Typography>
-              </>
-            }
-          />
-        </>
-      );
-      break;
-    default:
-      return (
-        <Typography variant="inherit" fontWeight="bold">
-          No disponible
-        </Typography>
-      );
+    label = "No disponible";
   }
 
   return (
     <>
-      {component}
+      <Grid container direction="row" alignItems="center">
+        <Grid item>
+          <Typography variant="inherit" color={color} fontWeight="bold">
+            {label}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <IconButton aria-label="info" color="secondary" size="small">
+            <InfoIcon fontSize="inherit" />
+          </IconButton>
+        </Grid>
+      </Grid>
       <StudentScheduleReservationModal
         practice={practice}
         groupId={groupId}

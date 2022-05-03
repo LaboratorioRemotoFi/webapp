@@ -3,6 +3,7 @@ import { Box, IconButton, Modal, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useStoreContext from "../../hooks/storeContext";
 import { getFullReservationDate } from "../../utils/reservationUtils.js";
+import StudentModalInformation from "./StudentModalInformation.js";
 import StudentModalDateReservation from "./StudentModalDateReservation.js";
 import StudentModalConfirmReservation from "./StudentModalConfirmReservation.js";
 import StudentModalReservationResult from "./StudentModalReservationResult.js";
@@ -32,7 +33,7 @@ function StudentScheduleReservationModal(props) {
   const [modalState, setModalState] = React.useState(0);
 
   const handleModalStateChange = () => {
-    modalState < 3 ? setModalState(modalState + 1) : setModalState(0);
+    modalState < 4 ? setModalState(modalState + 1) : setModalState(0);
   };
 
   // Final new date selected, obtained after selecting hour
@@ -70,11 +71,11 @@ function StudentScheduleReservationModal(props) {
           },
         });
         setReservationSuccessful(true);
-        setModalState(2);
+        setModalState(3);
       })
       .catch((err) => {
         setReservationSuccessful(false);
-        setModalState(2);
+        setModalState(3);
       });
   };
 
@@ -85,8 +86,18 @@ function StudentScheduleReservationModal(props) {
   let component;
 
   switch (modalState) {
-    // Reservation
+    // Information
     case 0:
+      component = (
+        <StudentModalInformation
+          practice={practice}
+          state={state}
+          changeModalState={handleModalStateChange}
+        />
+      );
+      break;
+    // Reservation
+    case 1:
       component = (
         <StudentModalDateReservation
           practice={practice}
@@ -97,7 +108,7 @@ function StudentScheduleReservationModal(props) {
       );
       break;
     // Confirmation
-    case 1:
+    case 2:
       component = (
         <StudentModalConfirmReservation
           reserveSchedule={handleReserveSchedule}
@@ -106,10 +117,12 @@ function StudentScheduleReservationModal(props) {
       );
       break;
     // Result
-    case 2:
+    case 3:
       component = (
         <StudentModalReservationResult
           reservationSuccessful={reservationSuccessful}
+          resetModal={setModalState}
+          closeModal={closeModal}
         />
       );
       break;
@@ -124,7 +137,7 @@ function StudentScheduleReservationModal(props) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={styleModal} width={{ lg: "70%", xs: "95%" }}>
+      <Box sx={styleModal}>
         <IconButton
           sx={styleCloseButton}
           onClick={() => {

@@ -1,7 +1,5 @@
 import convertDateToSpanishString from "../utils/timeUtils";
 
-let currDate = Date.now();
-
 function getDaySchedules(day, noAvailSchedPerDay, timeFrame) {
   let scheduleList = [];
 
@@ -22,6 +20,7 @@ function scheduleIsNotAvailable(
   currPractice,
   reservedSchedules
 ) {
+  const currDate = Date.now();
   let disable = !scheduleList
     .filter(
       (schedule) =>
@@ -29,7 +28,7 @@ function scheduleIsNotAvailable(
         schedule + (currPractice.timeFrame - 1) * 60 * 1000 > currDate &&
         // If the schedule isn't on the reserved schedules array
         // then enable it
-        !reservedSchedules.find(function (scheduleReserved, index) {
+        !reservedSchedules.find(function (scheduleReserved) {
           if (scheduleReserved == schedule) return true;
         })
     )
@@ -66,6 +65,50 @@ function getNearestPractice(groups) {
       (schedule) =>
         Date.now() > schedule.startTime && Date.now() < schedule.endTime
     );
+}
+
+export function getScheduleImprovedStatus({
+  practiceStartDate,
+  practiceEndDate,
+  practiceTimeframe,
+  scheduleTimestamp,
+  scheduleStatus,
+}) {
+  const currDate = Date.now();
+  // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
+  const reserveTime = 7 * 24 * 60 * 60 * 1000;
+
+  if (scheduleStatus === "FINISHED") {
+    return "FINISHED";
+  } else if (
+    scheduleStatus === "STARTED" &&
+    currDate < scheduleTimestamp + practiceTimeframe
+  ) {
+    return "STARTED";
+  } else if (
+    scheduleStatus === "STARTED" &&
+    currDate > scheduleTimestamp + practiceTimeframe
+  ) {
+    return "STARTED_EXPIRED";
+  } else if (scheduleStatus === "SCHEDULED" && currDate < scheduleTimestamp) {
+    return "READY_TO_START";
+  } else if (
+    scheduleStatus === "SCHEDULED" &&
+    currDate > scheduleTimestamp &&
+    currDate < practiceEndDate
+  ) {
+    return "SCHEDULE_EXPIRED";
+  } else if (
+    scheduleStatus === undefined &&
+    currDate < practiceEndDate &&
+    currDate >= practiceStartDate - reserveTime
+  ) {
+    return "READY_TO_SCHEDULE";
+  } else if (currDate > practiceEndDate) {
+    return "NO_LONGER_AVAILABLE";
+  } else if (currDate < practiceStartDate - reserveTime) {
+    return "NOT_YET_AVAILABLE";
+  }
 }
 
 export { getDaySchedules, scheduleIsNotAvailable, getNearestPractice };

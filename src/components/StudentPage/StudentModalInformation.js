@@ -9,12 +9,6 @@ function StudentModalInformation(props) {
   const currentStudentScheduleTimestamp =
     practice?.currentStudentSchedule?.timestamp;
 
-  let scheduleStatus = practice?.currentStudentSchedule?.status;
-
-  if (typeof scheduleStatus === "undefined") {
-    scheduleStatus = "NOT SCHEDULED";
-  }
-
   // Days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
   const reserveTime = 7 * 24 * 60 * 60 * 1000;
 
@@ -22,117 +16,42 @@ function StudentModalInformation(props) {
     currentStudentScheduleTimestamp
   );
   const schedulingDate = convertDateToSpanishString(startDate - reserveTime);
-
   const initialDate = convertDateToSpanishString(practice.startDate);
-
   const finalDate = convertDateToSpanishString(practice.endDate);
 
-  let component;
+  let text;
 
   switch (state) {
-    case "Finished":
-      component = (
-        <Typography variant="inherit" mb={2} fontWeight="bold">
-          Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.
-        </Typography>
-      );
+    case "FINISHED":
+    case "READY_TO_START":
+    case "SCHEDULE_EXPIRED":
+      text = `Fue agendada para el ${scheduleString[0]} a las ${scheduleString[1]}.`;
       break;
-    case "Started":
-      component = (
-        <Typography variant="inherit" mb={2} color="red" fontWeight="bold">
-          Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}. No
-          ha sido terminada.
-        </Typography>
-      );
+    case "STARTED":
+      text = `Fue agendada para el ${scheduleString[0]} a las ${scheduleString[1]}. No ha sido terminada.`;
       break;
-    case "Scheduled":
-      component = (
-        <>
-          <Typography variant="inherit" mb={2} fontWeight="bold">
-            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.
-          </Typography>
-          <Box textAlign="center">
-            <Button
-              variant="contained"
-              onClick={() => {
-                changeModalState();
-              }}
-            >
-              Reagendar
-            </Button>
-          </Box>
-        </>
-      );
+    case "STARTED_EXPIRED":
+      text = `Fue agendada para el ${scheduleString[0]} a las ${scheduleString[1]}. No se terminó en el tiempo especificado.`;
       break;
-    case "Reschedule":
-      component = (
-        <>
-          <Typography variant="inherit" mb={2} color="red" fontWeight="bold">
-            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]}.
-          </Typography>
-          <Box textAlign="center">
-            <Button
-              variant="contained"
-              onClick={() => {
-                changeModalState();
-              }}
-            >
-              Reagendar
-            </Button>
-          </Box>
-        </>
-      );
+    case "READY_TO_SCHEDULE":
+      text = "Aún no ha sido agendada.";
       break;
-    case "Available":
-      component = (
-        <>
-          <Typography variant="inherit" mb={2} fontWeight="bold">
-            Aún no ha sido agendada.
-          </Typography>
-          <Box textAlign="center">
-            <Button
-              variant="contained"
-              onClick={() => {
-                changeModalState();
-              }}
-            >
-              Agendar
-            </Button>
-          </Box>
-        </>
-      );
+    case "NO_LONGER_AVAILABLE":
+      text = "No fue agendada. Ya no está disponible";
       break;
-    case "Expired":
-      if (!scheduleStatus?.localeCompare("NOT SCHEDULED")) {
-        component = (
-          <Typography variant="inherit" mb={2} fontWeight="bold">
-            No fue agendada.
-          </Typography>
-        );
-      } else {
-        component = (
-          <Typography variant="inherit" fontWeight="bold">
-            Fue agendada para el {scheduleString[0]} a las {scheduleString[1]} y
-            no se realizó.
-          </Typography>
-        );
-      }
-      break;
-    case "Not available":
-      component = (
-        <Typography variant="inherit" mb={2} fontWeight="bold">
-          Estará disponible para agendar a partir del {schedulingDate[0]} a las{" "}
-          {schedulingDate[1]}.
-        </Typography>
-      );
+    case "NOT_YET_AVAILABLE":
+      text = `Estará disponible para agendar a partir del ${schedulingDate[0]} a las ${schedulingDate[1]}.`;
       break;
     default:
-      return (
-        <Typography variant="inherit" mb={2} fontWeight="bold">
-          No disponible.
-        </Typography>
-      );
+      break;
   }
+
+  const enableRescheduleButton = [
+    "STARTED_EXPIRED",
+    "SCHEDULE_EXPIRED",
+    "READY_TO_START",
+    "READY_TO_SCHEDULE",
+  ].includes(state);
 
   return (
     <>
@@ -148,7 +67,21 @@ function StudentModalInformation(props) {
       <Typography variant="inherit">
         Fecha final: {finalDate[0]} a las {finalDate[1]}.
       </Typography>
-      {component}
+      <Typography variant="inherit" mb={2} fontWeight="bold">
+        {text}
+      </Typography>
+      {enableRescheduleButton && (
+        <Box textAlign="center">
+          <Button
+            variant="contained"
+            onClick={() => {
+              changeModalState();
+            }}
+          >
+            {state === "READY_TO_SCHEDULE" ? "Agendar" : "Reagendar"}
+          </Button>
+        </Box>
+      )}
     </>
   );
 }

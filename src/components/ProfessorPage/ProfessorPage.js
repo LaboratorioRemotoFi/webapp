@@ -72,7 +72,7 @@ function ProfessorPage() {
                 })}
               </Select>
             </FormControl>
-            <FormControl fullWidth sx={{ my: 1 }}>
+            <FormControl fullWidth sx={{ my: 1 }} disabled={!selectedGroupId}>
               <InputLabel id="select-practice-label">
                 Selecciona una práctica
               </InputLabel>
@@ -96,7 +96,7 @@ function ProfessorPage() {
                   })}
               </Select>
             </FormControl>
-            <Grid container spacing={4}>
+            <Grid container sx={{ my: 1 }}>
               <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
                 <ProfessorPageTable />
               </Grid>

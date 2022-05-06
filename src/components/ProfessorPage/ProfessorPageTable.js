@@ -3,6 +3,7 @@ import {
   Button,
   Paper,
   Table,
+  TableHead,
   TableBody,
   TableCell,
   TableContainer,
@@ -25,8 +26,20 @@ const rows = [
 // function ProfessorPageTable({ group, practice, students }) {
 function ProfessorPageTable() {
   return (
-    <TableContainer component={Paper} sx={{ width: 1 }}>
+    <TableContainer
+      component={Paper}
+      elevation={0}
+      variant="outlined"
+      sx={{ width: 1 }}
+    >
       <Table aria-label="collapsible table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Nombre</TableCell>
+            <TableCell align="right">Estado</TableCell>
+            <TableCell align="right"></TableCell>
+          </TableRow>
+        </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow

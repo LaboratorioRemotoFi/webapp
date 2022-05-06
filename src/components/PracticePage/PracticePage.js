@@ -77,6 +77,7 @@ function PracticePage({
     page.actions &&
     page.actions.map((actionId) => ({
       ...metadata.actions[actionId],
+      id: actionId,
     }));
 
   return (

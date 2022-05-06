@@ -28,7 +28,7 @@ export async function getUser(id) {
   }
 }
 
-export async function getStudentGroups(studentId, groupsIds) {
+export async function getUserGroups(userId, userType, groupsIds) {
   let mongoClient;
 
   try {
@@ -55,18 +55,20 @@ export async function getStudentGroups(studentId, groupsIds) {
           id: practiceId,
         });
 
-        const currentStudentSchedule = await schedulesCollection.findOne({
-          subjectId,
-          practiceId,
-          studentId,
-        });
-        practice.currentStudentSchedule = currentStudentSchedule;
+        practice.currentStudentSchedule =
+          userType === "student"
+            ? await schedulesCollection.findOne({
+                subjectId,
+                practiceId,
+                studentId: userId,
+              })
+            : undefined;
 
         practices.push(practice);
       }
 
       const group = {
-        ...subject,
+        name: subject.name,
         semester,
         groupNumber,
         subjectId,

@@ -12,6 +12,22 @@ function PracticeStep({
 }) {
   return (
     <div>
+      <Typography variant="h4">Camaras</Typography>
+      {sensors && (
+        <ul>
+          {sensors.map((sensor) => {
+            const { id, labels, name, value } = sensor;
+            return (
+              <li key={id}>
+                <Typography>
+                  {name + ": "}
+                  {labels ? labels[value] : value}
+                </Typography>
+              </li>
+            );
+          })}
+        </ul>
+      )}
       <Typography variant="h4">Componentes</Typography>
       {sensors && (
         <ul>
@@ -56,7 +72,7 @@ function PracticeStep({
       {actions && (
         <Box sx={{ display: "flex", alignItems: "flex-end", mt: 1, ml: 3 }}>
           {actions.map((action, index) => {
-            const { name, command } = action;
+            const { name, id } = action;
             return (
               <Button
                 key={index}
@@ -64,7 +80,7 @@ function PracticeStep({
                 variant="text"
                 onClick={() => {
                   logCommand(name);
-                  sendCommand(command);
+                  sendCommand(id);
                 }}
                 sx={{ ml: 0, mr: 2 }}
               >

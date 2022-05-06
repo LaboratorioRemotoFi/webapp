@@ -27,6 +27,7 @@ export default NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.type = user.type;
         token.groupsIds = user.groupsIds;
       }
       return token;
@@ -34,6 +35,7 @@ export default NextAuth({
     // Adds the user id and groupsId data to the session
     async session({ session, token }) {
       session.user.id = token.id;
+      session.user.type = token.type;
       session.user.groupsIds = token.groupsIds;
       return session;
     },

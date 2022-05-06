@@ -1,11 +1,12 @@
 import { getSession } from "next-auth/react";
-import { getStudentGroups } from "/src/lib/database";
+import { getUserGroups } from "/src/lib/database";
 
 const handler = async (req, res) => {
   const session = await getSession({ req });
   if (session) {
-    const result = await getStudentGroups(
+    const result = await getUserGroups(
       session.user.id,
+      session.user.type,
       session.user.groupsIds
     );
     res.json(result);

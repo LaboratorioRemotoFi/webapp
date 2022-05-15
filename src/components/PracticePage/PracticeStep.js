@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import PracticeAction from "/src/components/PracticePage/PracticeAction";
+import { Stack, Typography } from "@mui/material";
 
 function PracticeStep({
   index,
@@ -7,27 +8,29 @@ function PracticeStep({
   sensors,
   actuators,
   actions,
+  videos,
   sendCommand,
   logCommand,
 }) {
   return (
     <div>
-      <Typography variant="h4">Camaras</Typography>
-      {sensors && (
-        <ul>
-          {sensors.map((sensor) => {
-            const { id, labels, name, value } = sensor;
-            return (
-              <li key={id}>
-                <Typography>
-                  {name + ": "}
-                  {labels ? labels[value] : value}
-                </Typography>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <Typography variant="h4">Cámaras</Typography>
+      {videos &&
+        videos.map((video) => {
+          const { name, url, width, height } = video;
+          return (
+            <>
+              <Typography>{name}</Typography>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                alt={`Video de ${name}`}
+                width={width}
+                height={height}
+                src={url}
+              />
+            </>
+          );
+        })}
       <Typography variant="h4">Componentes</Typography>
       {sensors && (
         <ul>
@@ -44,6 +47,7 @@ function PracticeStep({
           })}
         </ul>
       )}
+      <Typography variant="h4">Actuadores</Typography>
       {actuators && (
         <ul>
           {actuators.map((actuator) => {
@@ -70,25 +74,18 @@ function PracticeStep({
         })}
       </ul>
       {actions && (
-        <Box sx={{ display: "flex", alignItems: "flex-end", mt: 1, ml: 3 }}>
+        <Stack spacing={2} alignItems="flex-start">
           {actions.map((action, index) => {
-            const { name, id } = action;
             return (
-              <Button
+              <PracticeAction
                 key={index}
-                size="small"
-                variant="text"
-                onClick={() => {
-                  logCommand(name);
-                  sendCommand(id);
-                }}
-                sx={{ ml: 0, mr: 2 }}
-              >
-                {name}
-              </Button>
+                action={action}
+                logCommand={logCommand}
+                sendCommand={sendCommand}
+              />
             );
           })}
-        </Box>
+        </Stack>
       )}
     </div>
   );

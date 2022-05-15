@@ -3,7 +3,14 @@ import PracticeStep from "./PracticeStep";
 import useStoreContext from "/src/hooks/storeContext";
 import { useRouter } from "next/router";
 import { logScheduleAction, updateSchedule } from "/src/utils/practiceUtils.js";
-import { Box, Button, CircularProgress, Link, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Link,
+  Typography,
+  Stack,
+} from "@mui/material";
 
 function PracticePage({
   socket,
@@ -27,8 +34,8 @@ function PracticePage({
     }
   }, [schedule]);
 
-  const sendCommand = (command) => {
-    socket.emit("command", command);
+  const sendCommand = (command, value) => {
+    socket.emit("command", command, value);
   };
 
   const logCommand = (name) => {
@@ -79,6 +86,12 @@ function PracticePage({
       ...metadata.actions[actionId],
       id: actionId,
     }));
+  const videos =
+    page &&
+    page.videos &&
+    page.videos.map((videoId) => ({
+      ...metadata.videos[videoId],
+    }));
 
   return (
     <div>
@@ -114,29 +127,20 @@ function PracticePage({
               sensors={sensors}
               actuators={actuators}
               actions={actions}
+              videos={videos}
               sendCommand={sendCommand}
               logCommand={logCommand}
               setPageIndex={setPageIndex}
             />
           </Box>
-          <Box sx={{ my: 2 }}>
+          <Stack sx={{ my: 2 }} alignItems="flex-end">
             {pageIndex !== metadata.pages.length - 1 && (
-              <Button
-                size="sm"
-                variant="outlined"
-                onClick={onNextStepClick}
-                sx={{ ml: 0, mr: 2 }}
-              >
+              <Button size="sm" variant="outlined" onClick={onNextStepClick}>
                 Siguiente paso
               </Button>
             )}
             {pageIndex === metadata.pages.length - 1 && (
-              <Button
-                size="sm"
-                variant="outlined"
-                onClick={onFinishPractice}
-                sx={{ ml: 0, mr: 2 }}
-              >
+              <Button size="sm" variant="outlined" onClick={onFinishPractice}>
                 Terminar práctica
               </Button>
             )}
@@ -151,7 +155,7 @@ function PracticePage({
                 </Link>
               </div>
             )}
-          </Box>
+          </Stack>
         </>
       )}
     </div>

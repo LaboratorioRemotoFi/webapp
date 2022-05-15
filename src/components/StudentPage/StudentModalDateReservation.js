@@ -127,7 +127,7 @@ function StudentModalDateReservation(props) {
   }, [practice, subjectId]);
 
   let convertedDate;
-  const invalidWeekdays = [0, 6];
+  const invalidWeekdays = [];
 
   return (
     <>

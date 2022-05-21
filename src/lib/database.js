@@ -191,3 +191,53 @@ export async function getSchedules({ practiceId, subjectId }) {
     await mongoClient.close();
   }
 }
+
+export async function getStudentsPracticeInfo({
+  subjectId,
+  groupNumber,
+  practiceId,
+}) {
+  let mongoClient;
+
+  try {
+    mongoClient = await connectToCluster();
+    const db = mongoClient.db("laboratorioremotofi");
+    const groupsCollection = db.collection("groups");
+    const usersCollection = db.collection("users");
+    const schedulesCollection = db.collection("schedules");
+    const group = await groupsCollection.findOne({ subjectId, groupNumber });
+    const studentsIds = group?.studentsIds;
+
+    const practiceInfo = [];
+
+    for (const index in studentsIds) {
+      const studentId = studentsIds[index];
+      const student = await usersCollection.findOne({
+        id: studentId,
+      });
+      let schedule = await schedulesCollection.findOne({
+        studentId,
+        subjectId,
+        practiceId,
+      });
+      if (!schedule) {
+        schedule = {
+          status: "NOT_SCHEDULED",
+          timestamp: null,
+          log: [],
+        };
+      }
+      const info = {
+        id: studentId,
+        name: student?.name,
+        status: schedule?.status,
+        timestamp: schedule?.timestamp,
+        log: schedule?.log,
+      };
+      practiceInfo.push(info);
+    }
+    return practiceInfo;
+  } finally {
+    await mongoClient.close();
+  }
+}

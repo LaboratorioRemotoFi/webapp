@@ -13,12 +13,24 @@ import {
 import ProfessorPageTable from "/src/components/ProfessorPage/ProfessorPageTable";
 import Layout from "/src/components/Layout";
 import useStoreContext from "/src/hooks/storeContext";
+import convertDateToSpanishString from "../../utils/timeUtils";
 
 function ProfessorPage() {
   const [selectedGroupId, setSelectedGroupId] = React.useState("");
-  const [selectedPracticeId, setSelectedPracticeId] = React.useState("");
+  const [selectedPractice, setSelectedPractice] = React.useState("");
   const [currentState, currentDispatch] = useStoreContext();
   const { groups } = currentState;
+
+  const handleGroupChange = (event) => {
+    const groupId = event.target.value;
+    if (groupId !== null) {
+      setSelectedGroupId(groupId);
+      setSelectedPractice("");
+    }
+  };
+
+  let initialDate;
+  let finalDate;
 
   const { status, data } = useSession({
     required: true,
@@ -35,6 +47,16 @@ function ProfessorPage() {
         });
     }
   }, [groups, currentDispatch]);
+
+  console.log("Groups");
+  console.log(groups);
+  console.log(selectedGroupId);
+  console.log(selectedPractice);
+
+  if (selectedPractice !== "") {
+    initialDate = convertDateToSpanishString(selectedPractice.startDate);
+    finalDate = convertDateToSpanishString(selectedPractice.endDate);
+  }
 
   if (status !== "authenticated" || !groups) {
     return <Layout></Layout>;
@@ -59,9 +81,7 @@ function ProfessorPage() {
                 id="select-group"
                 value={selectedGroupId}
                 label="Selecciona un grupo"
-                onChange={(event) => {
-                  setSelectedGroupId(event.target.value);
-                }}
+                onChange={handleGroupChange}
               >
                 {groups.map((group) => {
                   return (
@@ -79,28 +99,52 @@ function ProfessorPage() {
               <Select
                 labelId="select-practice-label"
                 id="select-practice"
-                value={selectedPracticeId}
+                value={selectedPractice}
                 label="Selecciona una práctica"
                 onChange={(event) => {
-                  setSelectedPracticeId(event.target.value);
+                  setSelectedPractice(event.target.value);
                 }}
               >
                 {groups
                   .find((group) => group.id === selectedGroupId)
                   ?.practices.map((practice) => {
                     return (
-                      <MenuItem key={practice.id} value={practice.id}>
+                      <MenuItem key={practice.id} value={practice}>
                         {practice.name}
                       </MenuItem>
                     );
                   })}
               </Select>
             </FormControl>
-            <Grid container sx={{ my: 1 }}>
-              <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
-                <ProfessorPageTable />
+            {selectedPractice === "" ? (
+              <Grid container sx={{ my: 1 }}>
+                <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
+                  <Typography>
+                    Selecciona un grupo y una práctica para ver los detalles.
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
+            ) : (
+              <Grid container sx={{ my: 1 }}>
+                <Grid item xs={12} md={7} mb={2} order={{ xs: 2, md: 1 }}>
+                  <Typography variant="inherit">
+                    Duración: {selectedPractice.timeFrame} minutos.
+                  </Typography>
+                  <Typography variant="inherit">
+                    Fecha de inicio: {initialDate[0]} a las {initialDate[1]}.
+                  </Typography>
+                  <Typography variant="inherit">
+                    Fecha final: {finalDate[0]} a las {finalDate[1]}.
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }}>
+                  <ProfessorPageTable
+                    groupId={selectedGroupId}
+                    practiceId={selectedPractice.id}
+                  />
+                </Grid>
+              </Grid>
+            )}
           </Box>
         </Container>
       </Layout>

@@ -59,11 +59,8 @@ function ProfessorPageTable({ groupId, practiceId }) {
   const [scheduleInfo, setScheduleInfo] = React.useState("");
 
   const handleOpenModal = (info) => {
-    console.log(info);
     const { timestamp, timeFrame, log } = info;
-    console.log(timestamp, timeFrame, log);
-    setScheduleInfo({timestamp, timeFrame, log});
-    console.log(scheduleInfo);
+    setScheduleInfo({ timestamp, timeFrame, log });
     openModal();
   };
 
@@ -124,16 +121,19 @@ function ProfessorPageTable({ groupId, practiceId }) {
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
-                <TableCell align="right" sx={{ color: labelData[row.status]?.labelColor }}>
+                <TableCell
+                  align="right"
+                  sx={{ color: labelData[row.status]?.labelColor }}
+                >
                   {labelData[row.status]?.labelText}
                 </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{
-                    minHeight: 0,
-                    minWidth: 0,
-                    padding: 0,
-                    textTransform: "none",
+                      minHeight: 0,
+                      minWidth: 0,
+                      padding: 0,
+                      textTransform: "none",
                     }}
                     color="secondary"
                     fontWeight="bold"
@@ -141,16 +141,17 @@ function ProfessorPageTable({ groupId, practiceId }) {
                   >
                     Detalles
                   </Button>
-                  { isModalOpen
-                    ? <ProfessorPracticeDetailsModal
-                        timestamp={scheduleInfo?.timestamp}
-                        timeFrame={scheduleInfo?.timeFrame}
-                        log={scheduleInfo?.log}
-                        open={isModalOpen}
-                        closeModal={closeModal}
-                      />
-                    : <></>
-                  }
+                  {isModalOpen ? (
+                    <ProfessorPracticeDetailsModal
+                      timestamp={scheduleInfo?.timestamp}
+                      timeFrame={scheduleInfo?.timeFrame}
+                      log={scheduleInfo?.log}
+                      open={isModalOpen}
+                      closeModal={closeModal}
+                    />
+                  ) : (
+                    <></>
+                  )}
                 </TableCell>
               </TableRow>
             ))

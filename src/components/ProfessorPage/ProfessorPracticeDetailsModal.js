@@ -31,9 +31,9 @@ function ProfessorPracticeDetailsModal(props) {
 
   if (timestamp) {
     const fullReservationString = getFullReservationDate(timestamp, timeFrame);
-    scheduleDateString = `Horario reservado: ${fullReservationString[0]} de las ${fullReservationString[1]} a las ${fullReservationString[2]}.`
+    scheduleDateString = `Horario reservado: ${fullReservationString[0]} de las ${fullReservationString[1]} a las ${fullReservationString[2]}.`;
   } else {
-    scheduleDateString = "El alumno no ha reservado ningún horario."
+    scheduleDateString = "El alumno no ha reservado ningún horario.";
   }
 
   return (
@@ -44,11 +44,7 @@ function ProfessorPracticeDetailsModal(props) {
       aria-describedby="modal-modal-description"
     >
       <Box sx={styleModal} width={{ md: "auto", sm: "70%", xs: "95%" }}>
-        <IconButton
-          sx={styleCloseButton}
-          onClick={closeModal}
-          color="primary"
-        >
+        <IconButton sx={styleCloseButton} onClick={closeModal} color="primary">
           <CloseIcon />
         </IconButton>
         <Typography>{scheduleDateString}</Typography>

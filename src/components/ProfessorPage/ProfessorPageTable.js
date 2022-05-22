@@ -9,8 +9,8 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  Typography,
 } from "@mui/material";
+import ProfessorPracticeDetailsModal from "./ProfessorPracticeDetailsModal.js";
 
 const labelData = {
   FINISHED: {
@@ -21,13 +21,28 @@ const labelData = {
     labelText: "Empezada",
     labelColor: "orange",
   },
-  SCHEDULED: {
+  STARTED_EXPIRED: {
+    labelText: "Empezada",
+    labelColor: "red",
+  },
+  READY_TO_START: {
     labelText: "Agendada",
     labelColor: "blue",
   },
-  NOT_SCHEDULED: {
-    labelText: "Sin agendar",
+  SCHEDULE_EXPIRED: {
+    labelText: "Agendada",
     labelColor: "red",
+  },
+  READY_TO_SCHEDULE: {
+    labelText: "Por agendar",
+    labelColor: "blue",
+  },
+  NO_LONGER_AVAILABLE: {
+    labelText: "Expirada",
+    labelColor: "red",
+  },
+  NOT_YET_AVAILABLE: {
+    labelText: "No disponible",
   },
 };
 
@@ -36,6 +51,21 @@ const labelData = {
 function ProfessorPageTable({ groupId, practiceId }) {
   const [studentsPracticeInfo, setStudentsPracticeInfo] = React.useState("");
   const [dataStatus, setDataStatus] = React.useState("");
+
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const [scheduleInfo, setScheduleInfo] = React.useState("");
+
+  const handleOpenModal = (info) => {
+    console.log(info);
+    const { timestamp, timeFrame, log } = info;
+    console.log(timestamp, timeFrame, log);
+    setScheduleInfo({timestamp, timeFrame, log});
+    console.log(scheduleInfo);
+    openModal();
+  };
 
   React.useEffect(() => {
     setDataStatus("loading");
@@ -78,9 +108,9 @@ function ProfessorPageTable({ groupId, practiceId }) {
             <TableRow
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <Typography variant="inherit" m={2}>
+              <TableCell component="th" scope="row">
                 Cargando...
-              </Typography>
+              </TableCell>
             </TableRow>
           ) : studentsPracticeInfo ? (
             studentsPracticeInfo.map((row) => (
@@ -94,27 +124,33 @@ function ProfessorPageTable({ groupId, practiceId }) {
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
-                <TableCell align="right">
-                  <Typography
-                    variant="inherit"
-                    color={labelData[row.status]?.labelColor}
-                  >
-                    {labelData[row.status]?.labelText}
-                  </Typography>
+                <TableCell align="right" sx={{ color: labelData[row.status]?.labelColor }}>
+                  {labelData[row.status]?.labelText}
                 </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{
-                      minHeight: 0,
-                      minWidth: 0,
-                      padding: 0,
-                      textTransform: "none",
+                    minHeight: 0,
+                    minWidth: 0,
+                    padding: 0,
+                    textTransform: "none",
                     }}
                     color="secondary"
                     fontWeight="bold"
+                    onClick={() => handleOpenModal(row)}
                   >
                     Detalles
                   </Button>
+                  { isModalOpen
+                    ? <ProfessorPracticeDetailsModal
+                        timestamp={scheduleInfo?.timestamp}
+                        timeFrame={scheduleInfo?.timeFrame}
+                        log={scheduleInfo?.log}
+                        open={isModalOpen}
+                        closeModal={closeModal}
+                      />
+                    : <></>
+                  }
                 </TableCell>
               </TableRow>
             ))
@@ -122,9 +158,9 @@ function ProfessorPageTable({ groupId, practiceId }) {
             <TableRow
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <Typography variant="inherit" m={2}>
+              <TableCell component="th" scope="row">
                 Sin datos.
-              </Typography>
+              </TableCell>
             </TableRow>
           )}
         </TableBody>

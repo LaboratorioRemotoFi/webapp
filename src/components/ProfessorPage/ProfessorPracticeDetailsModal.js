@@ -28,12 +28,19 @@ function ProfessorPracticeDetailsModal(props) {
   console.log(timeFrame);
 
   let scheduleDateString;
+  let logString;
 
   if (timestamp) {
     const fullReservationString = getFullReservationDate(timestamp, timeFrame);
     scheduleDateString = `Horario reservado: ${fullReservationString[0]} de las ${fullReservationString[1]} a las ${fullReservationString[2]}.`;
   } else {
     scheduleDateString = "El alumno no ha reservado ningún horario.";
+  }
+
+  if (log.length > 0) {
+    logString = log;
+  } else {
+    logString = "Sin datos.";
   }
 
   return (
@@ -49,7 +56,7 @@ function ProfessorPracticeDetailsModal(props) {
         </IconButton>
         <Typography>{scheduleDateString}</Typography>
         <Typography>Su registro de actividades es el siguiente:</Typography>
-        <Typography>{log}</Typography>
+        <Typography>{logString}</Typography>
       </Box>
     </Modal>
   );

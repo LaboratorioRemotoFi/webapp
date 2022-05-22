@@ -58,6 +58,7 @@ function ProfessorPageTable({ groupId, practiceId }) {
 
   const [scheduleInfo, setScheduleInfo] = React.useState("");
 
+  // Won't be needed when modal is fixed
   const handleOpenModal = (info) => {
     const { timestamp, timeFrame, log } = info;
     setScheduleInfo({ timestamp, timeFrame, log });

@@ -1,4 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
+import { getScheduleImprovedStatus } from "/src/utils/scheduleUtils";
 
 async function connectToCluster() {
   const uri = process.env.DB_URI;
@@ -187,6 +188,71 @@ export async function getSchedules({ practiceId, subjectId }) {
       .toArray();
 
     return schedules;
+  } finally {
+    await mongoClient.close();
+  }
+}
+
+export async function getStudentsPracticeInfo({
+  subjectId,
+  groupNumber,
+  practiceId,
+}) {
+  let mongoClient;
+
+  try {
+    mongoClient = await connectToCluster();
+    const db = mongoClient.db("laboratorioremotofi");
+    const groupsCollection = db.collection("groups");
+    const usersCollection = db.collection("users");
+    const schedulesCollection = db.collection("schedules");
+    const practicesCollection = db.collection("practices");
+    const group = await groupsCollection.findOne({ subjectId, groupNumber });
+    const studentsIds = group?.studentsIds;
+
+    const practiceInfo = [];
+
+    const practice = await practicesCollection.findOne({
+      id: practiceId,
+    });
+
+    for (const index in studentsIds) {
+      const studentId = studentsIds[index];
+      const student = await usersCollection.findOne({
+        id: studentId,
+      });
+      let schedule = await schedulesCollection.findOne({
+        studentId,
+        subjectId,
+        practiceId,
+      });
+      let improvedStatus = getScheduleImprovedStatus({
+        practiceStartDate: practice?.startDate,
+        practiceEndDate: practice?.endDate,
+        practiceTimeframe:
+          practice?.timeFrame && practice?.timeFrame * 60 * 1000,
+        scheduleTimestamp: schedule?.timestamp,
+        scheduleStatus: schedule?.status,
+      });
+      if (!schedule) {
+        schedule = {
+          status: improvedStatus,
+          timestamp: null,
+          log: [],
+        };
+        improvedStatus = schedule.status;
+      }
+      const info = {
+        id: studentId,
+        name: student?.name,
+        status: improvedStatus,
+        timestamp: schedule?.timestamp,
+        timeFrame: practice?.timeFrame,
+        log: schedule?.log,
+      };
+      practiceInfo.push(info);
+    }
+    return practiceInfo;
   } finally {
     await mongoClient.close();
   }

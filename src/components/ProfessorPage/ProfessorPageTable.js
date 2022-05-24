@@ -82,92 +82,89 @@ function ProfessorPageTable({ groupId, practiceId }) {
       });
   }, [groupId, practiceId]);
 
-  console.log("INFO");
-  console.log(studentsPracticeInfo);
-
   return (
-    <TableContainer
-      component={Paper}
-      elevation={0}
-      variant="outlined"
-      sx={{ width: 1 }}
-    >
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell>No. Cuenta</TableCell>
-            <TableCell align="left">Nombre</TableCell>
-            <TableCell align="right">Estado</TableCell>
-            <TableCell align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {dataStatus === "loading" ? (
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Cargando...
-              </TableCell>
+    <>
+      <TableContainer
+        component={Paper}
+        elevation={0}
+        variant="outlined"
+        sx={{ width: 1 }}
+      >
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell>No. Cuenta</TableCell>
+              <TableCell align="left">Nombre</TableCell>
+              <TableCell align="right">Estado</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
-          ) : studentsPracticeInfo ? (
-            studentsPracticeInfo.map((row) => (
+          </TableHead>
+          <TableBody>
+            {dataStatus === "loading" ? (
               <TableRow
-                key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.id}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ color: labelData[row.status]?.labelColor }}
-                >
-                  {labelData[row.status]?.labelText}
-                </TableCell>
-                <TableCell align="right">
-                  <Button
-                    sx={{
-                      minHeight: 0,
-                      minWidth: 0,
-                      padding: 0,
-                      textTransform: "none",
-                    }}
-                    color="secondary"
-                    fontWeight="bold"
-                    onClick={() => handleOpenModal(row)}
-                  >
-                    Detalles
-                  </Button>
-                  {isModalOpen ? (
-                    <ProfessorPracticeDetailsModal
-                      timestamp={scheduleInfo?.timestamp}
-                      timeFrame={scheduleInfo?.timeFrame}
-                      log={scheduleInfo?.log}
-                      open={isModalOpen}
-                      closeModal={closeModal}
-                    />
-                  ) : (
-                    <></>
-                  )}
+                  Cargando...
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Sin datos.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            ) : studentsPracticeInfo ? (
+              studentsPracticeInfo.map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.id}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ color: labelData[row.status]?.labelColor }}
+                  >
+                    {labelData[row.status]?.labelText}
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button
+                      sx={{
+                        minHeight: 0,
+                        minWidth: 0,
+                        padding: 0,
+                        textTransform: "none",
+                      }}
+                      color="secondary"
+                      fontWeight="bold"
+                      onClick={() => handleOpenModal(row)}
+                    >
+                      Detalles
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  Sin datos.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {isModalOpen && (
+        <ProfessorPracticeDetailsModal
+          timestamp={scheduleInfo?.timestamp}
+          timeFrame={scheduleInfo?.timeFrame}
+          log={scheduleInfo?.log}
+          open={isModalOpen}
+          closeModal={closeModal}
+        />
+      )}
+    </>
   );
 }
 

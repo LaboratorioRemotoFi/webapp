@@ -48,11 +48,6 @@ function ProfessorPage() {
     }
   }, [groups, currentDispatch]);
 
-  console.log("Groups");
-  console.log(groups);
-  console.log(selectedGroupId);
-  console.log(selectedPractice);
-
   if (selectedPractice !== "") {
     initialDate = convertDateToSpanishString(selectedPractice.startDate);
     finalDate = convertDateToSpanishString(selectedPractice.endDate);

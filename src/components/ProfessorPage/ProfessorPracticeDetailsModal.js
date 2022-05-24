@@ -23,10 +23,6 @@ function ProfessorPracticeDetailsModal(props) {
     right: "0%",
   };
 
-  console.log("Modal");
-  console.log(timestamp);
-  console.log(timeFrame);
-
   let scheduleDateString;
   let logString;
 

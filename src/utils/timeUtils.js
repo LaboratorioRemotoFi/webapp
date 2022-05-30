@@ -1,5 +1,3 @@
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
 function convertDateToSpanishString(date) {
   let optionsDay = {
     weekday: "long",

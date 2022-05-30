@@ -24,19 +24,26 @@ function ProfessorPracticeDetailsModal(props) {
   };
 
   let scheduleDateString;
-  let logString;
 
   if (timestamp) {
     const fullReservationString = getFullReservationDate(timestamp, timeFrame);
-    scheduleDateString = `Horario reservado: ${fullReservationString[0]} de las ${fullReservationString[1]} a las ${fullReservationString[2]}.`;
+    scheduleDateString = `${fullReservationString[0]} de las ${fullReservationString[1]} a las ${fullReservationString[2]}.`;
   } else {
-    scheduleDateString = "El alumno no ha reservado ningún horario.";
+    scheduleDateString = "el alumno no ha reservado ningún horario.";
   }
 
-  if (log.length > 0) {
-    logString = log;
-  } else {
-    logString = "Sin datos.";
+  function getDateString(date) {
+    return `${date.getFullYear().toString().padStart(4, "0")}/${(
+      date.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")} ${date
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`;
   }
 
   return (
@@ -46,13 +53,26 @@ function ProfessorPracticeDetailsModal(props) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={styleModal} width={{ md: "auto", sm: "70%", xs: "95%" }}>
+      <Box sx={styleModal} width={{ md: "50%", sm: "70%", xs: "95%" }}>
         <IconButton sx={styleCloseButton} onClick={closeModal} color="primary">
           <CloseIcon />
         </IconButton>
-        <Typography>{scheduleDateString}</Typography>
-        <Typography>Su registro de actividades es el siguiente:</Typography>
-        <Typography>{logString}</Typography>
+        <Typography mb={2}>
+          <strong>Horario reservado: </strong>
+          {scheduleDateString}
+        </Typography>
+        <Typography mb={1} fontWeight="bold">
+          El registro de actividades es el siguiente:
+        </Typography>
+        {log.length > 0 ? (
+          log.map(({ date, message }) => (
+            <Typography key={date}>
+              <strong>{getDateString(new Date(date))}</strong>: {message}
+            </Typography>
+          ))
+        ) : (
+          <Typography>No existe registro.</Typography>
+        )}
       </Box>
     </Modal>
   );

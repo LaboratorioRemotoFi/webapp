@@ -37,6 +37,7 @@ function ProfessorPage() {
   });
 
   const user = data?.user;
+  const currDateString = convertDateToSpanishString(Date.now());
 
   React.useEffect(() => {
     if (!groups) {
@@ -62,7 +63,10 @@ function ProfessorPage() {
       <Layout>
         <Container maxWidth="false">
           <Box my={4}>
-            <Typography>Bienvenid@ profesor {user?.name}.</Typography>
+            <Typography>
+              Bienvenid@ profesor {user?.name}, hoy es {currDateString[0]} a las{" "}
+              {currDateString[1]}.
+            </Typography>
             <br />
             <Typography variant="h4" mb={2}>
               Grupos

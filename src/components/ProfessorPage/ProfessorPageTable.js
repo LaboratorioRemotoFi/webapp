@@ -46,8 +46,6 @@ const labelData = {
   },
 };
 
-// TODO: add the table data
-// function ProfessorPageTable({ group, practice, students }) {
 function ProfessorPageTable({ groupId, practiceId }) {
   const [studentsPracticeInfo, setStudentsPracticeInfo] = React.useState("");
   const [dataStatus, setDataStatus] = React.useState("");
@@ -58,7 +56,6 @@ function ProfessorPageTable({ groupId, practiceId }) {
 
   const [scheduleInfo, setScheduleInfo] = React.useState("");
 
-  // Won't be needed when modal is fixed
   const handleOpenModal = (info) => {
     const { timestamp, timeFrame, log } = info;
     setScheduleInfo({ timestamp, timeFrame, log });

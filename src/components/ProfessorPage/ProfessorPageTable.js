@@ -119,7 +119,10 @@ function ProfessorPageTable({ groupId, practiceId }) {
                   </TableCell>
                   <TableCell
                     align="right"
-                    sx={{ color: labelData[row.status]?.labelColor }}
+                    sx={{
+                      color: labelData[row.status]?.labelColor,
+                      fontWeight: "bold",
+                    }}
                   >
                     {labelData[row.status]?.labelText}
                   </TableCell>

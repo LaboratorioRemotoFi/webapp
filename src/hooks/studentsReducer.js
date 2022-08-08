@@ -17,14 +17,12 @@ const studentsReducer = (state, action) => {
         ...state,
         groups: null,
       };
-    case "setReservedSchedule":
-      const groupIndex = state.groups.findIndex((group) => {
-        return group.id === action.payload.groupId;
-      });
+    case "setReservedSchedule": {
+      const groupIndex = state.groups.findIndex(
+        (group) => group.id === action.payload.groupId
+      );
       const practiceIndex = state.groups[groupIndex].practices.findIndex(
-        (practice) => {
-          return practice.id === action.payload.reservedSchedule.practiceId;
-        }
+        (practice) => practice.id === action.payload.reservedSchedule.practiceId
       );
       const updatedGroups = state.groups.map((group, i) =>
         i === groupIndex
@@ -46,6 +44,7 @@ const studentsReducer = (state, action) => {
         ...state,
         groups: updatedGroups,
       };
+    }
     default:
       return {
         ...state,

@@ -10,9 +10,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import esLocale from "date-fns/locale/es";
 import {
   getDaySchedules,
@@ -134,7 +134,10 @@ function StudentModalDateReservation(props) {
       <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
         Selecciona una fecha y hora
       </Typography>
-      <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
+      <LocalizationProvider
+        dateAdapter={AdapterDateFns}
+        adapterLocale={esLocale}
+      >
         <Grid
           id="modal-modal-description"
           container

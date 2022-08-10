@@ -51,7 +51,7 @@ export async function getUserGroups(userId, userType, groupsIds) {
 
       const practices = [];
 
-      for (const practiceId of subject?.practicesIds) {
+      for (const practiceId of subject?.practicesIds || []) {
         const practice = await practicesCollection.findOne({
           id: practiceId,
         });

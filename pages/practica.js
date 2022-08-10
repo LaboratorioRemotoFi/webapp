@@ -3,7 +3,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import useSocket from "/src/hooks/useSocket";
 import PracticePage from "/src/components/PracticePage/PracticePage";
-// import { useRouter } from "next/router";
 import useStoreContext from "/src/hooks/storeContext";
 import {
   AppBar,
@@ -20,11 +19,10 @@ import {
 
 function Index() {
   const [currentState] = useStoreContext();
+  const [socket, setSocket] = React.useState();
   const practice = currentState.nearestPractice;
 
   const {
-    socket,
-    isConnected,
     connect,
     metadata,
     errorMessage,
@@ -34,7 +32,12 @@ function Index() {
   } = useSocket();
 
   React.useEffect(() => {
-    connect(practice.ip, "admin", "admin");
+    const newSocket = connect(practice.ip, "admin", "admin");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
   }, [practice, connect]);
 
   return (
@@ -45,10 +48,10 @@ function Index() {
             Cliente para Laboratorio Remoto
           </Typography>
           <Box mr={1} alignItems="center">
-            {isConnected ? <CheckIcon /> : <ClearIcon />}
+            {socket?.connected ? <CheckIcon /> : <ClearIcon />}
           </Box>
           <Typography variant="h6" component="div">
-            {isConnected ? "Conectado" : "Desconectado"}
+            {socket?.connected ? "Conectado" : "Desconectado"}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -64,7 +67,7 @@ function Index() {
           />
         )}
       </Container>
-      {!isConnected && (
+      {!socket?.connected && (
         <Dialog onClose={() => {}} open={true}>
           <DialogTitle>Desconectado</DialogTitle>
           <DialogContent>

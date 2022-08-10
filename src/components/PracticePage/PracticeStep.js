@@ -14,7 +14,7 @@ function PracticeStep({
 }) {
   return (
     <div>
-      <Typography variant="h4">Cámaras</Typography>
+      {videos?.length > 0 && <Typography variant="h4">Cámaras</Typography>}
       {videos &&
         videos.map((video) => {
           const { name, url, width, height } = video;

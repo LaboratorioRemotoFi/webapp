@@ -2,8 +2,6 @@ import React from "react";
 import { io } from "socket.io-client";
 
 function useSocket() {
-  const [socket, setSocket] = React.useState(null);
-  const [isConnected, setIsConnected] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const [metadata, setMetadata] = React.useState(null);
@@ -11,20 +9,12 @@ function useSocket() {
   const [sensorsData, setSensorsData] = React.useState({});
   const [actuatorsStatus, setActuatorsStatus] = React.useState({});
 
-  const disconnect = () => {
-    if (socket) {
-      socket.close();
-    }
-  };
-
   const connect = React.useCallback((serverIp, user, password) => {
     const newSocket = io(serverIp);
     setErrorMessage("");
 
     newSocket.on("connect", () => {
       console.log("socket on connect");
-
-      setIsConnected(true);
       newSocket.emit("setup", { user, password });
     });
 
@@ -34,13 +24,11 @@ function useSocket() {
 
     newSocket.on("disconnect", () => {
       console.log("socket on disconnect");
-      setIsConnected(false);
     });
 
     newSocket.on("setup", (data) => {
       if (data.status === "success") {
         setMetadata(data.data);
-        setIsConnected(true);
       } else if (data.status === "error") {
         setErrorMessage(data.message);
       }
@@ -54,20 +42,19 @@ function useSocket() {
 
     newSocket.on("message", ({ status, message }) => {
       if (status === "error") {
+        console.log("error: ", message);
         setErrorMessage(message);
       } else if (status === "success") {
         setErrorMessage("");
       }
     });
 
-    setSocket(newSocket);
+    return newSocket;
   }, []);
 
   return {
-    socket,
-    isConnected,
-    metadata,
     connect,
+    metadata,
     errorMessage,
     practiceStatus,
     sensorsData,

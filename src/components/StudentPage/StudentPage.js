@@ -72,7 +72,9 @@ function StudentPage() {
                     <br />
                     <Button variant="contained">
                       <Link href={"/practica"} color="primary.contrastText">
-                        Ir a la práctica
+                        {nearestPractice?.schedule?.status === "STARTED"
+                          ? "Continuar práctica"
+                          : "Empezar práctica"}
                       </Link>
                     </Button>
                   </>

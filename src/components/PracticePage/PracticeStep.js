@@ -17,9 +17,9 @@ function PracticeStep({
       {videos?.length > 0 && <Typography variant="h4">Cámaras</Typography>}
       {videos &&
         videos.map((video) => {
-          const { name, url, width, height } = video;
+          const { id, name, url, width, height } = video;
           return (
-            <>
+            <div key={id}>
               <Typography>{name}</Typography>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -28,7 +28,7 @@ function PracticeStep({
                 height={height}
                 src={url}
               />
-            </>
+            </div>
           );
         })}
       <Typography variant="h4">Componentes</Typography>

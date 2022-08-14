@@ -4,6 +4,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import useSocket from "/src/hooks/useSocket";
 import PracticePage from "/src/components/PracticePage/PracticePage";
 import useStoreContext from "/src/hooks/storeContext";
+import { useRouter } from "next/router";
 import {
   AppBar,
   Box,
@@ -18,6 +19,7 @@ import {
 } from "@mui/material";
 
 function Index() {
+  const router = useRouter();
   const [currentState] = useStoreContext();
   const [socket, setSocket] = React.useState();
   const practice = currentState.nearestPractice;
@@ -32,7 +34,13 @@ function Index() {
   } = useSocket();
 
   React.useEffect(() => {
-    const newSocket = connect(practice.ip, "admin", "admin");
+    if (practice == null) {
+      router.push("/");
+    }
+  }, [practice, router]);
+
+  React.useEffect(() => {
+    const newSocket = connect(practice?.ip, "admin", "admin");
     setSocket(newSocket);
 
     return () => {

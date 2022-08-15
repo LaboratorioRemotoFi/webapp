@@ -1,6 +1,6 @@
 import { getNearestPractice } from "/src/utils/scheduleUtils";
 
-const studentsReducer = (state, action) => {
+const storeReducer = (state, action) => {
   switch (action.type) {
     case "setGroups":
       return {
@@ -16,6 +16,13 @@ const studentsReducer = (state, action) => {
       return {
         ...state,
         groups: null,
+      };
+    case "setDirectConnectionIp":
+      return {
+        ...state,
+        nearestPractice: {
+          ip: action.serverIp,
+        },
       };
     case "setReservedSchedule": {
       const groupIndex = state.groups.findIndex(
@@ -52,4 +59,4 @@ const studentsReducer = (state, action) => {
   }
 };
 
-export default studentsReducer;
+export default storeReducer;

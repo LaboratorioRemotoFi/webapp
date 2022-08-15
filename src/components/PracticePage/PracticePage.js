@@ -28,7 +28,7 @@ function PracticePage({
   const [pageIndex, setPageIndex] = React.useState(-1);
 
   React.useEffect(() => {
-    if (schedule.status === "SCHEDULED") {
+    if (schedule?.status === "SCHEDULED") {
       updateSchedule(schedule._id, { status: "STARTED" });
       logScheduleAction(schedule._id, "Se inició la práctica");
     }
@@ -39,24 +39,26 @@ function PracticePage({
   };
 
   const logCommand = (name) => {
-    logScheduleAction(schedule._id, `Se mandó comando: ${name}`);
+    logScheduleAction(schedule?._id, `Se mandó comando: ${name}`);
   };
 
   const onNextStepClick = () => {
-    logScheduleAction(schedule._id, `Se empezó el paso ${pageIndex + 2}`);
+    logScheduleAction(schedule?._id, `Se empezó el paso ${pageIndex + 2}`);
     setPageIndex(pageIndex + 1);
   };
 
   const onFinishPractice = () => {
-    fetch(`/api/schedules/${schedule._id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify({ status: "FINISHED" }),
-    });
-    logScheduleAction(schedule._id, "Se terminó la práctica");
-    currentDispatch({ type: "clearData" });
+    if (schedule) {
+      fetch(`/api/schedules/${schedule._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({ status: "FINISHED" }),
+      });
+      logScheduleAction(schedule._id, "Se terminó la práctica");
+      currentDispatch({ type: "clearData" });
+    }
     socket.close();
     router.push("/");
   };

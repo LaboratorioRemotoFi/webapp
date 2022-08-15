@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useStoreContext from "/src/hooks/storeContext";
 import { useRouter } from "next/router";
-import { Button, Container, Stack, TextField, Typography } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import Layout from "../src/components/Layout";
 
 export default function Index() {

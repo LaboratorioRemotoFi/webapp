@@ -1,4 +1,8 @@
 export const logScheduleAction = (scheduleId, message) => {
+  if (!scheduleId) {
+    return Promise.resolve();
+  }
+
   return fetch(`/api/schedules/${scheduleId}/log`, {
     method: "POST",
     headers: {
@@ -9,6 +13,10 @@ export const logScheduleAction = (scheduleId, message) => {
 };
 
 export const updateSchedule = (scheduleId, data) => {
+  if (!scheduleId) {
+    return Promise.resolve();
+  }
+
   return fetch(`/api/schedules/${scheduleId}`, {
     method: "POST",
     headers: {

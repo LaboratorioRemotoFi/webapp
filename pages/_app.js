@@ -8,7 +8,7 @@ import theme from "../src/config/theme";
 import createEmotionCache from "../src/config/createEmotionCache";
 import { StoreContext } from "../src/hooks/storeContext";
 import { SessionProvider } from "next-auth/react";
-import StudentsProvider from "../src/hooks/studentsProvider";
+import StoreProvider from "../src/hooks/storeProvider";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -16,7 +16,7 @@ const clientSideEmotionCache = createEmotionCache();
 export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
-  const [studentsState, studentsDispatch] = StudentsProvider();
+  const [state, dispatch] = StoreProvider();
 
   return (
     <CacheProvider value={emotionCache}>
@@ -28,7 +28,7 @@ export default function MyApp(props) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <SessionProvider session={pageProps.session}>
-          <StoreContext.Provider value={[studentsState, studentsDispatch]}>
+          <StoreContext.Provider value={[state, dispatch]}>
             <Component {...pageProps} />
           </StoreContext.Provider>
         </SessionProvider>

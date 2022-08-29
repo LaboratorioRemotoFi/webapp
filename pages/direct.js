@@ -29,7 +29,7 @@ export default function Index() {
       <Typography variant="h2" sx={{ mt: 4 }}>
         Conectarse a un servidor directamente
       </Typography>
-      <Stack container spacing={2} sx={{ mt: 4, maxWidth: "400px" }}>
+      <Stack spacing={2} sx={{ mt: 4, maxWidth: "400px" }}>
         <TextField
           onChange={(e) => setServerIp(e.target.value)}
           onKeyDown={keyPress}

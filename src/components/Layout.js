@@ -1,11 +1,20 @@
 import React from "react";
 import Navbar from "./Navbar";
-import { Container } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Box, Container } from "@mui/material";
 
-const Layout = ({ children }) => (
+const Layout = ({ loading, children }) => (
   <>
     <Navbar />
-    <Container sx={{ paddingTop: 2 }}>{children}</Container>
+    <Container maxWidth="lg" sx={{ paddingTop: 2 }}>
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 12 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        children
+      )}
+    </Container>
   </>
 );
 

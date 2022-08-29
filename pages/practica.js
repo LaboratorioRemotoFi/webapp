@@ -49,7 +49,7 @@ function Index() {
   }, [practice, connect]);
 
   return (
-    <div>
+    <>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -88,7 +88,7 @@ function Index() {
           </DialogContent>
         </Dialog>
       )}
-    </div>
+    </>
   );
 }
 

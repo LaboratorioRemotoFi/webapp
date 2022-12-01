@@ -3,19 +3,22 @@ import { io } from "socket.io-client";
 
 function useSocket() {
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [showErrorMessage, setShowErrorMessage] = React.useState(false);
 
+  const [isConnected, setIsConnected] = React.useState(false);
   const [metadata, setMetadata] = React.useState(null);
   const [practiceStatus, setPracticeStatus] = React.useState("");
-  const [sensorsData, setSensorsData] = React.useState({});
-  const [actuatorsStatus, setActuatorsStatus] = React.useState({});
+  const [dataValues, setDataValues] = React.useState({});
 
-  const connect = React.useCallback((serverIp, user, password) => {
+  const connect = React.useCallback((serverIp, options) => {
+    const { user, password, initialize } = options;
     const newSocket = io(serverIp);
     setErrorMessage("");
 
     newSocket.on("connect", () => {
       console.log("socket on connect");
-      newSocket.emit("setup", { user, password });
+      setIsConnected(true);
+      newSocket.emit("setup", { user, password, initialize });
     });
 
     newSocket.io.on("reconnect", () => {
@@ -24,28 +27,28 @@ function useSocket() {
 
     newSocket.on("disconnect", () => {
       console.log("socket on disconnect");
+      setIsConnected(false);
     });
 
     newSocket.on("setup", (data) => {
       if (data.status === "success") {
-        setMetadata(data.data);
+        setMetadata(data.metadata);
       } else if (data.status === "error") {
         setErrorMessage(data.message);
+        setShowErrorMessage(true);
       }
     });
 
     newSocket.on("updatePracticeData", (practiceData) => {
       setPracticeStatus(practiceData.status);
-      setSensorsData(practiceData.sensors);
-      setActuatorsStatus(practiceData.actuators);
+      setDataValues(practiceData.dataValues);
     });
 
     newSocket.on("message", ({ status, message }) => {
       if (status === "error") {
-        console.log("error: ", message);
+        console.log("Error: ", message);
         setErrorMessage(message);
-      } else if (status === "success") {
-        setErrorMessage("");
+        setShowErrorMessage(true);
       }
     });
 
@@ -54,11 +57,15 @@ function useSocket() {
 
   return {
     connect,
+    isConnected,
     metadata,
-    errorMessage,
     practiceStatus,
-    sensorsData,
-    actuatorsStatus,
+    dataValues,
+    errorMessage,
+    showErrorMessage,
+    clearErrorMessage: () => {
+      setShowErrorMessage(false);
+    },
   };
 }
 

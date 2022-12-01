@@ -193,6 +193,29 @@ export async function getSchedules({ practiceId, subjectId }) {
   }
 }
 
+export async function getSchedulePracticeIp({ scheduleId }) {
+  let mongoClient;
+
+  try {
+    mongoClient = await connectToCluster();
+    const db = mongoClient.db("laboratorioremotofi");
+    const schedulesCollection = db.collection("schedules");
+    const practicesCollection = db.collection("practices");
+
+    const schedule = await schedulesCollection.findOne({
+      _id: ObjectId(scheduleId),
+    });
+
+    const practice = await practicesCollection.findOne({
+      id: schedule.practiceId,
+    });
+
+    return practice.raspIp;
+  } finally {
+    await mongoClient.close();
+  }
+}
+
 export async function getStudentsPracticeInfo({
   subjectId,
   groupNumber,

@@ -1,21 +1,22 @@
-import React, { useState } from "react";
-import useStoreContext from "/src/hooks/storeContext";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import Layout from "../src/components/Layout";
 
 export default function Index() {
   const router = useRouter();
+  const { ip: queryIp } = router.query;
 
-  const [serverIp, setServerIp] = useState("");
-  const [, dispatch] = useStoreContext();
+  const [serverIp, setServerIp] = useState(queryIp || "");
+
+  useEffect(() => {
+    if (queryIp) {
+      setServerIp(queryIp);
+    }
+  }, [queryIp, setServerIp]);
 
   const handleSubmit = () => {
-    dispatch({
-      type: "setDirectConnectionIp",
-      serverIp: serverIp || "localhost:8000",
-    });
-    router.push("/practica");
+    router.push(`/practica?ip=${serverIp || "localhost:8000"}`);
   };
 
   const keyPress = (e) => {
@@ -31,6 +32,7 @@ export default function Index() {
       </Typography>
       <Stack spacing={2} sx={{ mt: 4, maxWidth: "400px" }}>
         <TextField
+          value={serverIp}
           onChange={(e) => setServerIp(e.target.value)}
           onKeyDown={keyPress}
           label="Ip del servidor a conectarse"

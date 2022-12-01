@@ -1,15 +1,18 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import Link from "/src/components/Link";
 import Layout from "/src/components/Layout";
 import useStoreContext from "/src/hooks/storeContext";
 import convertDateToSpanishString from "/src/utils/timeUtils";
 import StudentGroupsTable from "./StudentGroupsTable";
+import { useRouter } from "next/router";
+import { logScheduleAction, updateSchedule } from "/src/utils/practiceUtils.js";
 
 function StudentPage() {
-  const [currentState, currentDispatch] = useStoreContext();
-  const { groups, nearestPractice } = currentState;
+  const router = useRouter();
+
+  const [state, dispatch] = useStoreContext();
+  const { groups, nearestPractice } = state;
 
   const { status, data } = useSession({
     required: true,
@@ -19,19 +22,26 @@ function StudentPage() {
 
   React.useEffect(() => {
     if (groups) {
-      currentDispatch({ type: "calculateNearestPractice" });
+      dispatch({ type: "calculateNearestPractice" });
     }
-  }, [groups, currentDispatch]);
+  }, [groups, dispatch]);
 
   React.useEffect(() => {
     if (!groups) {
       fetch("/api/groups")
         .then((response) => response.json())
         .then((fetchedGroups) => {
-          currentDispatch({ type: "setGroups", groups: fetchedGroups });
+          dispatch({ type: "setGroups", groups: fetchedGroups });
         });
     }
-  }, [groups, currentDispatch]);
+  }, [groups, dispatch]);
+
+  const startNearestPractice = () => {
+    const scheduleId = nearestPractice?.schedule?._id;
+    updateSchedule(scheduleId, { status: "STARTED" });
+    logScheduleAction(scheduleId, "Se inició la práctica");
+    router.push(`/practica?schedule=${scheduleId}`);
+  };
 
   const currDate = Date.now();
   const currDateString = convertDateToSpanishString(currDate);
@@ -68,10 +78,8 @@ function StudentPage() {
                   {nearestPractice.dateString[1]} horas.
                 </Typography>
                 <br />
-                <Button variant="contained">
-                  <Link href={"/practica"} color="primary.contrastText">
-                    Ir a la práctica
-                  </Link>
+                <Button variant="contained" onClick={startNearestPractice}>
+                  Ir a la práctica
                 </Button>
               </>
             ) : (

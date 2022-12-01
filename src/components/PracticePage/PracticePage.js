@@ -2,7 +2,7 @@ import React from "react";
 import PracticeStep from "./PracticeStep";
 import useStoreContext from "/src/hooks/storeContext";
 import { useRouter } from "next/router";
-import { logScheduleAction, updateSchedule } from "/src/utils/practiceUtils.js";
+import { logScheduleAction } from "/src/utils/practiceUtils.js";
 import {
   Box,
   Button,
@@ -16,88 +16,100 @@ function PracticePage({
   socket,
   metadata,
   practiceStatus,
-  sensorsData,
-  actuatorsStatus,
+  dataValues,
+  queryPageIndex,
+  scheduleId,
 }) {
   const router = useRouter();
+  const [, dispatch] = useStoreContext();
 
-  const [currentState, currentDispatch] = useStoreContext();
-  const practice = currentState.nearestPractice;
-  const schedule = practice && practice.schedule;
-
-  const [pageIndex, setPageIndex] = React.useState(-1);
-
-  React.useEffect(() => {
-    if (schedule?.status === "SCHEDULED") {
-      updateSchedule(schedule._id, { status: "STARTED" });
-      logScheduleAction(schedule._id, "Se inició la práctica");
-    }
-  }, [schedule]);
+  const [pageIndex, setPageIndex] = React.useState(
+    Number(queryPageIndex) > 0 ? Number(queryPageIndex) : 0
+  );
 
   const sendCommand = (command, value) => {
     socket.emit("command", command, value);
   };
 
   const logCommand = (name) => {
-    logScheduleAction(schedule?._id, `Se mandó comando: ${name}`);
+    logScheduleAction(scheduleId, `Se mandó comando: ${name}`);
+  };
+
+  const onPreviousStepClick = () => {
+    const newPageIndex = pageIndex - 1;
+    setPageIndex(newPageIndex);
+    router.push(
+      {
+        pathname: "/practica",
+        query: { ...router.query, pageIndex: newPageIndex },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
   };
 
   const onNextStepClick = () => {
-    logScheduleAction(schedule?._id, `Se empezó el paso ${pageIndex + 2}`);
-    setPageIndex(pageIndex + 1);
+    const newPageIndex = pageIndex + 1;
+    logScheduleAction(scheduleId, `Se empezó el paso ${newPageIndex}`);
+    setPageIndex(newPageIndex);
+    router.push(
+      {
+        pathname: "/practica",
+        query: { ...router.query, pageIndex: newPageIndex },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
   };
 
   const onFinishPractice = () => {
-    if (schedule) {
-      fetch(`/api/schedules/${schedule._id}`, {
+    if (scheduleId) {
+      fetch(`/api/schedules/${scheduleId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({ status: "FINISHED" }),
       });
-      logScheduleAction(schedule._id, "Se terminó la práctica");
-      currentDispatch({ type: "clearData" });
+      logScheduleAction(scheduleId, "Se terminó la práctica");
+      dispatch({ type: "clearData" });
     }
     socket.close();
-    router.push("/");
+    router.replace("/");
   };
 
-  const page = pageIndex >= 0 ? metadata.pages[pageIndex] : undefined;
+  const page = pageIndex > 0 ? metadata.pages[pageIndex - 1] : undefined;
 
-  const sensors =
+  const pageData =
     page &&
-    page.sensors &&
-    page.sensors.map((sensorId) => ({
-      ...metadata.sensors[sensorId],
-      value: sensorsData[sensorId],
-      id: sensorId,
+    page.dataIds &&
+    page.dataIds.map((dataId) => ({
+      ...metadata.data[dataId],
+      value: dataValues[dataId],
+      id: dataId,
     }));
-  const actuators =
+  const pageActions =
     page &&
-    page.actuators &&
-    page.actuators.map((actuatorId) => ({
-      ...metadata.actuators[actuatorId],
-      value: actuatorsStatus[actuatorId],
-      id: actuatorId,
-    }));
-  const actions =
-    page &&
-    page.actions &&
-    page.actions.map((actionId) => ({
+    page.actionIds &&
+    page.actionIds.map((actionId) => ({
       ...metadata.actions[actionId],
       id: actionId,
     }));
-  const videos =
+  const pageVideos =
     page &&
-    page.videos &&
-    page.videos.map((videoId) => ({
+    page.videoIds &&
+    page.videoIds.map((videoId) => ({
       ...metadata.videos[videoId],
+      id: videoId,
     }));
 
   return (
     <div>
-      {pageIndex === -1 ? (
+      {pageIndex === 0 ? (
         <>
           <Typography variant="h2">{metadata.name}</Typography>
           <Typography paragraph>{metadata.objective}</Typography>
@@ -125,33 +137,32 @@ function PracticePage({
           <Box sx={{ my: 4 }}>
             <PracticeStep
               index={pageIndex}
-              instructions={page.instructions}
-              sensors={sensors}
-              actuators={actuators}
-              actions={actions}
-              videos={videos}
+              instructions={page?.instructions}
+              data={pageData}
+              actions={pageActions}
+              videos={pageVideos}
               sendCommand={sendCommand}
               logCommand={logCommand}
               setPageIndex={setPageIndex}
             />
           </Box>
           <Stack sx={{ my: 2 }} alignItems="flex-end">
-            {pageIndex !== metadata.pages.length - 1 && (
+            {pageIndex !== metadata.pages.length && (
               <Button size="sm" variant="outlined" onClick={onNextStepClick}>
                 Siguiente paso
               </Button>
             )}
-            {pageIndex === metadata.pages.length - 1 && (
+            {pageIndex === metadata.pages.length && (
               <Button size="sm" variant="outlined" onClick={onFinishPractice}>
                 Terminar práctica
               </Button>
             )}
-            {pageIndex !== 0 && (
+            {pageIndex !== 1 && (
               <div>
                 <Link
                   sx={{ my: 1 }}
                   component="button"
-                  onClick={() => setPageIndex(pageIndex - 1)}
+                  onClick={onPreviousStepClick}
                 >
                   Paso anterior
                 </Link>

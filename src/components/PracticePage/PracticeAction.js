@@ -3,11 +3,14 @@ import {
   Box,
   Button,
   Slider,
+  Switch,
   Typography,
   Paper,
   Select,
   MenuItem,
+  FormGroup,
   FormControl,
+  FormControlLabel,
   InputLabel,
 } from "@mui/material";
 
@@ -27,6 +30,25 @@ function PracticeAction({ action, logCommand, sendCommand }) {
       >
         {name}
       </Button>
+    );
+  }
+
+  if (type === "toggle") {
+    return (
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch
+              defaultChecked
+              onChange={(event) => {
+                logCommand(name);
+                sendCommand(id, event.target.checked);
+              }}
+            />
+          }
+          label={name}
+        />
+      </FormGroup>
     );
   }
 
@@ -69,6 +91,7 @@ function PracticeAction({ action, logCommand, sendCommand }) {
           id="select-group"
           label={name}
           onChange={(e) => {
+            logCommand(name);
             sendCommand(id, e.target.value);
           }}
           defaultValue=""

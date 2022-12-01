@@ -3,8 +3,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import useSocket from "/src/hooks/useSocket";
 import PracticePage from "/src/components/PracticePage/PracticePage";
-import useStoreContext from "/src/hooks/storeContext";
-import { useRouter } from "next/router";
+import Layout from "/src/components/Layout";
+import url from "url";
+import MuiAlert from "@mui/material/Alert";
 import {
   AppBar,
   Box,
@@ -16,50 +17,66 @@ import {
   DialogTitle,
   Toolbar,
   Typography,
+  Snackbar,
 } from "@mui/material";
 
-function Index() {
-  const router = useRouter();
-  const [currentState] = useStoreContext();
+// "Server only" imports
+import { getSession } from "next-auth/react";
+import { getSchedulePracticeIp } from "/src/lib/database";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+function Index({ ip: practiceIp, queryPageIndex, scheduleId }) {
   const [socket, setSocket] = React.useState();
-  const practice = currentState.nearestPractice;
 
   const {
     connect,
+    isConnected,
     metadata,
-    errorMessage,
     practiceStatus,
-    sensorsData,
-    actuatorsStatus,
+    dataValues,
+    errorMessage,
+    showErrorMessage,
+    clearErrorMessage,
   } = useSocket();
 
   React.useEffect(() => {
-    if (practice == null) {
-      router.push("/");
-    }
-  }, [practice, router]);
+    let newSocket;
 
-  React.useEffect(() => {
-    const newSocket = connect(practice?.ip, "admin", "admin");
-    setSocket(newSocket);
+    if (practiceIp) {
+      newSocket = connect(practiceIp, {
+        user: "admin",
+        password: "admin",
+        // Si queremos empezar en un paso especifico
+        // no reiniciamos la práctica
+        initialize: !!queryPageIndex,
+      });
+      setSocket(newSocket);
+    }
 
     return () => {
-      newSocket.disconnect();
+      newSocket?.disconnect();
     };
-  }, [practice, connect]);
+  }, [practiceIp, connect, queryPageIndex]);
+
+  if (!practiceIp) {
+    return <Layout loading />;
+  }
 
   return (
     <>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Cliente para Laboratorio Remoto
+            Laboratorio Remoto
           </Typography>
           <Box mr={1} alignItems="center">
-            {socket?.connected ? <CheckIcon /> : <ClearIcon />}
+            {isConnected ? <CheckIcon /> : <ClearIcon />}
           </Box>
           <Typography variant="h6" component="div">
-            {socket?.connected ? "Conectado" : "Desconectado"}
+            {isConnected ? "Conectado" : "Desconectado"}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -69,13 +86,15 @@ function Index() {
             socket={socket}
             metadata={metadata}
             practiceStatus={practiceStatus}
-            sensorsData={sensorsData}
-            actuatorsStatus={actuatorsStatus}
+            dataValues={dataValues}
+            queryPageIndex={queryPageIndex}
+            scheduleId={scheduleId}
             errorMessage={errorMessage}
+            clearErrorMessage={clearErrorMessage}
           />
         )}
       </Container>
-      {!socket?.connected && (
+      {!isConnected && (
         <Dialog onClose={() => {}} open={true}>
           <DialogTitle>Desconectado</DialogTitle>
           <DialogContent>
@@ -88,8 +107,46 @@ function Index() {
           </DialogContent>
         </Dialog>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={showErrorMessage}
+        autoHideDuration={6000}
+        onClose={clearErrorMessage}
+      >
+        <Alert
+          onClose={clearErrorMessage}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const {
+    ip: queryIp,
+    schedule: scheduleId,
+    pageIndex,
+  } = url.parse(req.url, true).query;
+
+  let schedulePracticeIp;
+
+  const session = await getSession({ req });
+
+  if (session && scheduleId && !queryIp) {
+    schedulePracticeIp = await getSchedulePracticeIp({ scheduleId });
+  }
+
+  return {
+    props: {
+      ip: queryIp || schedulePracticeIp,
+      queryPageIndex: pageIndex || null,
+      scheduleId: scheduleId || null,
+    },
+  };
 }
 
 export default Index;

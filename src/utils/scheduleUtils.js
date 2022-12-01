@@ -28,7 +28,7 @@ function scheduleIsNotAvailable(
         schedule + (currPractice.timeFrame - 1) * 60 * 1000 > currDate &&
         // If the schedule isn't on the reserved schedules array
         // then enable it
-        !reservedSchedules.find(function (scheduleReserved) {
+        !reservedSchedules?.find(function (scheduleReserved) {
           if (scheduleReserved == schedule) return true;
         })
     )
